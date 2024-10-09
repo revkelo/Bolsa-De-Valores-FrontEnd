@@ -1,34 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
+  <title>Admin</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <style>
-    .hidden {
-      display: none;
-    }
-  </style>
 </head>
+
 <body class="bg-gray-100 font-sans antialiased">
 
-  <div class="flex min-h-screen">
+  <div class="flex flex-col min-h-screen lg:flex-row">
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-white p-6 border-r border-gray-200">
-        <div class="flex items-center gap-4 text-[#111418] mb-4">
-            <div class="size-4">
-              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z"
-                  fill="currentColor"
-                ></path>
-              </svg>
-            </div>
-            <h2 class="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]">Andina Trading</h2>
-          </div>
+    <aside class="w-full lg:w-64 bg-white p-6 border-b lg:border-b-0 lg:border-r border-gray-200 lg:h-screen lg:overflow-y-auto lg:fixed lg:left-0 lg:top-0 z-10" id="sidebar">
+      <div class="flex items-center gap-4 text-[#111418] mb-4">
+        <div class="size-4">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+        </div>
+        <h2 class="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]">Andina Trading</h2>
+      </div>
       <nav>
         <ul>
           <li class="mb-3">
@@ -54,7 +51,7 @@
     </aside>
 
     <!-- Main Content -->
-    <div class="flex-1 p-6 bg-gray-100">
+    <div class="flex-1 p-6 lg:ml-64">
       <div id="homePanel" class="panel mb-8 hidden">
         <h1 class="text-2xl font-semibold mb-4">Home</h1>
         <p class="text-gray-600 mb-8">Welcome to the admin dashboard!</p>
@@ -63,15 +60,14 @@
       <!-- Investor Management Panel -->
       <div id="investorManagementPanel" class="panel mb-8 hidden">
         <h1 class="text-2xl font-semibold mb-4">Investor Management</h1>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <!-- Create Investor Card -->
           <div class="bg-white p-4 rounded shadow">
             <h2 class="text-lg font-semibold mb-2">Create Investor</h2>
             <form class="mb-4">
               <input type="text" placeholder="Investor Name" class="border rounded p-2 mb-2 w-full" required />
               <input type="email" placeholder="Investor Email" class="border rounded p-2 mb-2 w-full" required />
-              <button type="submit" class="bg-blue-500 text-white p-2 rounded">Create</button>
+              <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Create</button>
             </form>
           </div>
 
@@ -82,7 +78,7 @@
               <input type="text" placeholder="Investor ID" class="border rounded p-2 mb-2 w-full" required />
               <input type="text" placeholder="New Investor Name" class="border rounded p-2 mb-2 w-full" />
               <input type="email" placeholder="New Investor Email" class="border rounded p-2 mb-2 w-full" />
-              <button type="submit" class="bg-yellow-500 text-white p-2 rounded">Update</button>
+              <button type="submit" class="bg-yellow-500 text-white p-2 rounded w-full">Update</button>
             </form>
           </div>
 
@@ -91,14 +87,14 @@
             <h2 class="text-lg font-semibold mb-2">Delete Investor</h2>
             <form class="mb-4">
               <input type="text" placeholder="Investor ID" class="border rounded p-2 mb-2 w-full" required />
-              <button type="submit" class="bg-red-500 text-white p-2 rounded">Delete</button>
+              <button type="submit" class="bg-red-500 text-white p-2 rounded w-full">Delete</button>
             </form>
           </div>
 
           <!-- Show List of Investors Card -->
           <div class="bg-white p-4 rounded shadow">
             <h2 class="text-lg font-semibold mb-2">Show Investors</h2>
-            <button onclick="showInvestors()" class="bg-gray-500 text-white p-2 rounded">Show List</button>
+            <button onclick="showInvestors()" class="bg-gray-500 text-white p-2 rounded w-full">Show List</button>
             <div id="investorList" class="mt-2 hidden">
               <table class="min-w-full mt-2 border">
                 <thead>
@@ -108,9 +104,7 @@
                     <th class="border px-4 py-2">Email</th>
                   </tr>
                 </thead>
-                <tbody id="investorTableBody">
-                  <!-- Dynamic list of investors will be displayed here -->
-                </tbody>
+                <tbody id="investorTableBody"></tbody>
               </table>
             </div>
           </div>
@@ -120,15 +114,14 @@
       <!-- Commissioner Management Panel -->
       <div id="commissionerManagementPanel" class="panel mb-8 hidden">
         <h1 class="text-2xl font-semibold mb-4">Commissioner Management</h1>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <!-- Create Commissioner Card -->
           <div class="bg-white p-4 rounded shadow">
             <h2 class="text-lg font-semibold mb-2">Create Commissioner</h2>
             <form class="mb-4">
               <input type="text" placeholder="Commissioner Name" class="border rounded p-2 mb-2 w-full" required />
               <input type="email" placeholder="Commissioner Email" class="border rounded p-2 mb-2 w-full" required />
-              <button type="submit" class="bg-blue-500 text-white p-2 rounded">Create</button>
+              <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Create</button>
             </form>
           </div>
 
@@ -139,7 +132,7 @@
               <input type="text" placeholder="Commissioner ID" class="border rounded p-2 mb-2 w-full" required />
               <input type="text" placeholder="New Commissioner Name" class="border rounded p-2 mb-2 w-full" />
               <input type="email" placeholder="New Commissioner Email" class="border rounded p-2 mb-2 w-full" />
-              <button type="submit" class="bg-yellow-500 text-white p-2 rounded">Update</button>
+              <button type="submit" class="bg-yellow-500 text-white p-2 rounded w-full">Update</button>
             </form>
           </div>
 
@@ -148,14 +141,14 @@
             <h2 class="text-lg font-semibold mb-2">Delete Commissioner</h2>
             <form class="mb-4">
               <input type="text" placeholder="Commissioner ID" class="border rounded p-2 mb-2 w-full" required />
-              <button type="submit" class="bg-red-500 text-white p-2 rounded">Delete</button>
+              <button type="submit" class="bg-red-500 text-white p-2 rounded w-full">Delete</button>
             </form>
           </div>
 
           <!-- Show List of Commissioners Card -->
           <div class="bg-white p-4 rounded shadow">
             <h2 class="text-lg font-semibold mb-2">Show Commissioners</h2>
-            <button onclick="showCommissioners()" class="bg-gray-500 text-white p-2 rounded">Show List</button>
+            <button onclick="showCommissioners()" class="bg-gray-500 text-white p-2 rounded w-full">Show List</button>
             <div id="commissionerList" class="mt-2 hidden">
               <table class="min-w-full mt-2 border">
                 <thead>
@@ -165,9 +158,7 @@
                     <th class="border px-4 py-2">Email</th>
                   </tr>
                 </thead>
-                <tbody id="commissionerTableBody">
-                  <!-- Dynamic list of commissioners will be displayed here -->
-                </tbody>
+                <tbody id="commissionerTableBody"></tbody>
               </table>
             </div>
           </div>
@@ -176,70 +167,62 @@
     </div>
   </div>
 
-  <!-- Tailwind requires this to be at the end -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // Function to toggle visibility of panels
     function togglePanel(panelId) {
       const panels = document.querySelectorAll('.panel');
-      panels.forEach(panel => {
-        if (panel.id === panelId) {
-          panel.classList.toggle('hidden'); // Show or hide the selected panel
-        } else {
-          panel.classList.add('hidden'); // Hide other panels
-        }
-      });
+      panels.forEach(panel => panel.classList.add('hidden'));
+      document.getElementById(panelId).classList.remove('hidden');
     }
 
-    // Function to show list of investors
     function showInvestors() {
       const investorList = document.getElementById('investorList');
-      investorList.classList.toggle('hidden');
-      
       const investorTableBody = document.getElementById('investorTableBody');
-      investorTableBody.innerHTML = ''; // Clear previous data
+      investorTableBody.innerHTML = '';
 
-      // Simulating data retrieval
       const investors = [
-        { id: 1, name: 'Investor 1', email: 'investor1@example.com' },
-        { id: 2, name: 'Investor 2', email: 'investor2@example.com' },
-        { id: 3, name: 'Investor 3', email: 'investor3@example.com' }
+        { id: 1, name: 'John Doe', email: 'john@example.com' },
+        { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
       ];
 
       investors.forEach(investor => {
-        const row = `<tr>
-                       <td class="border px-4 py-2">${investor.id}</td>
-                       <td class="border px-4 py-2">${investor.name}</td>
-                       <td class="border px-4 py-2">${investor.email}</td>
-                     </tr>`;
-        investorTableBody.innerHTML += row;
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="border px-4 py-2">${investor.id}</td>
+          <td class="border px-4 py-2">${investor.name}</td>
+          <td class="border px-4 py-2">${investor.email}</td>
+        `;
+        investorTableBody.appendChild(row);
       });
+
+      investorList.classList.remove('hidden');
     }
 
-    // Function to show list of commissioners
     function showCommissioners() {
       const commissionerList = document.getElementById('commissionerList');
-      commissionerList.classList.toggle('hidden');
-
       const commissionerTableBody = document.getElementById('commissionerTableBody');
-      commissionerTableBody.innerHTML = ''; // Clear previous data
+      commissionerTableBody.innerHTML = '';
 
-      // Simulating data retrieval
       const commissioners = [
-        { id: 1, name: 'Commissioner 1', email: 'commissioner1@example.com' },
-        { id: 2, name: 'Commissioner 2', email: 'commissioner2@example.com' },
-        { id: 3, name: 'Commissioner 3', email: 'commissioner3@example.com' }
+        { id: 1, name: 'Alice Johnson', email: 'alice@example.com' },
+        { id: 2, name: 'Bob Brown', email: 'bob@example.com' },
       ];
 
-      commissioners.forEach(commissioner => {
-        const row = `<tr>
-                       <td class="border px-4 py-2">${commissioner.id}</td>
-                       <td class="border px-4 py-2">${commissioner.name}</td>
-                       <td class="border px-4 py-2">${commissioner.email}</td>
-                     </tr>`;
-        commissionerTableBody.innerHTML += row;
+      commissioners.forEach(comm => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="border px-4 py-2">${comm.id}</td>
+          <td class="border px-4 py-2">${comm.name}</td>
+          <td class="border px-4 py-2">${comm.email}</td>
+        `;
+        commissionerTableBody.appendChild(row);
       });
+
+      commissionerList.classList.remove('hidden');
     }
+
+    // Show home panel by default
+    togglePanel('homePanel');
   </script>
 </body>
+
 </html>
