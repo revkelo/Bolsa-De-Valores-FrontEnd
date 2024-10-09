@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inversionista</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Material Icons -->
+    <!-- Iconos Materiales -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         .hidden {
@@ -19,7 +19,7 @@
 
     <div class="flex flex-col min-h-screen lg:flex-row">
 
-        <!-- Sidebar -->
+        <!-- Barra lateral -->
         <aside class="w-full lg:w-64 bg-white p-6 border-b lg:border-b-0 lg:border-r border-gray-200 lg:h-screen lg:overflow-y-auto lg:fixed lg:left-0 lg:top-0 z-10" id="sidebar">
             <div class="flex items-center gap-4 text-[#111418] mb-4">
                 <div class="size-4">
@@ -37,78 +37,78 @@
                     <li class="mb-3">
                         <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('homePanel')">
                             <span class="material-icons">home</span>
-                            <span class="ml-3">Home</span>
+                            <span class="ml-3">Inicio</span>
                         </a>
                     </li>
                     <li class="mb-3">
                         <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('marketPanel')">
                             <span class="material-icons">bar_chart</span>
-                            <span class="ml-3">Market</span>
+                            <span class="ml-3">Mercado</span>
                         </a>
                     </li>
                     <li class="mb-3">
                         <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('investmentPanel')">
                             <span class="material-icons">show_chart</span>
-                            <span class="ml-3">Investment</span>
+                            <span class="ml-3">Inversión</span>
                         </a>
                     </li>
                     <li class="mb-3">
                         <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('walletPanel')">
                             <span class="material-icons">account_balance_wallet</span>
-                            <span class="ml-3">Wallet</span>
+                            <span class="ml-3">Billetera</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('profilePanel')">
                             <span class="material-icons">person</span>
-                            <span class="ml-3">Profile</span>
+                            <span class="ml-3">Perfil</span>
                         </a>
                     </li>
                 </ul>
             </nav>
         </aside>
 
-        <!-- Main Content -->
+        <!-- Contenido principal -->
         <div class="flex-1 p-6 lg:ml-64">
             <div id="homePanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Home</h1>
-                <p class="text-gray-600 mb-8">Welcome to the dashboard!</p>
+                <h1 class="text-2xl font-semibold mb-4">Inicio</h1>
+                <p class="text-gray-600 mb-8">¡Bienvenido al panel de control!</p>
             </div>
             <div id="marketPanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Market</h1>
-                <p class="text-gray-600 mb-8">Market data will be displayed here.</p>
+                <h1 class="text-2xl font-semibold mb-4">Mercado</h1>
+                <p class="text-gray-600 mb-8">Los datos del mercado se mostrarán aquí.</p>
             </div>
             <div id="investmentPanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Investment</h1>
-                <p class="text-gray-600 mb-8">Investment options will be displayed here.</p>
+                <h1 class="text-2xl font-semibold mb-4">Inversión</h1>
+                <p class="text-gray-600 mb-8">Las opciones de inversión se mostrarán aquí.</p>
             </div>
             <div id="walletPanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Wallet</h1>
-                <p class="text-gray-600 mb-8">Wallet details will be displayed here.</p>
+                <h1 class="text-2xl font-semibold mb-4">Billetera</h1>
+                <p class="text-gray-600 mb-8">Los detalles de la billetera se mostrarán aquí.</p>
             </div>
             <div id="profilePanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Profile</h1>
-                <p class="text-gray-600 mb-8">Profile information will be displayed here.</p>
+                <h1 class="text-2xl font-semibold mb-4">Perfil</h1>
+                <p class="text-gray-600 mb-8">La información del perfil se mostrará aquí.</p>
             </div>
         </div>
     </div>
 
-    <!-- Tailwind requires this to be at the end -->
+    <!-- Tailwind requiere que esto esté al final -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Function to toggle visibility of panels
+        // Función para alternar la visibilidad de los paneles
         function togglePanel(panelId) {
             const panels = document.querySelectorAll('.panel');
             panels.forEach(panel => {
                 if (panel.id === panelId) {
-                    panel.classList.toggle('hidden'); // Show or hide the selected panel
+                    panel.classList.toggle('hidden'); // Mostrar u ocultar el panel seleccionado
                 } else {
-                    panel.classList.add('hidden'); // Hide other panels
+                    panel.classList.add('hidden'); // Ocultar otros paneles
                 }
             });
         }
 
-        // Show home panel by default
+        // Mostrar el panel de inicio por defecto
         togglePanel('homePanel');
     </script>
 </body>
