@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commission Agent Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white p-6 border-r border-gray-200">
+        <div class="flex items-center gap-4 text-[#111418] mb-4">
+            <div class="size-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]">Andina Trading</h2>
+          </div>
+      <nav>
+        <ul>
+          <li class="mb-3">
+            <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('homePanel')">
+              <span class="material-icons">home</span>
+              <span class="ml-3">Home</span>
+            </a>
+          </li>
+          <li class="mb-3">
+            <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('investorsPanel')">
+              <span class="material-icons">people</span>
+              <span class="ml-3">Investors</span>
+            </a>
+          </li>
+          <li class="mb-3">
+            <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('ordersPanel')">
+              <span class="material-icons">shopping_cart</span>
+              <span class="ml-3">Orders</span>
+            </a>
+          </li>
+          <li class="mb-3">
+            <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('reportsPanel')">
+              <span class="material-icons">assessment</span>
+              <span class="ml-3">Reports</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('marketGraphsPanel')">
+              <span class="material-icons">bar_chart</span>
+              <span class="ml-3">Market Graphs</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6 bg-gray-100">
+      <div id="homePanel" class="panel mb-8 hidden">
+        <h1 class="text-2xl font-semibold mb-4">Home</h1>
+        <p class="text-gray-600 mb-8">Welcome to the commission agent dashboard!</p>
+      </div>
+      <div id="investorsPanel" class="panel mb-8 hidden">
+        <h1 class="text-2xl font-semibold mb-4">Investors</h1>
+        <p class="text-gray-600 mb-8">Visualize the investors you manage.</p>
+      </div>
+      <div id="ordersPanel" class="panel mb-8 hidden">
+        <h1 class="text-2xl font-semibold mb-4">Orders</h1>
+        <p class="text-gray-600 mb-8">View purchase/sale orders and accept or deny them.</p>
+      </div>
+      <div id="reportsPanel" class="panel mb-8 hidden">
+        <h1 class="text-2xl font-semibold mb-4">Reports</h1>
+        <p class="text-gray-600 mb-8">Generate reports for each investor.</p>
+      </div>
+      <div id="marketGraphsPanel" class="panel mb-8 hidden">
+        <h1 class="text-2xl font-semibold mb-4">Market Graphs</h1>
+        <p class="text-gray-600 mb-8">Show graphs of stock markets from different countries.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tailwind requires this to be at the end -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Function to toggle visibility of panels
+    function togglePanel(panelId) {
+      const panels = document.querySelectorAll('.panel');
+      panels.forEach(panel => {
+        if (panel.id === panelId) {
+          panel.classList.toggle('hidden'); // Show or hide the selected panel
+        } else {
+          panel.classList.add('hidden'); // Hide other panels
+        }
+      });
+    }
+  </script>
+</body>
+</html>
