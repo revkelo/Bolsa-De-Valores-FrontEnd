@@ -1,3 +1,25 @@
+
+const rol = localStorage.getItem('rol');
+
+// Verificar si userId es null o no
+if (rol === null) {
+  
+}else{
+
+    if (rol === 'Inversionista') {
+        window.location.href = 'inversionista.html';
+    } else if (rol === 'Comisionista') {
+        window.location.href = 'comisionista.html';
+    } else if (rol === 'Administrador') {
+        window.location.href = 'admin.html';
+    } else {
+    
+    }    
+}
+
+
+
+
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.querySelector("form");
     form.addEventListener("submit", function(event) {
@@ -23,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // Asegúrate de que 'usuario_id' es parte de la respuesta JSON
             if (data.usuario_id) {
                 localStorage.setItem('userId', data.usuario_id); // Almacena el ID del usuario
+                localStorage.setItem('rol', data.rol); // Almacena el ID del usuario
                 alert('Sesión iniciada exitosamente. ID de usuario almacenado: ' + data.usuario_id);
                  // Redirigir según el rol
                  if (data.rol === 'Inversionista') {
