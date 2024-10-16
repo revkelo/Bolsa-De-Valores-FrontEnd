@@ -4,71 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
-    <!-- Bootstrap CSS -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Work Sans', 'Noto Sans', sans-serif;
-            background-color: #ffffff;
-            overflow-x: hidden;
-        }
-        .login-container {
-            max-width: 512px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .form-control-custom {
-            background-color: #f0f2f4;
-            border: none;
-            height: 56px;
-            padding: 1rem;
-            color: #111418;
-        }
-        .form-control-custom:focus {
-            outline: none;
-            box-shadow: none;
-        }
-        .btn-custom {
-            background-color: #bac964;
-            color: white;
-            font-weight: bold;
-            width: 100%;
-            height: 56px;
-        }
-        .btn-custom:hover {
-            background-color: #aab85b;
-        }
-        .text-link {
-            color: #617289;
-        }
-        .text-link:hover {
-            text-decoration: underline;
-        }
-        header {
-            padding: 0.5rem 1rem; /* Ajusta el padding */
-        }
-        header svg {
-            width: 40px;
-            height: 40px;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/login.css"> 
 </head>
 <body>
 
     <div class="container-fluid d-flex flex-column min-vh-100">
-        <!-- Header -->
+ 
         <header class="d-flex justify-content-between align-items-center py-2 px-4 border-bottom">
           <div class="d-flex align-items-center">
-            <div style="margin-right: 18px; "> <!-- Reducimos el espacio a 4px -->
+            <div style="margin-right: 18px;">
                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 18px; height: 18px;">
                     <path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z" fill="currentColor"></path>
                 </svg>
             </div>
-            <h2 class="mb-0" style="font-size: 16px; font-weight: 600;"> Andina Trading</h2> <!-- Tamaño del texto reducido -->
+            <h2 class="mb-0" style="font-size: 16px; font-weight: 600;"> Andina Trading</h2>
         </div>
         </header>
 
-        <!-- Contenido Principal -->
+
         <div class="flex-grow-1 d-flex justify-content-center align-items-center">
             <div class="login-container text-center">
                 <h2 class="mb-4">Bienvenido a Andina Trading</h2>
@@ -88,7 +43,8 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/login.js"></script>
 </body>
 </html>
