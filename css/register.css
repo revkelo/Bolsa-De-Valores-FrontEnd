@@ -1,0 +1,44 @@
+body {
+    font-family: 'Work Sans', 'Noto Sans', sans-serif;
+    background-color: #ffffff;
+    overflow-x: hidden;
+}
+.register-container {
+    max-width: 512px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+.form-control-custom {
+    background-color: #f0f2f4;
+    border: none;
+    height: 56px;
+    padding: 1rem;
+    color: #111418;
+}
+.form-control-custom:focus {
+    outline: none;
+    box-shadow: none;
+}
+.btn-custom {
+    background-color: #bac964;
+    color: white;
+    font-weight: bold;
+    width: 100%;
+    height: 56px;
+}
+.btn-custom:hover {
+    background-color: #aab85b;
+}
+.text-link {
+    color: #617289;
+}
+.text-link:hover {
+    text-decoration: underline;
+}
+header {
+    padding: 0.5rem 1rem;
+}
+header svg {
+    width: 40px;
+    height: 40px;
+}
