@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center; /* Centrar horizontalmente */
+            align-items: center; /* Centrar verticalmente */
+            height: 100vh; /* Altura completa de la ventana */
+            position: relative; /* Para posicionar el mensaje */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column; /* Cambia a columna para pantallas pequeñas */
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-overview, .payment-section {
+            flex: 1;
+            padding: 20px;
+            margin-bottom: 20px; /* Espacio entre secciones */
+        }
+
+        .product-overview h2, .payment-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .product-details {
+            flex: 1;
+        }
+
+        .payment-section form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .payment-section form label {
+            margin-bottom: 5px;
+        }
+
+        .payment-section form input {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%; /* Hacer que los inputs ocupen el 100% */
+        }
+
+        .order-summary {
+            margin-top: 20px;
+        }
+
+        .order-summary p {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .pay-button {
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pay-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Mensaje de confirmación */
+        .confirmation-message {
+            position: absolute; /* Posición absoluta para centrarlo */
+            top: 50%; /* Centro vertical */
+            left: 50%; /* Centro horizontal */
+            transform: translate(-50%, -50%); /* Ajustar para centrar */
+            text-align: center;
+            font-size: 20px;
+            background-color: white; /* Fondo blanco */
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none; /* Oculto por defecto */
+        }
+
+        /* Media queries para diseño responsive */
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row; /* Cambiar a fila en pantallas grandes */
+            }
+
+            .product-overview, .payment-section {
+                margin-bottom: 0; /* Eliminar margen inferior en pantallas grandes */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="checkout-container">
+        <div class="product-overview">
+            <h2>Resumen de Productos</h2>
+            <div id="product-container"></div> <!-- Contenedor para acciones -->
+        </div>
+
+        <div class="payment-section">
+            <h2>Ingresar Pago</h2>
+            <form id="payment-form">
+                <label>Nombre del titular de la tarjeta *</label>
+                <input type="text" placeholder="Nombre Completo" required>
+
+                <label>Tarjeta *</label>
+                <input type="text" id="card-input" placeholder="**** **** **** ****" maxlength="19" required>
+
+                <label>Fecha de expiración *</label>
+                <input type="text" id="expiry-input" placeholder="MM/AA" maxlength="5" required>
+
+                <label>CVV</label>
+                <input type="text" id="cvv-input" placeholder="***" maxlength="3" required>
+
+                <div class="order-summary" id="order-summary"></div> <!-- Contenedor para resumen de la orden -->
+                <button type="submit" class="pay-button">Pagar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="confirmation-message" id="confirmation-message">
+        <p> Petición de compra de acción hecha. Esperar al comisionista.✔️</p>
+    </div>
+
+    <script>
+        // Datos de acciones
+        const stocks = [
+            {
+                name: "APPL",
+                price: 150 // Precio de la acción de Apple
+            }
+        ];
+
+        // Función para crear el elemento de la acción
+        function createStockElement(stock) {
+            const productItem = document.createElement('div');
+            productItem.classList.add('product-item');
+
+            const productDetails = document.createElement('div');
+            productDetails.classList.add('product-details');
+
+            productDetails.innerHTML = `
+                <p><strong>${stock.name}</strong></p>
+                <p><strong>$${stock.price}</strong></p>
+            `;
+
+            productItem.appendChild(productDetails);
+            return productItem;
+        }
+
+        // Agregar las acciones al contenedor
+        const productContainer = document.getElementById('product-container');
+        stocks.forEach(stock => {
+            productContainer.appendChild(createStockElement(stock));
+        });
+
+        // Calcular el total a pagar
+        function calculateTotal() {
+            const totalStocks = stocks.reduce((total, stock) => total + stock.price, 0);
+            const total = totalStocks;
+            return total.toFixed(2); // Formato a dos decimales
+        }
+
+        // Mostrar resumen de la orden
+        function displayOrderSummary() {
+            const orderSummary = document.getElementById('order-summary');
+            const total = calculateTotal();
+            orderSummary.innerHTML = `
+                <p><strong>Total</strong> <span>$${total}</span></p>
+            `;
+        }
+
+        // Formatear la entrada de la tarjeta
+        const cardInput = document.getElementById('card-input');
+        cardInput.addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            let formattedValue = '';
+
+            for (let i = 0; i < value.length; i += 4) {
+                formattedValue += value.slice(i, i + 4) + ' ';
+            }
+
+            this.value = formattedValue.trim();
+        });
+
+        // Formatear la entrada de la fecha de expiración
+        const expiryInput = document.getElementById('expiry-input');
+        expiryInput.addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length >= 3) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+            this.value = value;
+        });
+
+        // Filtrar la entrada del CVV para permitir solo 3 dígitos
+        const cvvInput = document.getElementById('cvv-input');
+        cvvInput.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 3); // Permitir solo 3 dígitos
+        });
+
+        // Manejar el envío del formulario
+        const paymentForm = document.getElementById('payment-form');
+        paymentForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevenir el envío del formulario
+
+            // Ocultar el contenedor del checkout
+            document.getElementById('checkout-container').style.display = 'none';
+
+            // Mostrar el mensaje de confirmación
+            document.getElementById('confirmation-message').style.display = 'block';
+        });
+
+        // Ejecutar al cargar la página
+        displayOrderSummary();
+    </script>
+</body>
+</html>
