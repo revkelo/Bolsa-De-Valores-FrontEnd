@@ -76,7 +76,7 @@
             <form class="mb-4" id="create-investor-form">
               <input type="text" placeholder="Investor Name" class="border rounded p-2 mb-2 w-full" id="name-inversionista" required />
               <input type="email" placeholder="Investor Email" class="border rounded p-2 mb-2 w-full" id="email-inversionista" required />
-              <input type="password" placeholder="Commissioner Password" class="border rounded p-2 mb-2 w-full" id="password-inversionista" required />
+              <input type="password" placeholder="Investor Password" class="border rounded p-2 mb-2 w-full" id="password-inversionista" required />
               <input type="date" class="border rounded p-2 mb-2 w-full" id="date-of-birth-inversionista">
               <input type="text" class="border rounded p-2 mb-2 w-full" id="risk-profile-inversionista" placeholder="Ingresa tu perfil de riesgo">
               <input type="text" class="border rounded p-2 mb-2 w-full" id="country-inversionista" placeholder="Ingresa tu país">
@@ -88,9 +88,13 @@
           <div class="bg-white p-4 rounded shadow">
             <h2 class="text-lg font-semibold mb-2">Update Investor</h2>
             <form class="mb-4" id="update-investor-form">
-              <input type="text" placehoblder="ID inversionista" class="border rounded p-2 mb-2 w-full" id="id-inversionista-update" required />
+              <input type="text" placeholder="ID inversionista" class="border rounded p-2 mb-2 w-full" id="id-inversionista-update" required />
+              <input type="text" placeholder="Nombre" class="border rounded p-2 mb-2 w-full" id="name-inversionista-update" required />
+              <input type="email" placeholder="Email" class="border rounded p-2 mb-2 w-full" id="email-inversionista-update" required />
+              <input type="password" placeholder="Contraseña" class="border rounded p-2 mb-2 w-full" id="password-inversionista-update" required />
+              <input type="date" class="border rounded p-2 mb-2 w-full" id="date-of-birth-inversionista-update" required>
               <input type="text" placeholder="Perfil de riesgo" class="border rounded p-2 mb-2 w-full" id="risk-profile-inversionista-update" required />
-              <input type="text" placeholder="País" class="border rounded p-2 mb-2 w-full" id="country-inversionista-update"required />
+              <input type="text" placeholder="País" class="border rounded p-2 mb-2 w-full" id="country-inversionista-update" required />
               <button type="submit" class="bg-yellow-500 text-white p-2 rounded w-full">Update</button>
             </form>
           </div>
@@ -107,7 +111,7 @@
           <!-- Show List of Investors Card -->
           <div class="bg-white p-4 rounded shadow">
             <h2 class="text-lg font-semibold mb-2">Mostrar Inversionistas</h2>
-            <button onclick="showInvestors()" class="bg-gray-500 text-white p-2 rounded w-full">Mostar Lista</button>
+            <button onclick="showInvestors()" class="bg-gray-500 text-white p-2 rounded w-full">Mostrar Lista</button>
             
             <!-- Contenedor de la tabla, inicialmente oculto con la clase 'hidden' -->
             <div id="investorList" class="mt-2 hidden">
@@ -125,7 +129,9 @@
                 </table>
             </div>
         </div>
-
+      </div>
+    </div>
+  </div>
       <!-- Commissioner Management Panel -->
       <div id="commissionerManagementPanel" class="panel mb-8 hidden">
         <h1 class="text-2xl font-semibold mb-4">Commissioner Management</h1>
@@ -136,22 +142,25 @@
             <form id="create-commissioner-form" class="mb-4">
               <input type="text" placeholder="Nombre del Comisionista" class="border rounded p-2 mb-2 w-full" id="name-comisionista" required />
               <input type="email" placeholder="Email de Comisionista" class="border rounded p-2 mb-2 w-full" id="email-comisionista" required />
-              <input type="password" placeholder="Commissioner Password" class="border rounded p-2 mb-2 w-full" id="password-comisionista" required />
+              <input type="password" placeholder="Contraseña" class="border rounded p-2 mb-2 w-full" id="password-comisionista" required />
               <input type="date" class="border rounded p-2 mb-2 w-full" id="date-of-birth-comisionista" required>
               <input type="text" class="border rounded p-2 mb-2 w-full" id="company-comisionista" placeholder="Nombre Empresa" required>
               <input type="text" class="border rounded p-2 mb-2 w-full" id="commission-comisionista" placeholder="Comisión" required>
               <input type="text" class="border rounded p-2 mb-2 w-full" id="country-comisionista" placeholder="País" required>
               <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Create</button>
-          </form>
-          
+            </form>
           </div>
 
           <!-- Update Commissioner Card -->
           <div class="bg-white p-4 rounded shadow">
             <h2 class="text-lg font-semibold mb-2">Update Commissioner</h2>
-            <form class="mb-4" id="update-comissioner-form">
+            <form class="mb-4" id="update-commissioner-form">
               <input type="number" placeholder="ID comisionista" class="border rounded p-2 mb-2 w-full" id="id-comisionista-update" required />
-              <input type="text" placeholder="Empresa" class="border rounded p-2 mb-2 w-full" id="company-comisionista-update" required/>
+              <input type="text" placeholder="Nombre" class="border rounded p-2 mb-2 w-full" id="name-comisionista-update" required />
+              <input type="email" placeholder="Email" class="border rounded p-2 mb-2 w-full" id="email-comisionista-update" required />
+              <input type="password" placeholder="Contraseña" class="border rounded p-2 mb-2 w-full" id="password-comisionista-update" required />
+              <input type="date" class="border rounded p-2 mb-2 w-full" id="date-of-birth-comisionista-update" required>
+              <input type="text" placeholder="Empresa" class="border rounded p-2 mb-2 w-full" id="company-comisionista-update" required />
               <input type="number" placeholder="Comisión Comisionista" class="border rounded p-2 mb-2 w-full" id="commission-comisionista-update" required />
               <input type="text" placeholder="País Comisionista" class="border rounded p-2 mb-2 w-full" id="country-comisionista-update" required />
               <button type="submit" class="bg-yellow-500 text-white p-2 rounded w-full">Update</button>
@@ -161,7 +170,7 @@
           <!-- Delete Commissioner Card -->
           <div class="bg-white p-4 rounded shadow">
             <h2 class="text-lg font-semibold mb-2">Delete Commissioner</h2>
-            <form class="mb-4" id="delete-comissioner-form">
+            <form class="mb-4" id="delete-commissioner-form">
               <input type="text" placeholder="Commissioner ID" class="border rounded p-2 mb-2 w-full" id="id-comisionista-delete" required />
               <button type="submit" class="bg-red-500 text-white p-2 rounded w-full">Delete</button>
             </form>
@@ -189,7 +198,7 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráficas de Velas - Empresas Colombianas</title>
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+    <style>
+        .container {
+            width: 800px;
+            height: 400px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Gráficas de Velas - Empresas Colombianas</h1>
+    <div class="container" id="container-EC"></div>
+    <h2>Gráfica de Velas - Ecopetrol (EC)</h2>
+    <div class="container" id="container-AVAL"></div>
+    <h2>Gráfica de Velas - Grupo Aval (AVAL)</h2>
+    <div class="container" id="container-BCO"></div>
+    <h2>Gráfica de Velas - Bancolombia (BCO)</h2>
+    <div class="container" id="container-GEB"></div>
+    <h2>Gráfica de Velas - Grupo Energía Bogotá (GEB)</h2>
+    <div class="container" id="container-AVH"></div>
+    <h2>Gráfica de Velas - Avianca (AVH)</h2>
+
+    <script>
+        const apiKey = 'KMWVCL2X3YW94XTZ';
+        const symbols = ['EC', 'AVAL', 'BCO', 'GEB', 'AVH'];
+
+        symbols.forEach(symbol => {
+            const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}&outputsize=compact`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Verificar si el objeto Time Series existe
+                    const timeSeries = data['Time Series (Daily)'];
+                    if (!timeSeries) {
+                        console.error(`No se encontraron datos para ${symbol}. Respuesta:`, data);
+                        return; // Terminar la ejecución si no hay datos
+                    }
+
+                    const candlestickData = [];
+                    const dates = Object.keys(timeSeries).reverse();
+
+                    for (let date of dates) {
+                        const dailyData = timeSeries[date];
+                        const open = parseFloat(dailyData['1. open']);
+                        const high = parseFloat(dailyData['2. high']);
+                        const low = parseFloat(dailyData['3. low']);
+                        const close = parseFloat(dailyData['4. close']);
+
+                        if (!isNaN(open) && !isNaN(high) && !isNaN(low) && !isNaN(close)) {
+                            const timestamp = new Date(date + 'T00:00:00Z').getTime() / 1000;
+                            candlestickData.push({
+                                open: open,
+                                high: high,
+                                low: low,
+                                close: close,
+                                time: timestamp,
+                            });
+                        }
+                    }
+
+                    // Crear la gráfica
+                    const chartOptions = {
+                        layout: {
+                            textColor: 'black',
+                            background: { type: 'solid', color: 'white' },
+                        },
+                    };
+                    const chart = LightweightCharts.createChart(document.getElementById(`container-${symbol}`), chartOptions);
+                    const candlestickSeries = chart.addCandlestickSeries({
+                        upColor: '#26a69a',
+                        downColor: '#ef5350',
+                        borderVisible: false,
+                        wickUpColor: '#26a69a',
+                        wickDownColor: '#ef5350',
+                    });
+
+                    candlestickSeries.setData(candlestickData);
+                    chart.timeScale().fitContent();
+                })
+                .catch(error => console.error(`Error al obtener los datos para ${symbol}:`, error));
+        });
+    </script>
+</body>
+
+</html>
