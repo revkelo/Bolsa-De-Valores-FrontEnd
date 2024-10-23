@@ -7,17 +7,6 @@ if (userId === null) {
     window.location.href = 'login.html';
 }
 
-// Función para alternar la visibilidad de los paneles
-function togglePanel(panelId) {
-    const panels = document.querySelectorAll('.panel');
-    panels.forEach(panel => {
-        if (panel.id === panelId) {
-            panel.classList.toggle('hidden'); // Mostrar u ocultar el panel seleccionado
-        } else {
-            panel.classList.add('hidden'); // Ocultar otros paneles
-        }
-    });
-}
 
 // Función para cerrar sesión
 function logout() {
@@ -34,60 +23,11 @@ function logout() {
 
 
 
-
-
-
 function togglePanel(panelId) {
-    const panels = document.querySelectorAll('.panel');
-    panels.forEach(panel => panel.classList.add('hidden'));
-    document.getElementById(panelId).classList.remove('hidden');
-  }
-
-  function showInvestors() {
-    const investorList = document.getElementById('investorList');
-    const investorTableBody = document.getElementById('investorTableBody');
-    investorTableBody.innerHTML = '';
-
-    const investors = [
-      { id: 1, name: 'John Doe', email: 'john@example.com' },
-      { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
-    ];
-
-    investors.forEach(investor => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td class="border px-4 py-2">${investor.id}</td>
-        <td class="border px-4 py-2">${investor.name}</td>
-        <td class="border px-4 py-2">${investor.email}</td>
-      `;
-      investorTableBody.appendChild(row);
-    });
-
-    investorList.classList.remove('hidden');
-  }
-
-  function showCommissioners() {
-    const commissionerList = document.getElementById('commissionerList');
-    const commissionerTableBody = document.getElementById('commissionerTableBody');
-    commissionerTableBody.innerHTML = '';
-
-    const commissioners = [
-      { id: 1, name: 'Alice Johnson', email: 'alice@example.com' },
-      { id: 2, name: 'Bob Brown', email: 'bob@example.com' },
-    ];
-
-    commissioners.forEach(comm => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td class="border px-4 py-2">${comm.id}</td>
-        <td class="border px-4 py-2">${comm.name}</td>
-        <td class="border px-4 py-2">${comm.email}</td>
-      `;
-      commissionerTableBody.appendChild(row);
-    });
-
-    commissionerList.classList.remove('hidden');
-  }
+  const panels = document.querySelectorAll('.panel');
+  panels.forEach(panel => panel.classList.add('hidden')); // Ocultar todos los paneles
+  document.getElementById(panelId).classList.remove('hidden'); // Mostrar el panel solicitado
+}
 
   // Show home panel by default
   togglePanel('homePanel');
@@ -146,22 +86,31 @@ function togglePanel(panelId) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-const form = document.getElementById('update-comissioner-form');
+const form = document.getElementById('update-commissioner-form');
 form.addEventListener('submit', function(event) {
     event.preventDefault();
 
     const userId = document.getElementById('id-comisionista-update').value;
     const empresa = document.getElementById('company-comisionista-update').value;
-    const nombre = document.getElementById('name-comisionista').value;
-    const email = document.getElementById('email-comisionista').value;
-    const password = document.getElementById('password-comisionista').value;
+    const nombre = document.getElementById('name-comisionista-update').value;
+    const email = document.getElementById('email-comisionista-update').value;
+    const password = document.getElementById('password-comisionista-update').value;
     const rol = 'Comisionista';
-    const dateOfBirth = document.getElementById('date-of-birth-comisionista').value;
-    const company = document.getElementById('company-comisionista').value;
+    const dateOfBirth = document.getElementById('date-of-birth-comisionista-update').value;
     const commission = document.getElementById('commission-comisionista-update').value;
     const pais = document.getElementById('country-comisionista-update').value;
 
-    fetch("http://localhost:8080/api/comisionista/{"+ userId+"}?empresa="+empresa+"&comision="+commission+"&pais="+pais+"&comisionista_id=" + userId, {
+
+    fetch("http://localhost:8080/api/usuario/"+ userId+"?nombre="+nombre+"&email="+email+"&contraseña="+password+"&rol="+rol+"&fecha_creacion="+dateOfBirth,
+      {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+      fetch("http://localhost:8080/api/comisionista/{"+ userId+"}?empresa="+empresa+"&comision="+commission+"&pais="+pais+"&comisionista_id=" + userId, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -171,6 +120,8 @@ form.addEventListener('submit', function(event) {
     .then(data => {
         alert('Comisionista actualizado exitosamente');
         form.reset();
+      })
+      .catch(error => console.error('Error al actualizar el comisionista:', error));
     })
     .catch(error => {
         console.error('Error al actualizar el comisionista:', error);
@@ -179,7 +130,7 @@ form.addEventListener('submit', function(event) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('delete-comissioner-form');
+  const form = document.getElementById('delete-commissioner-form');
   form.addEventListener('submit', function(event) {
       event.preventDefault();
 
@@ -208,10 +159,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-
-document.addEventListener('DOMContentLoaded', function() {
-const form = document.getElementById('mostrar-comisionistas-form');
-});
 
 function showCommissioners() {
   // Realizar solicitud para obtener la lista de comisionistas
@@ -330,16 +277,17 @@ form.addEventListener('submit', function(event) {
     event.preventDefault();
 
     const userId = document.getElementById('id-inversionista-update').value;
+    const nombre = document.getElementById('name-inversionista-update').value;
+    const email = document.getElementById('email-inversionista-update').value;
+    const password = document.getElementById('password-inversionista-update').value;
+    const rol = "Inversionista";
+    const dateOfBirth = document.getElementById('date-of-birth-inversionista-update').value;
     const perfilRiesgo = document.getElementById('risk-profile-inversionista-update').value;
-    const nombre = document.getElementById('name-inversionista').value;
-    const email = document.getElementById('email-inversionista').value;
-    const password = document.getElementById('password-inversionista').value;
-    const rol = 'Inversionista';
-    const dateOfBirth = document.getElementById('date-of-birth-inversionista').value;
-    const riskProfile = document.getElementById('risk-profile-inversionista-update').value;
     const pais = document.getElementById('country-inversionista-update').value;
 
-    fetch("http://localhost:8080/api/inversionista/{"+ userId+"}?perfil_riesgo="+perfilRiesgo+"&pais="+pais+"&inversionista_id=" + userId, {
+
+    fetch("http://localhost:8080/api/usuario/"+ userId+"?nombre="+nombre+"&email="+email+"&contraseña="+password+"&rol="+rol+"&fecha_creacion="+dateOfBirth,
+      {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -347,8 +295,20 @@ form.addEventListener('submit', function(event) {
     })
     .then(response => response.json())
     .then(data => {
-        alert('Inversionista actualizado exitosamente');
-        form.reset();
+        fetch("http://localhost:8080/api/inversionista/{"+ userId+"}?perfil_riesgo="+perfilRiesgo+"&pais="+pais+"&inversionista_id=" + userId, {
+          method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      })
+      .then(response => response.json())
+      .then(data => {
+          alert('Inversionista actualizado exitosamente');
+          form.reset();
+
+      })
+      .catch(error=> console.error('Error al actualizar el inversionista:', error));
+    
     })
     .catch(error => {
         console.error('Error al actualizar el inversionista:', error);

@@ -44,7 +44,8 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log(data);
             // Asegúrate de que 'usuario_id' es parte de la respuesta JSON
             if (data.usuario_id) {
-                localStorage.setItem('userId', data.usuario_id); // Almacena el ID del usuario
+                localStorage.setItem('userId', data.usuario_id); 
+                localStorage.setItem('password', data.contraseña);// Almacena el ID del usuario
                 localStorage.setItem('rol', data.rol); // Almacena el ID del usuario
                 alert('Sesión iniciada exitosamente. ID de usuario almacenado: ' + data.usuario_id);
                  // Redirigir según el rol
