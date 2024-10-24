@@ -5,10 +5,7 @@ const password = localStorage.getItem('password');
 
 // Verificar si userId es null o no
 
-if (userId === null) {
-    // Redirigir a login.html si userId es null
-    window.location.href = 'login.html';
-}
+
 
 // Función para cerrar sesión
 function logout() {

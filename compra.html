@@ -11,15 +11,15 @@
             padding: 0;
             background-color: #f5f5f5;
             display: flex;
-            justify-content: center; /* Centrar horizontalmente */
-            align-items: center; /* Centrar verticalmente */
-            height: 100vh; /* Altura completa de la ventana */
-            position: relative; /* Para posicionar el mensaje */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
         }
 
         .container {
             display: flex;
-            flex-direction: column; /* Cambia a columna para pantallas pequeñas */
+            flex-direction: column;
             max-width: 1200px;
             margin: 20px auto;
             background-color: white;
@@ -30,7 +30,7 @@
         .product-overview, .payment-section {
             flex: 1;
             padding: 20px;
-            margin-bottom: 20px; /* Espacio entre secciones */
+            margin-bottom: 20px;
         }
 
         .product-overview h2, .payment-section h2 {
@@ -62,7 +62,7 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            width: 100%; /* Hacer que los inputs ocupen el 100% */
+            width: 100%;
         }
 
         .order-summary {
@@ -87,28 +87,26 @@
             background-color: #45a049;
         }
 
-        /* Mensaje de confirmación */
         .confirmation-message {
-            position: absolute; /* Posición absoluta para centrarlo */
-            top: 50%; /* Centro vertical */
-            left: 50%; /* Centro horizontal */
-            transform: translate(-50%, -50%); /* Ajustar para centrar */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
             font-size: 20px;
-            background-color: white; /* Fondo blanco */
+            background-color: white;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            display: none; /* Oculto por defecto */
+            display: none;
         }
 
-        /* Media queries para diseño responsive */
         @media (min-width: 768px) {
             .container {
-                flex-direction: row; /* Cambiar a fila en pantallas grandes */
+                flex-direction: row;
             }
 
             .product-overview, .payment-section {
-                margin-bottom: 0; /* Eliminar margen inferior en pantallas grandes */
+                margin-bottom: 0;
             }
         }
     </style>
@@ -146,51 +144,54 @@
     </div>
 
     <script>
-        // Datos de acciones
-        const stocks = [
-            {
-                name: "APPL",
-                price: 150 // Precio de la acción de Apple
+        // Obtener el símbolo y precio de la acción desde localStorage
+        const symbol = localStorage.getItem('cvempresa');
+        const price = localStorage.getItem('cvprecio');
+
+        // Si los datos existen en localStorage
+        if (symbol && price) {
+            const stock = {
+                name: symbol,
+                price: parseFloat(price) // Convertir a número
+            };
+
+            // Crear y mostrar el resumen del producto
+            function createStockElement(stock) {
+                const productItem = document.createElement('div');
+                productItem.classList.add('product-item');
+
+                const productDetails = document.createElement('div');
+                productDetails.classList.add('product-details');
+
+                productDetails.innerHTML = `
+                    <p><strong>${stock.name}</strong></p>
+                    <p><strong>$${stock.price}</strong></p>
+                `;
+
+                productItem.appendChild(productDetails);
+                return productItem;
             }
-        ];
 
-        // Función para crear el elemento de la acción
-        function createStockElement(stock) {
-            const productItem = document.createElement('div');
-            productItem.classList.add('product-item');
-
-            const productDetails = document.createElement('div');
-            productDetails.classList.add('product-details');
-
-            productDetails.innerHTML = `
-                <p><strong>${stock.name}</strong></p>
-                <p><strong>$${stock.price}</strong></p>
-            `;
-
-            productItem.appendChild(productDetails);
-            return productItem;
-        }
-
-        // Agregar las acciones al contenedor
-        const productContainer = document.getElementById('product-container');
-        stocks.forEach(stock => {
+            // Agregar la acción seleccionada al contenedor
+            const productContainer = document.getElementById('product-container');
             productContainer.appendChild(createStockElement(stock));
-        });
 
-        // Calcular el total a pagar
-        function calculateTotal() {
-            const totalStocks = stocks.reduce((total, stock) => total + stock.price, 0);
-            const total = totalStocks;
-            return total.toFixed(2); // Formato a dos decimales
-        }
+            // Calcular el total a pagar
+            function calculateTotal() {
+                return stock.price.toFixed(2); // Formato a dos decimales
+            }
 
-        // Mostrar resumen de la orden
-        function displayOrderSummary() {
-            const orderSummary = document.getElementById('order-summary');
-            const total = calculateTotal();
-            orderSummary.innerHTML = `
-                <p><strong>Total</strong> <span>$${total}</span></p>
-            `;
+            // Mostrar el resumen de la orden
+            function displayOrderSummary() {
+                const orderSummary = document.getElementById('order-summary');
+                const total = calculateTotal();
+                orderSummary.innerHTML = `
+                    <p><strong>Total</strong> <span>$${total}</span></p>
+                `;
+            }
+
+            // Ejecutar al cargar la página
+            displayOrderSummary();
         }
 
         // Formatear la entrada de la tarjeta
@@ -234,8 +235,6 @@
             document.getElementById('confirmation-message').style.display = 'block';
         });
 
-        // Ejecutar al cargar la página
-        displayOrderSummary();
     </script>
 </body>
 </html>
