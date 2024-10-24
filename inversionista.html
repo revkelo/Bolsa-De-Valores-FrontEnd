@@ -103,7 +103,38 @@
             </div>
             <div id="investmentPanel" class="panel mb-8 hidden">
                 <h1 class="text-2xl font-semibold mb-4">Inversiones</h1>
-                <p class="text-gray-600 mb-8">Las opciones de inversión se mostrarán aquí.</p>
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Valor Actual</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border-b border-gray-200 px-4 py-2">Tesla</td>
+                            <td class="border-b border-gray-200 px-4 py-2">10</td>
+                            <td class="border-b border-gray-200 px-4 py-2">$200</td>
+                            <td class="border-b border-gray-200 px-4 py-2">$250</td>
+                            <td class="border-b border-gray-200 px-4 py-2">
+                                <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="sellStock('TSLA')">Vender</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border-b border-gray-200 px-4 py-2">Apple</td>
+                            <td class="border-b border-gray-200 px-4 py-2">5</td>
+                            <td class="border-b border-gray-200 px-4 py-2">$150</td>
+                            <td class="border-b border-gray-200 px-4 py-2">$180</td>
+                            <td class="border-b border-gray-200 px-4 py-2">
+                                <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="sellStock('AAPL')">Vender</button>
+                            </td>
+                        </tr>
+                        <!-- Agrega más filas aquí según sea necesario -->
+                    </tbody>
+                </table>
             </div>
 
             <div id="profilePanel" class="panel mb-8 hidden">
