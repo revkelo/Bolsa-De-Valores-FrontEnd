@@ -73,12 +73,17 @@
           <div class="bg-white p-4 rounded shadow">
             <h2 class="text-lg font-semibold mb-2">Create Investor</h2>
             <form class="mb-4" id="create-investor-form">
-              <input type="text" placeholder="Investor Name" class="border rounded p-2 mb-2 w-full" id="name-inversionista" required />
-              <input type="email" placeholder="Investor Email" class="border rounded p-2 mb-2 w-full" id="email-inversionista" required />
-              <input type="password" placeholder="Investor Password" class="border rounded p-2 mb-2 w-full" id="password-inversionista" required />
+              <input type="text" placeholder="Investor Name" class="border rounded p-2 mb-2 w-full"
+                id="name-inversionista" required />
+              <input type="email" placeholder="Investor Email" class="border rounded p-2 mb-2 w-full"
+                id="email-inversionista" required />
+              <input type="password" placeholder="Investor Password" class="border rounded p-2 mb-2 w-full"
+                id="password-inversionista" required />
               <input type="date" class="border rounded p-2 mb-2 w-full" id="date-of-birth-inversionista">
-              <input type="text" class="border rounded p-2 mb-2 w-full" id="risk-profile-inversionista" placeholder="Ingresa tu perfil de riesgo">
-              <input type="text" class="border rounded p-2 mb-2 w-full" id="country-inversionista" placeholder="Ingresa tu país">
+              <input type="text" class="border rounded p-2 mb-2 w-full" id="risk-profile-inversionista"
+                placeholder="Ingresa tu perfil de riesgo">
+              <input type="text" class="border rounded p-2 mb-2 w-full" id="country-inversionista"
+                placeholder="Ingresa tu país">
               <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Create</button>
             </form>
           </div>
@@ -87,13 +92,20 @@
           <div class="bg-white p-4 rounded shadow">
             <h2 class="text-lg font-semibold mb-2">Update Investor</h2>
             <form class="mb-4" id="update-investor-form">
-              <input type="text" placeholder="ID inversionista" class="border rounded p-2 mb-2 w-full" id="id-inversionista-update" required />
-              <input type="text" placeholder="Nombre" class="border rounded p-2 mb-2 w-full" id="name-inversionista-update" required />
-              <input type="email" placeholder="Email" class="border rounded p-2 mb-2 w-full" id="email-inversionista-update" required />
-              <input type="password" placeholder="Contraseña" class="border rounded p-2 mb-2 w-full" id="password-inversionista-update" required />
-              <input type="date" class="border rounded p-2 mb-2 w-full" id="date-of-birth-inversionista-update" required>
-              <input type="text" placeholder="Perfil de riesgo" class="border rounded p-2 mb-2 w-full" id="risk-profile-inversionista-update" required />
-              <input type="text" placeholder="País" class="border rounded p-2 mb-2 w-full" id="country-inversionista-update" required />
+              <input type="text" placeholder="ID inversionista" class="border rounded p-2 mb-2 w-full"
+                id="id-inversionista-update" required />
+              <input type="text" placeholder="Nombre" class="border rounded p-2 mb-2 w-full"
+                id="name-inversionista-update" required />
+              <input type="email" placeholder="Email" class="border rounded p-2 mb-2 w-full"
+                id="email-inversionista-update" required />
+              <input type="password" placeholder="Contraseña" class="border rounded p-2 mb-2 w-full"
+                id="password-inversionista-update" required />
+              <input type="date" class="border rounded p-2 mb-2 w-full" id="date-of-birth-inversionista-update"
+                required>
+              <input type="text" placeholder="Perfil de riesgo" class="border rounded p-2 mb-2 w-full"
+                id="risk-profile-inversionista-update" required />
+              <input type="text" placeholder="País" class="border rounded p-2 mb-2 w-full"
+                id="country-inversionista-update" required />
               <button type="submit" class="bg-yellow-500 text-white p-2 rounded w-full">Update</button>
             </form>
           </div>
@@ -102,7 +114,8 @@
           <div class="bg-white p-4 rounded shadow">
             <h2 class="text-lg font-semibold mb-2">Delete Investor</h2>
             <form class="mb-4" id="delete-investor-form">
-              <input type="text" placeholder="Investor ID" class="border rounded p-2 mb-2 w-full" id="id-inversionista-delete" required />
+              <input type="text" placeholder="Investor ID" class="border rounded p-2 mb-2 w-full"
+                id="id-inversionista-delete" required />
               <button type="submit" class="bg-red-500 text-white p-2 rounded w-full">Delete</button>
             </form>
           </div>
@@ -111,96 +124,110 @@
           <div class="bg-white p-4 rounded shadow">
             <h2 class="text-lg font-semibold mb-2">Mostrar Inversionistas</h2>
             <button onclick="showInvestors()" class="bg-gray-500 text-white p-2 rounded w-full">Mostrar Lista</button>
-            
+
             <!-- Contenedor de la tabla, inicialmente oculto con la clase 'hidden' -->
             <div id="investorList" class="mt-2 hidden">
-                <table class="min-w-full mt-2 border">
-                    <thead>
-                        <tr class="bg-gray-200">
-                            <th class="border px-4 py-2">Inversionista ID</th>
-                            <th class="border px-4 py-2">País</th>
-                            <th class="border px-4 py-2">Perfil de Riesgo</th>
-                        </tr>
-                    </thead>
-                    <tbody id="InvestorTableBody">
-                        <!-- Las filas de la tabla se agregarán aquí dinámicamente con JavaScript -->
-                    </tbody>
-                </table>
+              <table class="min-w-full mt-2 border">
+                <thead>
+                  <tr class="bg-gray-200">
+                    <th class="border px-4 py-2">Inversionista ID</th>
+                    <th class="border px-4 py-2">País</th>
+                    <th class="border px-4 py-2">Perfil de Riesgo</th>
+                  </tr>
+                </thead>
+                <tbody id="InvestorTableBody">
+                  <!-- Las filas de la tabla se agregarán aquí dinámicamente con JavaScript -->
+                </tbody>
+              </table>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Commissioner Management Panel -->
+    <div id="commissionerManagementPanel" class="panel mb-8 hidden">
+      <h1 class="text-2xl font-semibold mb-4">Commissioner Management</h1>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Create Commissioner Card -->
+        <div class="bg-white p-4 rounded shadow">
+          <h2 class="text-lg font-semibold mb-2">Create Commissioner</h2>
+          <form id="create-commissioner-form" class="mb-4">
+            <input type="text" placeholder="Nombre del Comisionista" class="border rounded p-2 mb-2 w-full"
+              id="name-comisionista" required />
+            <input type="email" placeholder="Email de Comisionista" class="border rounded p-2 mb-2 w-full"
+              id="email-comisionista" required />
+            <input type="password" placeholder="Contraseña" class="border rounded p-2 mb-2 w-full"
+              id="password-comisionista" required />
+            <input type="date" class="border rounded p-2 mb-2 w-full" id="date-of-birth-comisionista" required>
+            <input type="text" class="border rounded p-2 mb-2 w-full" id="company-comisionista"
+              placeholder="Nombre Empresa" required>
+            <input type="text" class="border rounded p-2 mb-2 w-full" id="commission-comisionista"
+              placeholder="Comisión" required>
+            <input type="text" class="border rounded p-2 mb-2 w-full" id="country-comisionista" placeholder="País"
+              required>
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Create</button>
+          </form>
+        </div>
+
+        <!-- Update Commissioner Card -->
+        <div class="bg-white p-4 rounded shadow">
+          <h2 class="text-lg font-semibold mb-2">Update Commissioner</h2>
+          <form class="mb-4" id="update-commissioner-form">
+            <input type="number" placeholder="ID comisionista" class="border rounded p-2 mb-2 w-full"
+              id="id-comisionista-update" required />
+            <input type="text" placeholder="Nombre" class="border rounded p-2 mb-2 w-full" id="name-comisionista-update"
+              required />
+            <input type="email" placeholder="Email" class="border rounded p-2 mb-2 w-full"
+              id="email-comisionista-update" required />
+            <input type="password" placeholder="Contraseña" class="border rounded p-2 mb-2 w-full"
+              id="password-comisionista-update" required />
+            <input type="date" class="border rounded p-2 mb-2 w-full" id="date-of-birth-comisionista-update" required>
+            <input type="text" placeholder="Empresa" class="border rounded p-2 mb-2 w-full"
+              id="company-comisionista-update" required />
+            <input type="number" placeholder="Comisión Comisionista" class="border rounded p-2 mb-2 w-full"
+              id="commission-comisionista-update" required />
+            <input type="text" placeholder="País Comisionista" class="border rounded p-2 mb-2 w-full"
+              id="country-comisionista-update" required />
+            <button type="submit" class="bg-yellow-500 text-white p-2 rounded w-full">Update</button>
+          </form>
+        </div>
+
+        <!-- Delete Commissioner Card -->
+        <div class="bg-white p-4 rounded shadow">
+          <h2 class="text-lg font-semibold mb-2">Delete Commissioner</h2>
+          <form class="mb-4" id="delete-commissioner-form">
+            <input type="text" placeholder="Commissioner ID" class="border rounded p-2 mb-2 w-full"
+              id="id-comisionista-delete" required />
+            <button type="submit" class="bg-red-500 text-white p-2 rounded w-full">Delete</button>
+          </form>
+        </div>
+
+        <!-- Show List of Commissioners Card -->
+        <div class="bg-white p-4 rounded shadow">
+          <h2 class="text-lg font-semibold mb-2">Show Commissioners</h2>
+          <!-- Botón para mostrar la lista de comisionistas -->
+          <button onclick="showCommissioners()" class="bg-gray-500 text-white p-2 rounded w-full">Show List</button>
+
+          <!-- Contenedor de la tabla, inicialmente oculto con la clase 'hidden' -->
+          <div id="commissionerList" class="mt-2 hidden">
+            <table class="min-w-full mt-2 border">
+              <thead>
+                <tr class="bg-gray-200">
+                  <th class="border px-4 py-2">Commissioner ID</th>
+                  <th class="border px-4 py-2">Empresa</th>
+                  <th class="border px-4 py-2">Comisión</th>
+                  <th class="border px-4 py-2">País</th>
+                </tr>
+              </thead>
+              <tbody id="commissionerTableBody">
+                <!-- Las filas de la tabla se agregarán aquí dinámicamente con JavaScript -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
-      <!-- Commissioner Management Panel -->
-      <div id="commissionerManagementPanel" class="panel mb-8 hidden">
-        <h1 class="text-2xl font-semibold mb-4">Commissioner Management</h1>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <!-- Create Commissioner Card -->
-          <div class="bg-white p-4 rounded shadow">
-            <h2 class="text-lg font-semibold mb-2">Create Commissioner</h2>
-            <form id="create-commissioner-form" class="mb-4">
-              <input type="text" placeholder="Nombre del Comisionista" class="border rounded p-2 mb-2 w-full" id="name-comisionista" required />
-              <input type="email" placeholder="Email de Comisionista" class="border rounded p-2 mb-2 w-full" id="email-comisionista" required />
-              <input type="password" placeholder="Contraseña" class="border rounded p-2 mb-2 w-full" id="password-comisionista" required />
-              <input type="date" class="border rounded p-2 mb-2 w-full" id="date-of-birth-comisionista" required>
-              <input type="text" class="border rounded p-2 mb-2 w-full" id="company-comisionista" placeholder="Nombre Empresa" required>
-              <input type="text" class="border rounded p-2 mb-2 w-full" id="commission-comisionista" placeholder="Comisión" required>
-              <input type="text" class="border rounded p-2 mb-2 w-full" id="country-comisionista" placeholder="País" required>
-              <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Create</button>
-            </form>
-          </div>
-
-          <!-- Update Commissioner Card -->
-          <div class="bg-white p-4 rounded shadow">
-            <h2 class="text-lg font-semibold mb-2">Update Commissioner</h2>
-            <form class="mb-4" id="update-commissioner-form">
-              <input type="number" placeholder="ID comisionista" class="border rounded p-2 mb-2 w-full" id="id-comisionista-update" required />
-              <input type="text" placeholder="Nombre" class="border rounded p-2 mb-2 w-full" id="name-comisionista-update" required />
-              <input type="email" placeholder="Email" class="border rounded p-2 mb-2 w-full" id="email-comisionista-update" required />
-              <input type="password" placeholder="Contraseña" class="border rounded p-2 mb-2 w-full" id="password-comisionista-update" required />
-              <input type="date" class="border rounded p-2 mb-2 w-full" id="date-of-birth-comisionista-update" required>
-              <input type="text" placeholder="Empresa" class="border rounded p-2 mb-2 w-full" id="company-comisionista-update" required />
-              <input type="number" placeholder="Comisión Comisionista" class="border rounded p-2 mb-2 w-full" id="commission-comisionista-update" required />
-              <input type="text" placeholder="País Comisionista" class="border rounded p-2 mb-2 w-full" id="country-comisionista-update" required />
-              <button type="submit" class="bg-yellow-500 text-white p-2 rounded w-full">Update</button>
-            </form>
-          </div>
-
-          <!-- Delete Commissioner Card -->
-          <div class="bg-white p-4 rounded shadow">
-            <h2 class="text-lg font-semibold mb-2">Delete Commissioner</h2>
-            <form class="mb-4" id="delete-commissioner-form">
-              <input type="text" placeholder="Commissioner ID" class="border rounded p-2 mb-2 w-full" id="id-comisionista-delete" required />
-              <button type="submit" class="bg-red-500 text-white p-2 rounded w-full">Delete</button>
-            </form>
-          </div>
-
-          <!-- Show List of Commissioners Card -->
-          <div class="bg-white p-4 rounded shadow">
-            <h2 class="text-lg font-semibold mb-2">Show Commissioners</h2>
-            <!-- Botón para mostrar la lista de comisionistas -->
-            <button onclick="showCommissioners()" class="bg-gray-500 text-white p-2 rounded w-full">Show List</button>
-            
-            <!-- Contenedor de la tabla, inicialmente oculto con la clase 'hidden' -->
-            <div id="commissionerList" class="mt-2 hidden">
-                <table class="min-w-full mt-2 border">
-                    <thead>
-                        <tr class="bg-gray-200">
-                            <th class="border px-4 py-2">Commissioner ID</th>
-                            <th class="border px-4 py-2">Empresa</th>
-                            <th class="border px-4 py-2">Comisión</th>
-                            <th class="border px-4 py-2">País</th>
-                        </tr>
-                    </thead>
-                    <tbody id="commissionerTableBody">
-                        <!-- Las filas de la tabla se agregarán aquí dinámicamente con JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
   <script src="./js/admin.js"></script>
 

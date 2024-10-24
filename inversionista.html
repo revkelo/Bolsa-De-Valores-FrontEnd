@@ -65,13 +65,7 @@
                             <span class="ml-3">Inversión</span>
                         </a>
                     </li>
-                    <li class="mb-3">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900"
-                            onclick="togglePanel('walletPanel')">
-                            <span class="material-icons">account_balance_wallet</span>
-                            <span class="ml-3">Billetera</span>
-                        </a>
-                    </li>
+
                     <li>
                         <a href="#" class="flex items-center text-gray-600 hover:text-gray-900"
                             onclick="togglePanel('profilePanel')">
@@ -93,10 +87,10 @@
         <!-- Contenido principal -->
         <div class="flex-1 p-6 lg:ml-64">
             <div id="homePanel" class="panel mb-8">
-    
+
                 <img src="./images/home.jpg" alt="Descripción de la imagen" class="w-full h-auto mb-4">
             </div>
-            
+
             <div id="marketPanel" class="panel mb-8 hidden">
                 <h1 class="text-2xl font-semibold mb-4">Mercado</h1>
                 <p class="text-gray-600 mb-8">Los datos del mercado se mostrarán aquí.</p>
@@ -108,13 +102,10 @@
                 </div>
             </div>
             <div id="investmentPanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Inversión</h1>
+                <h1 class="text-2xl font-semibold mb-4">Inversiones</h1>
                 <p class="text-gray-600 mb-8">Las opciones de inversión se mostrarán aquí.</p>
             </div>
-            <div id="walletPanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Billetera</h1>
-                <p class="text-gray-600 mb-8">Los detalles de la billetera se mostrarán aquí.</p>
-            </div>
+
             <div id="profilePanel" class="panel mb-8 hidden">
                 <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
                     <div class="flex flex-wrap justify-between gap-3 p-4">
@@ -362,17 +353,21 @@
             candlestickSeries.setData(data);
         }
 
+        var graficas = false;
         function togglePanel(panelId) {
             const panels = document.querySelectorAll('.panel');
             panels.forEach(panel => {
                 if (panel.id === panelId) {
-                    panel.classList.toggle('hidden'); // Mostrar u ocultar el panel seleccionado
+                    panel.classList.toggle('hidden');
 
-                    stocks.forEach(stock => {
-                        const containerId = `container-${stock.symbol}`;
-                        fetchDataAndCreateChart(stock.symbol, containerId);
-                    });
 
+                    if (graficas === false) {
+                        stocks.forEach(stock => {
+                            const containerId = `container-${stock.symbol}`;
+                            fetchDataAndCreateChart(stock.symbol, containerId);
+                        });
+                        graficas = true;
+                    }
 
                 } else {
                     panel.classList.add('hidden'); // Ocultar otros paneles
@@ -380,8 +375,8 @@
             });
         }
         function buyStock(symbol) {
-          // Obtener los datos de la acción almacenada en localStorage
-          const storedData = JSON.parse(localStorage.getItem(symbol));
+            // Obtener los datos de la acción almacenada en localStorage
+            const storedData = JSON.parse(localStorage.getItem(symbol));
             const latestPrice = storedData.data[storedData.data.length - 1].close;
 
             localStorage.setItem('cvempresa', symbol);
