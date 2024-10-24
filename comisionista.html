@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/comisionista.css">
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
     <style>
         .hidden {
             display: none;
@@ -60,13 +61,13 @@
                             <span class="ml-3">Informes</span>
                         </a>
                     </li>
-                    <li>
+                    <li class="mb-3">
                         <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('marketGraphsPanel')">
                             <span class="material-icons">bar_chart</span>
                             <span class="ml-3">Gráficas de Mercado</span>
                         </a>
                     </li>
-                    <li>
+                    <li class="mb-3">
                         <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('profilePanel')">
                             <span class="material-icons">person</span>
                             <span class="ml-3">Perfil</span>
@@ -106,8 +107,7 @@
                 <p class="text-gray-600 mb-8">Genera informes para cada inversor.</p>
             </div>
             <div id="marketGraphsPanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Gráficas de Mercado</h1>
-                <p class="text-gray-600 mb-8">Muestra gráficas de los mercados de acciones de diferentes países.</p>
+                <div id="stock-container"></div>
             </div>
             <div id="profilePanel" class="panel mb-8 hidden">
                 <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
@@ -200,7 +200,193 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./js/comisionista.js"></script>
     <script>
-        
+
+        const stocks = [
+            { name: 'Ecopetrol', symbol: 'EC' },
+            { name: 'Apple', symbol: 'AAPL' },
+            { name: 'Tesla', symbol: 'TSLA' },
+            { name: 'Microsoft', symbol: 'MSFT' },
+            { name: 'Amazon', symbol: 'AMZN' },
+            { name: 'Google', symbol: 'GOOGL' },
+            { name: 'NVIDIA', symbol: 'NVDA' },
+            { name: 'Mazda', symbol: 'TYO' },
+            { name: 'Coca-Cola', symbol: 'KO' },
+            { name: 'Walmart', symbol: 'WMT' },
+            { name: 'Disney', symbol: 'DIS' },
+            { name: 'IBM', symbol: 'IBM' }
+
+        ];
+
+
+        function createStockCard(stock) {
+            return `
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title text-center">${stock.name} (${stock.symbol})</h3>
+                    <div class="chart-container" id="container-${stock.symbol}"></div>
+                    <div class="text-center">
+                        <p id="price-${stock.symbol}" class="font-weight-bold"></p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+        }
+
+        function renderStocks() {
+            const stockContainer = document.getElementById('stock-container');
+            let html = '<div class="row mb-4">';
+            stocks.forEach((stock, index) => {
+                html += createStockCard(stock);
+                // Cerrar la fila cada dos columnas
+                if ((index + 1) % 2 === 0 && index !== stocks.length - 1) {
+                    html += '</div><div class="row mb-4">';
+                }
+            });
+            html += '</div>'; // Cerrar la última fila
+            stockContainer.innerHTML = html;
+        }
+
+        // Llama a la función para renderizar las acciones
+        renderStocks();
+
+
+
+
+        const apiKey = 'BI2G66ESVQSXQZ0F';
+        const expirationTime = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
+
+        // Función para verificar si los datos están en localStorage y no han expirado
+        function getStoredData(symbol) {
+            const storedData = localStorage.getItem(symbol);
+            if (storedData) {
+                const parsedData = JSON.parse(storedData);
+                const now = new Date().getTime();
+                if (now - parsedData.timestamp < expirationTime) {
+                    return parsedData.data;
+                }
+            }
+            return null;
+        }
+
+        // Función para guardar los datos en localStorage
+        function storeData(symbol, data) {
+            const now = new Date().getTime();
+            const storedData = {
+                timestamp: now,
+                data: data
+            };
+            localStorage.setItem(symbol, JSON.stringify(storedData));
+        }
+
+        let apiLimitReached = false; // Variable para controlar si el límite ya fue alcanzado
+
+        function fetchDataAndCreateChart(symbol, containerId) {
+            const storedData = getStoredData(symbol);
+            if (storedData) {
+                createChart(storedData, containerId);
+                console.log("LOCAL");
+            } else {
+                const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}&outputsize=compact`;
+                console.log("API");
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.Information && !apiLimitReached) {
+                            // Verifica si el mensaje de límite se recibe y no se ha mostrado antes
+                            alert("Se llegó el límite de la API"); // O usa console.log() si prefieres
+                            apiLimitReached = true; // Cambia el estado a verdadero para no mostrarlo nuevamente
+                            return; // Salir de la función si se alcanzó el límite
+                        }
+
+                        const timeSeries = data['Time Series (Daily)'];
+                        if (!timeSeries) {
+                            console.error('No se encontraron datos.');
+                            return;
+                        }
+
+                        const candlestickData = [];
+                        const dates = Object.keys(timeSeries).reverse();
+
+                        for (let date of dates) {
+                            const dailyData = timeSeries[date];
+                            candlestickData.push({
+                                time: new Date(date).getTime() / 1000,
+                                open: parseFloat(dailyData['1. open']),
+                                high: parseFloat(dailyData['2. high']),
+                                low: parseFloat(dailyData['3. low']),
+                                close: parseFloat(dailyData['4. close']),
+                            });
+                        }
+
+                        storeData(symbol, candlestickData); // Almacenar los datos en localStorage
+                        createChart(candlestickData, containerId); // Crear la gráfica
+                    })
+                    .catch(error => console.error('Error al obtener los datos:', error));
+            }
+        }
+
+
+        // Función para crear la gráfica con los datos
+        function createChart(data, containerId) {
+            const chart = LightweightCharts.createChart(document.getElementById(containerId), {
+                layout: {
+                    textColor: '#000',
+                    background: { type: 'solid', color: '#fff' }
+                },
+                width: document.getElementById(containerId).offsetWidth,
+                height: 400
+            });
+            const candlestickSeries = chart.addCandlestickSeries();
+            candlestickSeries.setData(data);
+        }
+
+        var graficas = false;
+        function togglePanel(panelId) {
+            const panels = document.querySelectorAll('.panel');
+            panels.forEach(panel => {
+                if (panel.id === panelId) {
+                    panel.classList.toggle('hidden');
+
+
+                    if (graficas === false) {
+                        stocks.forEach(stock => {
+                            const containerId = `container-${stock.symbol}`;
+                            fetchDataAndCreateChart(stock.symbol, containerId);
+                        });
+                        graficas = true;
+                    }
+
+                } else {
+                    panel.classList.add('hidden'); // Ocultar otros paneles
+                }
+            });
+        }
+        function buyStock(symbol) {
+            // Obtener los datos de la acción almacenada en localStorage
+            const storedData = JSON.parse(localStorage.getItem(symbol));
+            const latestPrice = storedData.data[storedData.data.length - 1].close;
+
+            localStorage.setItem('cvempresa', symbol);
+            localStorage.setItem('cvprecio', latestPrice);
+            window.location.href = 'compra.html';
+
+        }
+
+        function sellStock(symbol) {
+            // Obtener los datos de la acción almacenada en localStorage
+            const storedData = JSON.parse(localStorage.getItem(symbol));
+            const latestPrice = storedData.data[storedData.data.length - 1].close;
+
+            localStorage.setItem('cvempresa', symbol);
+            localStorage.setItem('cvprecio', latestPrice);
+            window.location.href = 'vender.html';
+
+        }
+
+
     </script>
 </body>
 

@@ -8,18 +8,6 @@ if (userId === null) {
     window.location.href = 'login.html';
 }
 
-// Función para alternar la visibilidad de los paneles
-function togglePanel(panelId) {
-    const panels = document.querySelectorAll('.panel');
-    panels.forEach(panel => {
-        if (panel.id === panelId) {
-            panel.classList.toggle('hidden'); // Mostrar u ocultar el panel seleccionado
-        } else {
-            panel.classList.add('hidden'); // Ocultar otros paneles
-        }
-    });
-}
-
 // Función para cerrar sesión
 function logout() {
     // Eliminar el ID del usuario de localStorage
