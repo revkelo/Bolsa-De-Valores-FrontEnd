@@ -78,7 +78,11 @@ function enableEditProfile() {
     const pais = document.querySelector('.profile-pais').textContent;
     const perfil_riesgo = document.querySelector('.profile-perfil-riesgo').textContent;
     const email = document.querySelector('.profile-email').textContent;
+    const dateOfBirth = document.querySelector('.profile-birthdate').textContent;
 
+    // Convertir la fecha de nacimiento al formato YYYY-MM-DD
+    const dateParts = dateOfBirth.split('/');
+    const formattedDateOfBirth = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
 
     document.getElementById('input-profile-name').classList.remove('hidden');
     document.getElementById('nombre-inv').classList.add('hidden');
@@ -86,11 +90,11 @@ function enableEditProfile() {
 
     document.getElementById('input-profile-birthdate').classList.remove('hidden');
     document.getElementById('birthdate-inv').classList.add('hidden');
+    document.getElementById('input-profile-birthdate').value = formattedDateOfBirth; // Establecer el valor predeterminado
 
     document.getElementById('input-profile-country').classList.remove('hidden');
     document.getElementById('pais-inv').classList.add('hidden');
     document.getElementById('input-profile-country').value = pais;
-
 
     document.getElementById('input-profile-risk').classList.remove('hidden');
     document.getElementById('perfil-riesgo-inv').classList.add('hidden');
@@ -103,7 +107,6 @@ function enableEditProfile() {
     document.getElementById('boton-actualizar').classList.add('hidden');
     document.getElementById('boton-guardar').classList.remove('hidden');
 }
-
 function cancelar(){
 
     document.getElementById('input-profile-name').classList.add('hidden');
