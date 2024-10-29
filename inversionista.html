@@ -9,32 +9,35 @@
     <!-- Iconos Materiales -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/inverionista.css">
     <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
     <style>
         .hidden {
             display: none;
         }
+
         .chart-container {
-        height: 400px;
-    }
+            height: 400px;
+        }
     </style>
 </head>
 
 <body class="bg-gray-100 font-sans antialiased">
 
-  
+
 
     <div class="flex flex-col min-h-screen lg:flex-row">
 
         <!-- Barra lateral -->
-        <aside class="w-full lg:w-64 bg-white p-6 border-b lg:border-b-0 lg:border-r border-gray-200 lg:h-screen lg:overflow-y-auto lg:fixed lg:left-0 lg:top-0 z-10" id="sidebar">
+        <aside
+            class="w-full lg:w-64 bg-white p-6 border-b lg:border-b-0 lg:border-r border-gray-200 lg:h-screen lg:overflow-y-auto lg:fixed lg:left-0 lg:top-0 z-10"
+            id="sidebar">
             <div class="flex items-center gap-4 text-[#111418] mb-4">
                 <div class="size-4">
                     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z"
-                            fill="currentColor"
-                        ></path>
+                            fill="currentColor"></path>
                     </svg>
                 </div>
                 <h2 class="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]">Andina Trading</h2>
@@ -42,31 +45,30 @@
             <nav>
                 <ul>
                     <li class="mb-3">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('homePanel')">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900"
+                            onclick="togglePanel('homePanel')">
                             <span class="material-icons">home</span>
                             <span class="ml-3">Inicio</span>
                         </a>
                     </li>
                     <li class="mb-3">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('marketPanel')">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900"
+                            onclick="togglePanel('marketPanel')">
                             <span class="material-icons">bar_chart</span>
                             <span class="ml-3">Mercado</span>
                         </a>
                     </li>
                     <li class="mb-3">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('investmentPanel')">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900"
+                            onclick="togglePanel('investmentPanel')">
                             <span class="material-icons">show_chart</span>
                             <span class="ml-3">Inversión</span>
                         </a>
                     </li>
-                    <li class="mb-3">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('walletPanel')">
-                            <span class="material-icons">account_balance_wallet</span>
-                            <span class="ml-3">Billetera</span>
-                        </a>
-                    </li>
+
                     <li>
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('profilePanel')">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900"
+                            onclick="togglePanel('profilePanel')">
                             <span class="material-icons">person</span>
                             <span class="ml-3">Perfil</span>
                         </a>
@@ -74,336 +76,163 @@
 
                     <li class="mt-6">
                         <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="logout()">
-                          <span class="material-icons">logout</span>
-                          <span class="ml-3">Cerrar Sesión</span>
+                            <span class="material-icons">logout</span>
+                            <span class="ml-3">Cerrar Sesión</span>
                         </a>
-                      </li>
+                    </li>
                 </ul>
             </nav>
         </aside>
 
         <!-- Contenido principal -->
         <div class="flex-1 p-6 lg:ml-64">
-            <div id="homePanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Inicio</h1>
-                <p class="text-gray-600 mb-8">¡Bienvenido al panel de control!</p>
+            <div id="homePanel" class="panel mb-8">
+
+                <img src="./images/home.jpg" alt="Descripción de la imagen" class="w-full h-auto mb-4">
             </div>
+
             <div id="marketPanel" class="panel mb-8 hidden">
                 <h1 class="text-2xl font-semibold mb-4">Mercado</h1>
                 <p class="text-gray-600 mb-8">Los datos del mercado se mostrarán aquí.</p>
-             
+
                 <div class="container mt-4">
-                    <h1 class="text-center">Gráficas de Velas - Empresas de América Latina</h1>
-            
-                    <h2 class="mt-4">Colombia</h2>
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Ecopetrol (EC)</h3>
-                                    <div class="chart-container" id="container-EC"></div>
-                                    <div class="text-center">
-                                        <p id="price-EC" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('EC')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('EC')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Grupo Aval (AVAL)</h3>
-                                    <div class="chart-container" id="container-AVAL"></div>
-                                    <div class="text-center">
-                                        <p id="price-AVAL" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('AVAL')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('AVAL')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Bancolombia (BCO)</h3>
-                                    <div class="chart-container" id="container-BCO"></div>
-                                    <div class="text-center">
-                                        <p id="price-BCO" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('BCO')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('BCO')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Grupo Energía Bogotá (GEB)</h3>
-                                    <div class="chart-container" id="container-GEB"></div>
-                                    <div class="text-center">
-                                        <p id="price-GEB" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('GEB')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('GEB')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
+
+                    <div id="stock-container"></div>
+
+                </div>
+            </div>
+            <div id="investmentPanel" class="panel mb-8 hidden">
+                <h1 class="text-2xl font-semibold mb-4">Inversiones</h1>
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Valor Actual</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border-b border-gray-200 px-4 py-2">Tesla</td>
+                            <td class="border-b border-gray-200 px-4 py-2">10</td>
+                            <td class="border-b border-gray-200 px-4 py-2">$200</td>
+                            <td class="border-b border-gray-200 px-4 py-2">$250</td>
+                            <td class="border-b border-gray-200 px-4 py-2">
+                                <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="sellStock('TSLA')">Vender</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border-b border-gray-200 px-4 py-2">Apple</td>
+                            <td class="border-b border-gray-200 px-4 py-2">5</td>
+                            <td class="border-b border-gray-200 px-4 py-2">$150</td>
+                            <td class="border-b border-gray-200 px-4 py-2">$180</td>
+                            <td class="border-b border-gray-200 px-4 py-2">
+                                <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="sellStock('AAPL')">Vender</button>
+                            </td>
+                        </tr>
+                        <!-- Agrega más filas aquí según sea necesario -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="profilePanel" class="panel mb-8 hidden">
+                <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+                    <div class="flex flex-wrap justify-between gap-3 p-4">
+                        <div class="flex min-w-72 flex-col gap-3">
+                            <p class="text-[#1C160C] tracking-light text-[32px] font-bold leading-tight profile-name">
+                                Perfil del Inversionista
+                            </p>
+                            <p class="text-[#A18249] text-sm font-normal leading-normal">
+                                Bienvenido, <span class="profile-name"></span>. Este es tu perfil de inversionista.
+                                Puedes actualizar tus datos personales, foto de perfil, etc. Si necesitas ayuda, no
+                                dudes en ponerte en contacto con nuestro equipo de soporte.
+                            </p>
                         </div>
                     </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12 text-center">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title">Avianca (AVH)</h3>
-                                    <div class="chart-container" id="container-AVH"></div>
-                                    <div class="text-center">
-                                        <p id="price-AVH" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('AVH')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('AVH')">Vender</button>
-                                    </div>
+                    <div class="flex p-4 @container">
+                        <div
+                            class="flex w-full flex-col gap-4 @[520px]:flex-row @[520px]:justify-between @[520px]:items-center">
+                            <div class="flex gap-4">
+                                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32"
+                                    style='background-image: url("/images/profile-inv.jpg");'>
+                                </div>
+                                <div class="flex flex-col justify-center">
+                                    <p class="text-[#1C160C] text-[22px] font-bold leading-tight profile-name"
+                                        id="nombre-inv"></p>
+                                    <input type="text" class="hidden profile-name-input" id="input-profile-name"
+                                        placeholder="Ingresar Nuevo nombre">
+                                    <p class="text-[#A18249] text-base font-normal leading-normal">Inversionista</p>
                                 </div>
                             </div>
+                            <button
+                                class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#F4EFE6] text-[#1C160C] text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto"
+                                onclick="enableEditProfile()" id="boton-actualizar">
+                                <span class="truncate">Actualizar perfil</span>
+                            </button>
+                            <button
+                                class="hidden flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#F4EFE6] text-[#1C160C] text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto"
+                                onclick="saveProfile()" id="boton-guardar">
+                                <span class="truncate">Actualizar perfil</span>
+                            </button>
+                            <button
+                                class=" hidden flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#F4EFE6] text-[#1C160C] text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto"
+                                onclick="cancelar()" id="boton-cancelar">
+                                <span class="truncate">Cancelar</span>
+                            </button>
                         </div>
                     </div>
-            
-                    <h2 class="mt-4">Ecuador</h2>
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Empresa 1 (ECU1)</h3>
-                                    <div class="chart-container" id="container-ECU1"></div>
-                                    <div class="text-center">
-                                        <p id="price-ECU1" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('ECU1')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('ECU1')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="p-4 grid grid-cols-[20%_1fr] gap-x-6">
+                        <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
+                            <p class="text-[#A18249] text-sm font-normal leading-normal">DNI</p>
+                            <p class="text-[#1C160C] text-sm font-normal leading-normal profile-dni"></p>
                         </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Empresa 2 (ECU2)</h3>
-                                    <div class="chart-container" id="container-ECU2"></div>
-                                    <div class="text-center">
-                                        <p id="price-ECU2" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('ECU2')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('ECU2')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
+                            <p class="text-[#A18249] text-sm font-normal leading-normal">Fecha de nacimiento</p>
+                            <p class="text-[#1C160C] text-sm font-normal leading-normal profile-birthdate"
+                                id="birthdate-inv"></p>
+                            <input type="date" class="hidden profile-date-input" id="input-profile-birthdate">
+                        </div>
+                        <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
+                            <p class="text-[#A18249] text-sm font-normal leading-normal">País</p>
+                            <p class="text-[#1C160C] text-sm font-normal leading-normal profile-pais" id="pais-inv"></p>
+                            <input type="text" class="hidden profile-country-input" id="input-profile-country">
+
+                        </div>
+                        <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
+                            <p class="text-[#A18249] text-sm font-normal leading-normal">Perfil de Riesgo</p>
+                            <p class="text-[#1C160C] text-sm font-normal leading-normal profile-pais profile-perfil-riesgo"
+                                id="perfil-riesgo-inv"></p>
+                            <input type="text" class="hidden profile-risk-input" id="input-profile-risk">
                         </div>
                     </div>
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Empresa 3 (ECU3)</h3>
-                                    <div class="chart-container" id="container-ECU3"></div>
-                                    <div class="text-center">
-                                        <p id="price-ECU3" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('ECU3')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('ECU3')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
+                    <h3 class="text-[#1C160C] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">
+                        Contacto</h3>
+                    <div class="p-4 grid grid-cols-[20%_1fr] gap-x-6">
+                        <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
+                            <p class="text-[#A18249] text-sm font-normal leading-normal">Correo electrónico</p>
+                            <p class="text-[#1C160C] text-sm font-normal leading-normal profile-email" id="email-inv">
+                            </p>
+                            <input type="email" class="hidden profile-email-input" id="input-profile-email">
+
                         </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Empresa 4 (ECU4)</h3>
-                                    <div class="chart-container" id="container-ECU4"></div>
-                                    <div class="text-center">
-                                        <p id="price-ECU4" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('ECU4')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('ECU4')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
+                            <p class="text-[#A18249] text-sm font-normal leading-normal">Teléfono</p>
+                            <p class="text-[#1C160C] text-sm font-normal leading-normal">+123 456 7890</p>
                         </div>
                     </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12 text-center">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title">Empresa 5 (ECU5)</h3>
-                                    <div class="chart-container" id="container-ECU5"></div>
-                                    <div class="text-center">
-                                        <p id="price-ECU5" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('ECU5')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('ECU5')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <h2 class="mt-4">Perú</h2>
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Empresa 1 (PER1)</h3>
-                                    <div class="chart-container" id="container-PER1"></div>
-                                    <div class="text-center">
-                                        <p id="price-PER1" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('PER1')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('PER1')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Empresa 2 (PER2)</h3>
-                                    <div class="chart-container" id="container-PER2"></div>
-                                    <div class="text-center">
-                                        <p id="price-PER2" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('PER2')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('PER2')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Empresa 3 (PER3)</h3>
-                                    <div class="chart-container" id="container-PER3"></div>
-                                    <div class="text-center">
-                                        <p id="price-PER3" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('PER3')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('PER3')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Empresa 4 (PER4)</h3>
-                                    <div class="chart-container" id="container-PER4"></div>
-                                    <div class="text-center">
-                                        <p id="price-PER4" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('PER4')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('PER4')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12 text-center">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title">Empresa 5 (PER5)</h3>
-                                    <div class="chart-container" id="container-PER5"></div>
-                                    <div class="text-center">
-                                        <p id="price-PER5" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('PER5')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('PER5')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <h2 class="mt-4">Venezuela</h2>
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Empresa 1 (VEN1)</h3>
-                                    <div class="chart-container" id="container-VEN1"></div>
-                                    <div class="text-center">
-                                        <p id="price-VEN1" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('VEN1')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('VEN1')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Empresa 2 (VEN2)</h3>
-                                    <div class="chart-container" id="container-VEN2"></div>
-                                    <div class="text-center">
-                                        <p id="price-VEN2" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('VEN2')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('VEN2')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Empresa 3 (VEN3)</h3>
-                                    <div class="chart-container" id="container-VEN3"></div>
-                                    <div class="text-center">
-                                        <p id="price-VEN3" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('VEN3')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('VEN3')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title text-center">Empresa 4 (VEN4)</h3>
-                                    <div class="chart-container" id="container-VEN4"></div>
-                                    <div class="text-center">
-                                        <p id="price-VEN4" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('VEN4')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('VEN4')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col-md-12 text-center">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3 class="card-title">Empresa 5 (VEN5)</h3>
-                                    <div class="chart-container" id="container-VEN5"></div>
-                                    <div class="text-center">
-                                        <p id="price-VEN5" class="font-weight-bold"></p>
-                                        <button class="btn btn-success" onclick="buyStock('VEN5')">Comprar</button>
-                                        <button class="btn btn-danger" onclick="sellStock('VEN5')">Vender</button>
-                                    </div>
-                                </div>
-                            </div>
+                    <h3 class="text-[#1C160C] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">
+                        Documentos</h3>
+                    <div class="p-4 grid grid-cols-[20%_1fr] gap-x-6">
+                        <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
+                            <p class="text-[#A18249] text-sm font-normal leading-normal">Documentos de identidad</p>
+                            <p class="text-[#1C160C] text-sm font-normal leading-normal">Subidos</p>
                         </div>
                     </div>
                 </div>
-      
+            </div>
 
-
-
-            </div>
-            <div id="investmentPanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Inversión</h1>
-                <p class="text-gray-600 mb-8">Las opciones de inversión se mostrarán aquí.</p>
-            </div>
-            <div id="walletPanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Billetera</h1>
-                <p class="text-gray-600 mb-8">Los detalles de la billetera se mostrarán aquí.</p>
-            </div>
-            <div id="profilePanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Perfil</h1>
-                <p class="text-gray-600 mb-8">La información del perfil se mostrará aquí.</p>
-            </div>
         </div>
     </div>
 
@@ -411,94 +240,194 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./js/inversionista.js"></script>
     <script>
-        const apiKey = 'YINPFN7FGH8MGY4N';
-        const symbols = {
-            colombia: ['EC', 'AVAL', 'BCO', 'GEB', 'AVH'],
-            ecuador: ['ECU1', 'ECU2', 'ECU3', 'ECU4', 'ECU5'], // Reemplaza con símbolos válidos de Ecuador
-            peru: ['PER1', 'PER2', 'PER3', 'PER4', 'PER5'], // Reemplaza con símbolos válidos de Perú
-            venezuela: ['VEN1', 'VEN2', 'VEN3', 'VEN4', 'VEN5'], // Reemplaza con símbolos válidos de Venezuela
-        };
 
-        // Función para obtener datos y crear gráficas
-        function fetchDataAndCreateChart(symbol, containerId, priceId) {
-            const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}&outputsize=compact`;
+        const stocks = [
+            { name: 'Ecopetrol', symbol: 'EC' },
+            { name: 'Apple', symbol: 'AAPL' },
+            { name: 'Tesla', symbol: 'TSLA' },
+            { name: 'Microsoft', symbol: 'MSFT' },
+            { name: 'Amazon', symbol: 'AMZN' },
+            { name: 'Google', symbol: 'GOOGL' },
+            { name: 'NVIDIA', symbol: 'NVDA' },
+            { name: 'Mazda', symbol: 'TYO' },
+            { name: 'Coca-Cola', symbol: 'KO' },
+            { name: 'Walmart', symbol: 'WMT' },
+            { name: 'Disney', symbol: 'DIS' },
+            { name: 'IBM', symbol: 'IBM' }
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const timeSeries = data['Time Series (Daily)'];
-                    if (!timeSeries) {
-                        console.error(`No se encontraron datos para ${symbol}. Respuesta:`, data);
-                        return;
-                    }
+        ];
 
-                    const candlestickData = [];
-                    const dates = Object.keys(timeSeries).reverse();
 
-                    for (let date of dates) {
-                        const dailyData = timeSeries[date];
-                        const open = parseFloat(dailyData['1. open']);
-                        const high = parseFloat(dailyData['2. high']);
-                        const low = parseFloat(dailyData['3. low']);
-                        const close = parseFloat(dailyData['4. close']);
-
-                        if (!isNaN(open) && !isNaN(high) && !isNaN(low) && !isNaN(close)) {
-                            const timestamp = new Date(date + 'T00:00:00Z').getTime() / 1000;
-                            candlestickData.push({
-                                open: open,
-                                high: high,
-                                low: low,
-                                close: close,
-                                time: timestamp,
-                            });
-                        }
-                    }
-
-                    const chartOptions = {
-                        layout: {
-                            textColor: 'black',
-                            background: { type: 'solid', color: 'white' },
-                        },
-                    };
-                    const chart = LightweightCharts.createChart(document.getElementById(containerId), chartOptions);
-                    const candlestickSeries = chart.addCandlestickSeries({
-                        upColor: '#26a69a',
-                        downColor: '#ef5350',
-                        borderVisible: false,
-                        wickUpColor: '#26a69a',
-                        wickDownColor: '#ef5350',
-                    });
-
-                    candlestickSeries.setData(candlestickData);
-                    document.getElementById(priceId).innerText = `Precio actual: $${candlestickData[candlestickData.length - 1].close.toFixed(2)}`;
-                })
-                .catch(error => console.error('Error al obtener los datos:', error));
+        function createStockCard(stock) {
+            return `
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title text-center">${stock.name} (${stock.symbol})</h3>
+                    <div class="chart-container" id="container-${stock.symbol}"></div>
+                    <div class="text-center">
+                        <p id="price-${stock.symbol}" class="font-weight-bold"></p>
+                        <button class="btn btn-success" onclick="buyStock('${stock.symbol}')">Comprar</button>
+                        <button class="btn btn-danger" onclick="sellStock('${stock.symbol}')">Vender</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
         }
 
-        // Funciones para comprar y vender acciones
+        function renderStocks() {
+            const stockContainer = document.getElementById('stock-container');
+            let html = '<div class="row mb-4">';
+            stocks.forEach((stock, index) => {
+                html += createStockCard(stock);
+                // Cerrar la fila cada dos columnas
+                if ((index + 1) % 2 === 0 && index !== stocks.length - 1) {
+                    html += '</div><div class="row mb-4">';
+                }
+            });
+            html += '</div>'; // Cerrar la última fila
+            stockContainer.innerHTML = html;
+        }
+
+        // Llama a la función para renderizar las acciones
+        renderStocks();
+
+
+
+
+        const apiKey = 'BI2G66ESVQSXQZ0F';
+        const expirationTime = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
+
+        // Función para verificar si los datos están en localStorage y no han expirado
+        function getStoredData(symbol) {
+            const storedData = localStorage.getItem(symbol);
+            if (storedData) {
+                const parsedData = JSON.parse(storedData);
+                const now = new Date().getTime();
+                if (now - parsedData.timestamp < expirationTime) {
+                    return parsedData.data;
+                }
+            }
+            return null;
+        }
+
+        // Función para guardar los datos en localStorage
+        function storeData(symbol, data) {
+            const now = new Date().getTime();
+            const storedData = {
+                timestamp: now,
+                data: data
+            };
+            localStorage.setItem(symbol, JSON.stringify(storedData));
+        }
+
+        let apiLimitReached = false; // Variable para controlar si el límite ya fue alcanzado
+
+        function fetchDataAndCreateChart(symbol, containerId) {
+            const storedData = getStoredData(symbol);
+            if (storedData) {
+                createChart(storedData, containerId);
+                console.log("LOCAL");
+            } else {
+                const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}&outputsize=compact`;
+                console.log("API");
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.Information && !apiLimitReached) {
+                            // Verifica si el mensaje de límite se recibe y no se ha mostrado antes
+                            alert("Se llegó el límite de la API"); // O usa console.log() si prefieres
+                            apiLimitReached = true; // Cambia el estado a verdadero para no mostrarlo nuevamente
+                            return; // Salir de la función si se alcanzó el límite
+                        }
+
+                        const timeSeries = data['Time Series (Daily)'];
+                        if (!timeSeries) {
+                            console.error('No se encontraron datos.');
+                            return;
+                        }
+
+                        const candlestickData = [];
+                        const dates = Object.keys(timeSeries).reverse();
+
+                        for (let date of dates) {
+                            const dailyData = timeSeries[date];
+                            candlestickData.push({
+                                time: new Date(date).getTime() / 1000,
+                                open: parseFloat(dailyData['1. open']),
+                                high: parseFloat(dailyData['2. high']),
+                                low: parseFloat(dailyData['3. low']),
+                                close: parseFloat(dailyData['4. close']),
+                            });
+                        }
+
+                        storeData(symbol, candlestickData); // Almacenar los datos en localStorage
+                        createChart(candlestickData, containerId); // Crear la gráfica
+                    })
+                    .catch(error => console.error('Error al obtener los datos:', error));
+            }
+        }
+
+
+        // Función para crear la gráfica con los datos
+        function createChart(data, containerId) {
+            const chart = LightweightCharts.createChart(document.getElementById(containerId), {
+                layout: {
+                    textColor: '#000',
+                    background: { type: 'solid', color: '#fff' }
+                },
+                width: document.getElementById(containerId).offsetWidth,
+                height: 400
+            });
+            const candlestickSeries = chart.addCandlestickSeries();
+            candlestickSeries.setData(data);
+        }
+
+        var graficas = false;
+        function togglePanel(panelId) {
+            const panels = document.querySelectorAll('.panel');
+            panels.forEach(panel => {
+                if (panel.id === panelId) {
+                    panel.classList.toggle('hidden');
+
+
+                    if (graficas === false) {
+                        stocks.forEach(stock => {
+                            const containerId = `container-${stock.symbol}`;
+                            fetchDataAndCreateChart(stock.symbol, containerId);
+                        });
+                        graficas = true;
+                    }
+
+                } else {
+                    panel.classList.add('hidden'); // Ocultar otros paneles
+                }
+            });
+        }
         function buyStock(symbol) {
-            const priceElement = document.getElementById(`price-${symbol}`);
-            const priceText = priceElement.innerText;
-            const price = parseFloat(priceText.replace(/[^0-9.-]+/g, '')); // Extrae el precio numérico
-            alert(`Compraste acciones de ${symbol} a $${price.toFixed(2)}`);
-            // Aquí puedes añadir lógica para procesar la compra
+            // Obtener los datos de la acción almacenada en localStorage
+            const storedData = JSON.parse(localStorage.getItem(symbol));
+            const latestPrice = storedData.data[storedData.data.length - 1].close;
+
+            localStorage.setItem('cvempresa', symbol);
+            localStorage.setItem('cvprecio', latestPrice);
+            window.location.href = 'compra.html';
+
         }
 
         function sellStock(symbol) {
-            const priceElement = document.getElementById(`price-${symbol}`);
-            const priceText = priceElement.innerText;
-            const price = parseFloat(priceText.replace(/[^0-9.-]+/g, '')); // Extrae el precio numérico
-            alert(`Vendiste acciones de ${symbol} a $${price.toFixed(2)}`);
-            // Aquí puedes añadir lógica para procesar la venta
+            // Obtener los datos de la acción almacenada en localStorage
+            const storedData = JSON.parse(localStorage.getItem(symbol));
+            const latestPrice = storedData.data[storedData.data.length - 1].close;
+
+            localStorage.setItem('cvempresa', symbol);
+            localStorage.setItem('cvprecio', latestPrice);
+            window.location.href = 'vender.html';
+
         }
 
-        // Llamar a las funciones para cada acción
-        const countries = ['colombia', 'ecuador', 'peru', 'venezuela'];
-        for (const country of countries) {
-            for (const symbol of symbols[country]) {
-                fetchDataAndCreateChart(symbol, `container-${symbol}`, `price-${symbol}`);
-            }
-        }
+
     </script>
 </body>
 

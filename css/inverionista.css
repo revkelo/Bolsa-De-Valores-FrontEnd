@@ -1,0 +1,89 @@
+/* Contenedor de la información de perfil */
+.profile-info {
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 20% 1fr;
+    gap: 1.5rem;
+}
+
+/* Estilo base para los párrafos que contienen información del perfil */
+.profile-info p {
+    color: #1C160C;
+    font-size: 0.875rem;
+    font-weight: normal;
+    transition: color 0.3s ease;
+}
+
+/* Estilo base para los inputs ocultos */
+input[type="text"], input[type="date"], input[type="email"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #E9DFCE;
+    border-radius: 5px;
+    font-size: 0.875rem;
+    color: #1C160C;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.3s ease;
+    background-color: transparent;
+    outline: none;
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+/* Inputs visibles (cuando se habilita la edición) */
+input:not(.hidden) {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+/* Efecto cuando se hace foco en un input */
+input:focus {
+    border-color: #A18249;
+    box-shadow: 0 0 5px rgba(161, 130, 73, 0.5);
+    background-color: #FFF9E6;
+}
+
+/* Animación para transiciones suaves de las entradas */
+input, p {
+    transition: all 0.3s ease;
+}
+
+/* Inputs en su estado normal (no habilitados para edición) */
+input.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95);
+}
+
+/* Efectos de transición de color y escala */
+.profile-info p:hover {
+    color: #A18249;
+}
+
+/* Botón para activar la edición (ejemplo con hover) */
+button {
+    background-color: #F4EFE6;
+    color: #1C160C;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #A18249;
+    color: #FFFFFF;
+    transform: scale(1.05);
+}
+
+/* Efecto de transición cuando se activa la edición */
+input.profile-date-input, input.profile-country-input, input.profile-risk-input, input.profile-email-input {
+    display: block;
+    margin-top: 5px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.875rem;
+}
