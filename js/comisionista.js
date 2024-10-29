@@ -182,7 +182,7 @@ function saveProfile() {
 
 // Función para obtener los inversores de la API de Inversionistas y crear las tarjetas dinámicamente
 function loadInvestors() {
-    fetch('http://localhost:8080/api/inversionista', {
+    fetch('http://localhost:8080/api/contrato/comisionista/'+userId+'/inversionistas', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
