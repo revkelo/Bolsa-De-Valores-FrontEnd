@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     .then(data => {
                         alert('Inversionista creado con éxito');
                         // Redirigir a la página del inversionista
-                        window.location.href = 'inversionista.html';
+                        window.location.href = 'PanelComisionistas.html';
                     })
                     .catch(error => console.error('Error al crear el inversionista:', error));
 

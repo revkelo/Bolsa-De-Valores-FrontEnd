@@ -1,6 +1,7 @@
  // Obtener el ID del usuario desde localStorage
 const userId = localStorage.getItem('userId');
 const password = localStorage.getItem('password');
+const comisionista_seleccionado = localStorage.getItem('comisionista_seleccionado');
 
 
 // Verificar si userId es null o no
@@ -68,6 +69,28 @@ function loadprofile() {
     .catch(error => {
         console.error('Error al obtener los datos del perfil:', error);
         alert('Error al cargar el perfil. Por favor, inténtelo de nuevo.');
+    });
+
+    fetch('http://localhost:8080/api/usuario/' + comisionista_seleccionado, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(usuario => {
+        // Insertar los datos obtenidos en el HTML
+
+        // Nombre del comisionista
+        document.querySelector('.comisionista-name').textContent = usuario.nombre ? usuario.nombre : 'No hay contrato con comisionista';
+
+        // Correo electrónico
+        document.querySelector('.comisionista-email').textContent = usuario.email ? usuario.email : 'No hay contrato con comisionista';
+
+    })
+    .catch(error => {
+        console.error('Error al obtener los datos del comisionista:', error);
+        alert('Error al cargar el comisionista. Por favor, inténtelo de nuevo.');
     });
 }
 
