@@ -100,6 +100,7 @@ function firmarContrato(){
     .then(response => response.json())
     .then(data => {
         if (data.contrato_id){
+            localStorage.setItem('contratoId', data.contrato_id);
             const contrato_id = data.contrato_id;
             alert('Contrato firmado con éxito');
             localStorage.setItem('contratoId', contrato_id);

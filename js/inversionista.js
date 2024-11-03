@@ -2,7 +2,7 @@
 const userId = localStorage.getItem('userId');
 const password = localStorage.getItem('password');
 const comisionista_seleccionado = localStorage.getItem('comisionista_seleccionado');
-
+const contrato_id = localStorage.getItem('contratoId');
 
 // Verificar si userId es null o no
 
@@ -190,6 +190,22 @@ function saveProfile() {
       .catch(error => {
           console.error('Error al actualizar el inversionista:', error);
       });
+    }
+
+    function cancelarContrato(){
+        fetch("http://localhost:8080/api/contrato/cancelar/" + contrato_id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then (response => response.json())
+        .then(data => {
+            alert('Contrato cancelado exitosamente');
+            window.location.href = 'PanelComisionistas.html';
+        }).catch(error => {
+            console.error('Error al cancelar el contrato:', error);
+            alert('Error al cancelar el contrato. Por favor, inténtelo de nuevo.');
+        });
     }
 
 
