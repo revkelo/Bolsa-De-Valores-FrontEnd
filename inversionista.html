@@ -120,7 +120,8 @@
                             <td class="border-b border-gray-200 px-4 py-2">$200</td>
                             <td class="border-b border-gray-200 px-4 py-2">$250</td>
                             <td class="border-b border-gray-200 px-4 py-2">
-                                <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="sellStock('TSLA')">Vender</button>
+                                <button class="bg-blue-500 text-white px-3 py-1 rounded"
+                                    onclick="sellStock('TSLA')">Vender</button>
                             </td>
                         </tr>
                         <tr>
@@ -129,7 +130,8 @@
                             <td class="border-b border-gray-200 px-4 py-2">$150</td>
                             <td class="border-b border-gray-200 px-4 py-2">$180</td>
                             <td class="border-b border-gray-200 px-4 py-2">
-                                <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="sellStock('AAPL')">Vender</button>
+                                <button class="bg-blue-500 text-white px-3 py-1 rounded"
+                                    onclick="sellStock('AAPL')">Vender</button>
                             </td>
                         </tr>
                         <!-- Agrega más filas aquí según sea necesario -->
@@ -221,7 +223,7 @@
                         </div>
                         <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
 
-                        <button
+                            <button
                                 class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#F4EFE6] text-[#1C160C] text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto"
                                 onclick="cancelarContrato()" id="boton-cancelar-contrato">
                                 <span class="truncate">Cancelar contrato</span>
@@ -413,13 +415,15 @@
                 if (panel.id === panelId) {
                     panel.classList.toggle('hidden');
 
-
-                    if (graficas === false) {
-                        stocks.forEach(stock => {
-                            const containerId = `container-${stock.symbol}`;
-                            fetchDataAndCreateChart(stock.symbol, containerId);
-                        });
-                        graficas = true;
+                    if ("marketPanel" === panelId) {
+                        if (graficas === false) {
+                            stocks.forEach(stock => {
+                                const containerId = `container-${stock.symbol}`;
+                                fetchDataAndCreateChart(stock.symbol, containerId);
+                       
+                            });
+                            graficas = true;
+                        }
                     }
 
                 } else {
