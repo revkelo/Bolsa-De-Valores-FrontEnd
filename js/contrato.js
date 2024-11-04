@@ -84,7 +84,6 @@ function loadInversionista(){
 
 function firmarContrato(){
 
-    
     const inversionista_id = user;
     const comisionista_id = comisionista_seleccionado;
     const fecha_firma = "2021-10-10";

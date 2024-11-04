@@ -16,6 +16,8 @@ function logout() {
     // Eliminar el ID del usuario de localStorage
     localStorage.removeItem('userId');
     localStorage.removeItem('rol');
+    localStorage.removeItem('comisionista_seleccionado');
+    localStorage.removeItem('contratoId');
     
     // Mostrar un mensaje de alerta
     alert('Sesión cerrada exitosamente.');
