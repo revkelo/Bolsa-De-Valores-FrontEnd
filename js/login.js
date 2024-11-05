@@ -48,6 +48,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 localStorage.setItem('password', data.contraseña); // Almacena la contraseña del usuario
                 localStorage.setItem('rol', data.rol); // Almacena el rol del usuario
         
+                fetch("http://localhost:8080/api/billetera/usuario/"+  data.usuario_id, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(billetera => {
+                    localStorage.setItem('billeteraId', billetera.billetera_id);
+                    alert('Billetera guardada con éxito');
+                })
+                .catch(error => console.error('Error al crear la billetera:', error));
                 // Redirigir según el rol
                 if (data.rol === 'Inversionista') {
                     fetch("http://localhost:8080/api/contrato/inversionista/" + data.usuario_id + "/comisionistaContrato", {

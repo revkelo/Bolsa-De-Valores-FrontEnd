@@ -35,6 +35,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('userId', usuario_id);
                 localStorage.setItem('rol', rol);
 
+                fetch("http://localhost:8080/api/billetera?inversionista_id="+data.usuario_id+"&saldo=0",{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(billetera => {
+                    localStorage.setItem('billeteraId', billetera.billetera_id);
+                    alert('Billetera creada con éxito');
+                })
+                .catch(error => console.error('Error al crear la billetera:', error));
                 // Segunda solicitud: Crear el inversionista o comisionista según el rol
                 if (rol === 'Inversionista') {
                     const riskProfile = document.getElementById('risk-profile').value;
