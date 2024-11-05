@@ -420,7 +420,7 @@
                             stocks.forEach(stock => {
                                 const containerId = `container-${stock.symbol}`;
                                 fetchDataAndCreateChart(stock.symbol, containerId);
-                       
+
                             });
                             graficas = true;
                         }
@@ -442,6 +442,14 @@
 
         }
 
+
+
+        // Función para obtener el nombre de la empresa a partir del símbolo
+        function nombreEmpresa(symbol) {
+            const stock = stocks.find(s => s.symbol === symbol);
+            return stock ? stock.name : 'Símbolo no encontrado';
+        }
+
         function sellStock(symbol) {
             // Obtener los datos de la acción almacenada en localStorage
             const storedData = JSON.parse(localStorage.getItem(symbol));
@@ -449,9 +457,37 @@
 
             localStorage.setItem('cvempresa', symbol);
             localStorage.setItem('cvprecio', latestPrice);
-            window.location.href = 'vender.html';
+
+
+            // Función para obtener el ID de la empresa
+            fetch('http://localhost:8080/api/transaccion/' + localStorage.getItem('userId') + '/' + nombreEmpresa(localStorage.getItem('cvempresa')), {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        response.json().then(isVerified => {
+                            if (isVerified) {
+                                window.location.href = 'vender.html';
+                            } else {
+                                alert("No ha comprado ninguna acción de esta empresa");
+                            }
+                        });
+                    } else {
+                        alert("Error al verificar la compra");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error en la solicitud:", error);
+                    alert("Ocurrió un error, por favor intenta de nuevo.");
+                });
 
         }
+
+
+
 
 
     </script>
