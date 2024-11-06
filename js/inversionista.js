@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-async function fetchInvestments(investmentBodyhtml,inversionistaId,estado,tipo) {
+async function fetchInvestments(investmentBodyhtml, inversionistaId, estado, tipo) {
     try {
         const response = await fetch(`http://localhost:8080/api/transaccion/inversionista/${inversionistaId}/${estado}/${tipo}`); // Cambia el estado y tipo según sea necesario
         if (!response.ok) {
@@ -247,8 +247,8 @@ async function fetchInvestments(investmentBodyhtml,inversionistaId,estado,tipo) 
                         <td class="border-b border-gray-200 px-4 py-2">${inversion[1]}</td>
                         <td class="border-b border-gray-200 px-4 py-2">${inversion[2]}</td>
                         <td class="border-b border-gray-200 px-4 py-2">$${inversion[3]}</td>
-                        <td class="border-b border-gray-200 px-4 py-2">$${inversion[4]}</td>
                         <td class="border-b border-gray-200 px-4 py-2">$${latestPrice}</td>
+                        <td class="border-b border-gray-200 px-4 py-2">$${inversion[4]}</td>
                         <td class="border-b border-gray-200 px-4 py-2">
                             <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="sellStock()">Vender</button>
                         </td>
@@ -436,8 +436,8 @@ function togglePanel(panelId) {
 
                 const inversionistaId = localStorage.getItem('userId'); // Asegúrate de que 'userId' esté guardado en localStorage
                 if (inversionistaId) {
-                    fetchInvestments('investmentBody',inversionistaId,true,'compra');
-                    fetchInvestments('investmentBodyInactive',inversionistaId,false,'compra');
+                    fetchInvestments('investmentBody', inversionistaId, true, 'compra');
+                    fetchInvestments('investmentBodyInactive', inversionistaId, false, 'compra');
                 } else {
                     console.error('No se encontró el ID del inversionista en localStorage.');
                 }
