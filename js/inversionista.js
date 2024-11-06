@@ -443,6 +443,7 @@ function togglePanel(panelId) {
 
                 const inversionistaId = localStorage.getItem('userId'); // Asegúrate de que 'userId' esté guardado en localStorage
                 if (inversionistaId) {
+                    obtenerSaldoBilletera(inversionistaId);
                     fetchInvestments('investmentBody', inversionistaId, true, 'compra', 0);
                     fetchInvestments('investmentBodyInactive', inversionistaId, false, 'compra', 1);
                     fetchInvestments('ventaBody', inversionistaId, true, 'venta', 1);
@@ -462,6 +463,34 @@ function togglePanel(panelId) {
         }
     });
 }
+
+
+async function obtenerSaldoBilletera(userId) {
+    try {
+        // Llamada al endpoint de tu API
+        const response = await fetch(`http://localhost:8080/api/billetera/usuario/${userId}`);
+        if (response.ok) {
+            const billeteras = await response.json();
+
+            // Selecciona el contenedor donde se mostrarán los datos
+            const container = document.getElementById('billetera-container');
+            container.innerHTML = ''; // Limpia el contenedor
+
+            // Itera sobre cada billetera y muestra su saldo
+            billeteras.forEach(billetera => {
+                const saldoElemento = document.createElement('p');
+                saldoElemento.textContent = `Saldo: ${billetera.saldo}`;
+                container.appendChild(saldoElemento);
+            });
+        } else {
+            console.error('No se encontraron billeteras para este usuario');
+        }
+    } catch (error) {
+        console.error('Error al obtener el saldo de las billeteras:', error);
+    }
+}
+
+
 function buyStock(symbol) {
     // Obtener los datos de la acción almacenada en localStorage
     const storedData = JSON.parse(localStorage.getItem(symbol));
@@ -532,8 +561,11 @@ function sellStock(symbol) {
         .then(response => {
             if (response.ok) {
                 response.json().then(isVerified => {
+     
                     if (isVerified) {
-                        window.location.href = 'vender.html';
+                    
+                        togglePanel("investmentPanel");
+                   
                     } else {
                         alert("No ha comprado ninguna acción de esta empresa");
                     }

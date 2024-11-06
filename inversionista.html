@@ -103,6 +103,11 @@
             </div>
             <div id="investmentPanel" class="panel mb-8 hidden">
                 <h1 class="text-2xl font-semibold mb-4">Inversiones</h1>
+
+                <h1>Saldo de Billeteras del Usuario</h1>
+                <div id="billetera-container">
+                    <!-- Aquí se insertarán los saldos -->
+                </div>
                 <h2 class="text-2xl font-semibold mb-4">Compras Activas</h2>
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white border border-gray-200" id="investmentTable">
@@ -133,7 +138,7 @@
                                 <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
                                 <th class="border-b-2 border-gray-200 px-4 py-2">Valor actual</th>
                                 <th class="border-b-2 border-gray-200 px-4 py-2">Monto total</th>
-                             
+
                             </tr>
                         </thead>
                         <tbody id="investmentBodyInactive">
@@ -141,26 +146,26 @@
                         </tbody>
                     </table>
                 </div>
-                  <!-- Tabla de Inversiones Finalizadas -->
-                  <h2 class="text-2xl font-semibold mt-8 mb-4">Ventas Activas</h2>
-                  <div class="overflow-x-auto">
-                      <table class="min-w-full bg-white border border-gray-200" id="investmentTableInactive">
-                          <thead>
-                              <tr>
-                                  <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
-                                  <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
-                                  <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
-                                  <th class="border-b-2 border-gray-200 px-4 py-2">Valor actual</th>
-                                  <th class="border-b-2 border-gray-200 px-4 py-2">Monto total</th>
-                      
-                              </tr>
-                          </thead>
-                          <tbody id="ventaBodyInactive">
-                              <!-- Filas de inversiones finalizadas -->
-                          </tbody>
-                      </table>
-                  </div>
-                    <!-- Tabla de Inversiones Finalizadas -->
+                <!-- Tabla de Inversiones Finalizadas -->
+                <h2 class="text-2xl font-semibold mt-8 mb-4">Ventas Activas</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200" id="investmentTableInactive">
+                        <thead>
+                            <tr>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Valor actual</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Monto total</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="ventaBody">
+                            <!-- Filas de inversiones finalizadas -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Tabla de Inversiones Finalizadas -->
                 <h2 class="text-2xl font-semibold mt-8 mb-4">Ventas Pendientes</h2>
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white border border-gray-200" id="investmentTableInactive">
@@ -171,10 +176,10 @@
                                 <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
                                 <th class="border-b-2 border-gray-200 px-4 py-2">Valor actual</th>
                                 <th class="border-b-2 border-gray-200 px-4 py-2">Monto total</th>
-       
+
                             </tr>
                         </thead>
-                        <tbody id="investmentBodyInactive">
+                        <tbody id="ventaBodyInactive">
                             <!-- Filas de inversiones finalizadas -->
                         </tbody>
                     </table>
