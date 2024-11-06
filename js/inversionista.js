@@ -224,9 +224,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-async function fetchInvestments(investmentBodyhtml, inversionistaId, estado, tipo) {
+async function fetchInvestments(investmentBodyhtml, inversionistaId, estado, tipo, accion) {
     try {
-        const response = await fetch(`http://localhost:8080/api/transaccion/inversionista/${inversionistaId}/${estado}/${tipo}`); // Cambia el estado y tipo según sea necesario
+        const response = await fetch(`http://localhost:8080/api/transaccion/inversionista/${inversionistaId}/${estado}/${tipo}`);
         if (!response.ok) {
             throw new Error('Error al obtener datos de la API');
         }
@@ -234,27 +234,33 @@ async function fetchInvestments(investmentBodyhtml, inversionistaId, estado, tip
         const investmentBody = document.getElementById(investmentBodyhtml);
         investmentBody.innerHTML = ''; // Limpiar contenido previo
 
-
-
-
         inversiones.forEach(inversion => {
             const row = document.createElement('tr');
-
+            console.log(inversion)
             // Obtener los datos de la acción almacenada en localStorage
-            const storedData = JSON.parse(localStorage.getItem(simboloEmpresa(inversion[1])));
-            const latestPrice = storedData.data[storedData.data.length - 1].close;
-            row.innerHTML = `
-                        <td class="border-b border-gray-200 px-4 py-2">${inversion[1]}</td>
-                        <td class="border-b border-gray-200 px-4 py-2">${inversion[2]}</td>
-                        <td class="border-b border-gray-200 px-4 py-2">$${inversion[3]}</td>
-                        <td class="border-b border-gray-200 px-4 py-2">$${latestPrice}</td>
-                        <td class="border-b border-gray-200 px-4 py-2">$${inversion[4]}</td>
-                        <td class="border-b border-gray-200 px-4 py-2">
-                            <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="sellStock()">Vender</button>
-                        </td>
-                    `;
+            const storedData = JSON.parse(localStorage.getItem(simboloEmpresa(inversion[2])));
+            const latestPrice = storedData ? storedData.data[storedData.data.length - 1].close : 'N/A';
 
+            // Construir el contenido del row
+            let rowContent = `
+                <td class="border-b border-gray-200 px-4 py-2">${inversion[2]}</td>
+                <td class="border-b border-gray-200 px-4 py-2">${inversion[3]}</td>
+                <td class="border-b border-gray-200 px-4 py-2">$${inversion[4]}</td>
+                <td class="border-b border-gray-200 px-4 py-2">$${latestPrice}</td>
+                <td class="border-b border-gray-200 px-4 py-2">$${inversion[5]}</td>
+            `;
 
+            // Añadir el precio más reciente si accion es 0
+            if (accion === 0) {
+                // Añadir el resto de columnas comunes
+                rowContent += `
+              
+                <td class="border-b border-gray-200 px-4 py-2">
+                    <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="venta(${inversion[0]})">Vender</button>
+                </td>
+            `;
+            }
+            row.innerHTML = rowContent;
             investmentBody.appendChild(row);
         });
 
@@ -265,6 +271,7 @@ async function fetchInvestments(investmentBodyhtml, inversionistaId, estado, tip
         console.error('Error fetching investments:', error);
     }
 }
+
 
 
 
@@ -436,8 +443,10 @@ function togglePanel(panelId) {
 
                 const inversionistaId = localStorage.getItem('userId'); // Asegúrate de que 'userId' esté guardado en localStorage
                 if (inversionistaId) {
-                    fetchInvestments('investmentBody', inversionistaId, true, 'compra');
-                    fetchInvestments('investmentBodyInactive', inversionistaId, false, 'compra');
+                    fetchInvestments('investmentBody', inversionistaId, true, 'compra', 0);
+                    fetchInvestments('investmentBodyInactive', inversionistaId, false, 'compra', 1);
+                    fetchInvestments('ventaBody', inversionistaId, true, 'venta', 1);
+                    fetchInvestments('ventaBodyInactive', inversionistaId, false, 'venta', 1);
                 } else {
                     console.error('No se encontró el ID del inversionista en localStorage.');
                 }
@@ -464,6 +473,31 @@ function buyStock(symbol) {
 
 }
 
+
+function venta(id_trasacion) {
+    alert("Processing transaction ID: " + id_trasacion);
+
+    // Make an API request to the backend to process the transaction as a 'venta'
+    fetch(`http://localhost:8080/api/transaccion/venta/${id_trasacion}`, {
+        method: 'PUT',  // Use PUT or PATCH depending on your API
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Transaction not found or failed to update');
+            }
+        })
+        .then(data => {
+            alert('Transaction successfully processed: ' + JSON.stringify(data));
+        })
+        .catch(error => {
+            alert('Error: ' + error.message);
+        });
+}
 
 
 // Función para obtener el nombre de la empresa a partir del símbolo
