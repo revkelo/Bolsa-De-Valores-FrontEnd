@@ -103,41 +103,44 @@
             </div>
             <div id="investmentPanel" class="panel mb-8 hidden">
                 <h1 class="text-2xl font-semibold mb-4">Inversiones</h1>
-                <table class="min-w-full bg-white border border-gray-200">
+                <h2 class="text-2xl font-semibold mb-4">Compras de acciones</h2>
+                <table class="min-w-full bg-white border border-gray-200" id="investmentTable">
                     <thead>
                         <tr>
                             <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
                             <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
                             <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
-                            <th class="border-b-2 border-gray-200 px-4 py-2">Valor Actual</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Valor actual</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Monto total</th>
                             <th class="border-b-2 border-gray-200 px-4 py-2">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="investmentBody">
+                        <!-- Las filas se llenarán aquí con JavaScript -->
+                    </tbody>
+                </table>
+
+                <!-- Tabla de Inversiones Finalizadas -->
+                <h2 class="text-2xl font-semibold mt-8 mb-4">Pendiente</h2>
+                <table class="min-w-full bg-white border border-gray-200" id="investmentTableInactive">
+                    <thead>
                         <tr>
-                            <td class="border-b border-gray-200 px-4 py-2">Tesla</td>
-                            <td class="border-b border-gray-200 px-4 py-2">10</td>
-                            <td class="border-b border-gray-200 px-4 py-2">$200</td>
-                            <td class="border-b border-gray-200 px-4 py-2">$250</td>
-                            <td class="border-b border-gray-200 px-4 py-2">
-                                <button class="bg-blue-500 text-white px-3 py-1 rounded"
-                                    onclick="sellStock('TSLA')">Vender</button>
-                            </td>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Valor actual</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Monto total</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Acciones</th>
                         </tr>
-                        <tr>
-                            <td class="border-b border-gray-200 px-4 py-2">Apple</td>
-                            <td class="border-b border-gray-200 px-4 py-2">5</td>
-                            <td class="border-b border-gray-200 px-4 py-2">$150</td>
-                            <td class="border-b border-gray-200 px-4 py-2">$180</td>
-                            <td class="border-b border-gray-200 px-4 py-2">
-                                <button class="bg-blue-500 text-white px-3 py-1 rounded"
-                                    onclick="sellStock('AAPL')">Vender</button>
-                            </td>
-                        </tr>
-                        <!-- Agrega más filas aquí según sea necesario -->
+                    </thead>
+                    <tbody id="investmentBodyInactive">
+                        <!-- Filas de inversiones finalizadas -->
                     </tbody>
                 </table>
             </div>
+
+
+
 
             <div id="profilePanel" class="panel mb-8 hidden">
                 <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
@@ -264,228 +267,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./js/inversionista.js"></script>
     <script>
-
-        const stocks = [
-            { name: 'Ecopetrol', symbol: 'EC' },
-            { name: 'Apple', symbol: 'AAPL' },
-            { name: 'Tesla', symbol: 'TSLA' },
-            { name: 'Microsoft', symbol: 'MSFT' },
-            { name: 'Amazon', symbol: 'AMZN' },
-            { name: 'Google', symbol: 'GOOGL' },
-            { name: 'NVIDIA', symbol: 'NVDA' },
-            { name: 'Mazda', symbol: 'TYO' },
-            { name: 'Coca-Cola', symbol: 'KO' },
-            { name: 'Walmart', symbol: 'WMT' },
-            { name: 'Disney', symbol: 'DIS' },
-            { name: 'IBM', symbol: 'IBM' }
-
-        ];
-
-
-        function createStockCard(stock) {
-            return `
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title text-center">${stock.name} (${stock.symbol})</h3>
-                    <div class="chart-container" id="container-${stock.symbol}"></div>
-                    <div class="text-center">
-                        <p id="price-${stock.symbol}" class="font-weight-bold"></p>
-                        <button class="btn btn-success" onclick="buyStock('${stock.symbol}')">Comprar</button>
-                        <button class="btn btn-danger" onclick="sellStock('${stock.symbol}')">Vender</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-        }
-
-        function renderStocks() {
-            const stockContainer = document.getElementById('stock-container');
-            let html = '<div class="row mb-4">';
-            stocks.forEach((stock, index) => {
-                html += createStockCard(stock);
-                // Cerrar la fila cada dos columnas
-                if ((index + 1) % 2 === 0 && index !== stocks.length - 1) {
-                    html += '</div><div class="row mb-4">';
-                }
-            });
-            html += '</div>'; // Cerrar la última fila
-            stockContainer.innerHTML = html;
-        }
-
-        // Llama a la función para renderizar las acciones
-        renderStocks();
-
-
-
-
-        const apiKey = 'BI2G66ESVQSXQZ0F';
-        const expirationTime = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
-
-        // Función para verificar si los datos están en localStorage y no han expirado
-        function getStoredData(symbol) {
-            const storedData = localStorage.getItem(symbol);
-            if (storedData) {
-                const parsedData = JSON.parse(storedData);
-                const now = new Date().getTime();
-                if (now - parsedData.timestamp < expirationTime) {
-                    return parsedData.data;
-                }
-            }
-            return null;
-        }
-
-        // Función para guardar los datos en localStorage
-        function storeData(symbol, data) {
-            const now = new Date().getTime();
-            const storedData = {
-                timestamp: now,
-                data: data
-            };
-            localStorage.setItem(symbol, JSON.stringify(storedData));
-        }
-
-        let apiLimitReached = false; // Variable para controlar si el límite ya fue alcanzado
-
-        function fetchDataAndCreateChart(symbol, containerId) {
-            const storedData = getStoredData(symbol);
-            if (storedData) {
-                createChart(storedData, containerId);
-                console.log("LOCAL");
-            } else {
-                const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}&outputsize=compact`;
-                console.log("API");
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.Information && !apiLimitReached) {
-                            // Verifica si el mensaje de límite se recibe y no se ha mostrado antes
-                            alert("Se llegó el límite de la API"); // O usa console.log() si prefieres
-                            apiLimitReached = true; // Cambia el estado a verdadero para no mostrarlo nuevamente
-                            return; // Salir de la función si se alcanzó el límite
-                        }
-
-                        const timeSeries = data['Time Series (Daily)'];
-                        if (!timeSeries) {
-                            console.error('No se encontraron datos.');
-                            return;
-                        }
-
-                        const candlestickData = [];
-                        const dates = Object.keys(timeSeries).reverse();
-
-                        for (let date of dates) {
-                            const dailyData = timeSeries[date];
-                            candlestickData.push({
-                                time: new Date(date).getTime() / 1000,
-                                open: parseFloat(dailyData['1. open']),
-                                high: parseFloat(dailyData['2. high']),
-                                low: parseFloat(dailyData['3. low']),
-                                close: parseFloat(dailyData['4. close']),
-                            });
-                        }
-
-                        storeData(symbol, candlestickData); // Almacenar los datos en localStorage
-                        createChart(candlestickData, containerId); // Crear la gráfica
-                    })
-                    .catch(error => console.error('Error al obtener los datos:', error));
-            }
-        }
-
-
-        // Función para crear la gráfica con los datos
-        function createChart(data, containerId) {
-            const chart = LightweightCharts.createChart(document.getElementById(containerId), {
-                layout: {
-                    textColor: '#000',
-                    background: { type: 'solid', color: '#fff' }
-                },
-                width: document.getElementById(containerId).offsetWidth,
-                height: 400
-            });
-            const candlestickSeries = chart.addCandlestickSeries();
-            candlestickSeries.setData(data);
-        }
-
-        var graficas = false;
-        function togglePanel(panelId) {
-            const panels = document.querySelectorAll('.panel');
-            panels.forEach(panel => {
-                if (panel.id === panelId) {
-                    panel.classList.toggle('hidden');
-
-                    if ("marketPanel" === panelId) {
-                        if (graficas === false) {
-                            stocks.forEach(stock => {
-                                const containerId = `container-${stock.symbol}`;
-                                fetchDataAndCreateChart(stock.symbol, containerId);
-
-                            });
-                            graficas = true;
-                        }
-                    }
-
-                } else {
-                    panel.classList.add('hidden'); // Ocultar otros paneles
-                }
-            });
-        }
-        function buyStock(symbol) {
-            // Obtener los datos de la acción almacenada en localStorage
-            const storedData = JSON.parse(localStorage.getItem(symbol));
-            const latestPrice = storedData.data[storedData.data.length - 1].close;
-
-            localStorage.setItem('cvempresa', symbol);
-            localStorage.setItem('cvprecio', latestPrice);
-            window.location.href = 'compra.html';
-
-        }
-
-
-
-        // Función para obtener el nombre de la empresa a partir del símbolo
-        function nombreEmpresa(symbol) {
-            const stock = stocks.find(s => s.symbol === symbol);
-            return stock ? stock.name : 'Símbolo no encontrado';
-        }
-
-        function sellStock(symbol) {
-            // Obtener los datos de la acción almacenada en localStorage
-            const storedData = JSON.parse(localStorage.getItem(symbol));
-            const latestPrice = storedData.data[storedData.data.length - 1].close;
-
-            localStorage.setItem('cvempresa', symbol);
-            localStorage.setItem('cvprecio', latestPrice);
-
-
-            // Función para obtener el ID de la empresa
-            fetch('http://localhost:8080/api/transaccion/' + localStorage.getItem('userId') + '/' + nombreEmpresa(localStorage.getItem('cvempresa')), {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (response.ok) {
-                        response.json().then(isVerified => {
-                            if (isVerified) {
-                                window.location.href = 'vender.html';
-                            } else {
-                                alert("No ha comprado ninguna acción de esta empresa");
-                            }
-                        });
-                    } else {
-                        alert("Error al verificar la compra");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error en la solicitud:", error);
-                    alert("Ocurrió un error, por favor intenta de nuevo.");
-                });
-
-        }
-
 
 
 
