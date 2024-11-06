@@ -50,7 +50,7 @@
                         </a>
                     </li>
                     <li class="mb-3">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('ordersPanel')">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('transactionsPanel')">
                             <span class="material-icons">shopping_cart</span>
                             <span class="ml-3">Órdenes</span>
                         </a>
@@ -98,9 +98,24 @@
                     <!-- Aquí se agregarán dinámicamente las tarjetas de los inversores con JavaScript -->
                 </div>
             </div>
-            <div id="ordersPanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Órdenes</h1>
-                <p class="text-gray-600 mb-8">Ve las órdenes de compra/venta y acéptalas o deniégalas.</p>
+            <div id="transactionsPanel" class="panel mb-8 hidden">
+                <h1 class="text-2xl font-semibold mb-4">Transacciones</h1>
+                <table class="min-w-full bg-white border border-gray-200" id="transactionTable">
+                    <thead>
+                        <tr>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
+                <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
+                <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
+                <th class="border-b-2 border-gray-200 px-4 py-2">Valor actual</th>
+                <th class="border-b-2 border-gray-200 px-4 py-2">Monto total</th>
+                <th class="border-b-2 border-gray-200 px-4 py-2">Inversionista</th>
+                <th class="border-b-2 border-gray-200 px-4 py-2">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionBody">
+                        <!-- Las filas se llenarán aquí con JavaScript -->
+                    </tbody>
+                </table>
             </div>
             <div id="reportsPanel" class="panel mb-8 hidden">
                 <h1 class="text-2xl font-semibold mb-4">Informes</h1>
@@ -198,24 +213,10 @@
 
     <!-- Tailwind requiere que esto esté al final -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./js/stocks.js"></script>"
     <script src="./js/comisionista.js"></script>
     <script>
 
-        const stocks = [
-            { name: 'Ecopetrol', symbol: 'EC' },
-            { name: 'Apple', symbol: 'AAPL' },
-            { name: 'Tesla', symbol: 'TSLA' },
-            { name: 'Microsoft', symbol: 'MSFT' },
-            { name: 'Amazon', symbol: 'AMZN' },
-            { name: 'Google', symbol: 'GOOGL' },
-            { name: 'NVIDIA', symbol: 'NVDA' },
-            { name: 'Mazda', symbol: 'TYO' },
-            { name: 'Coca-Cola', symbol: 'KO' },
-            { name: 'Walmart', symbol: 'WMT' },
-            { name: 'Disney', symbol: 'DIS' },
-            { name: 'IBM', symbol: 'IBM' }
-
-        ];
 
 
         function createStockCard(stock) {

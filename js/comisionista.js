@@ -1,10 +1,27 @@
 // Obtener el ID del usuario desde localStorage
 const userId = localStorage.getItem('userId');
 const password = localStorage.getItem('password');
+// comisionista.js
+const storedData = localStorage.getItem('AAPL');
+if (storedData) {
+    const parsedData = JSON.parse(storedData);
+    const timestamp = parsedData.timestamp;
+    const data = parsedData.data;
+    
+    // Supongamos que quieres obtener el último precio de cierre
+    // Si 'data' es un array de datos históricos
+    const latestPrice = data[data.length - 1].close;
+    console.log('Último precio de AAPL:', latestPrice);
+    
+    // Aquí puedes utilizar 'latestPrice' como lo necesites
+} else {
+    console.log('No hay datos almacenados para AAPL.');
+}
+
 
 // Verificar si userId es null o no
 if (userId === null) {
-    // Redirigir a login.html si userId es null
+    // Redirigir a login.html ssi userId es null
     window.location.href = 'login.html';
 }
 
@@ -57,7 +74,7 @@ function loadprofile() {
         document.querySelector('.profile-email').textContent = data.email;
 
         // DNI (suponiendo que es el "usuario_id")
-        document.querySelector('.profile-dni').textContent = data.usuario_id;
+        document.querySelecGtor('.profile-dni').textContent = data.usuario_id;
 
         // Fecha de nacimiento (formateada)
         const formattedDate = new Date(data.fecha_creacion).toLocaleDateString();
@@ -252,11 +269,127 @@ function loadInvestors() {
     })
     .catch(error => console.error('Error al cargar los inversionistas:', error));
 }
+function simboloEmpresa(nombreEmpresa) {
+    // Define la lógica para obtener el símbolo de la empresa basado en su nombre
+    // Esto es solo un ejemplo, ajusta según tu lógica
+    return nombreEmpresa.toLowerCase().replace(/\s+/g, '-');
+}
+
+async function fetchTransactions() {
+    try {
+        const response = await fetch(`http://localhost:8080/api/transaccion/comisionista/${userId}/transacciones`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Error al obtener datos de la API');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error al obtener las transacciones:', error);
+        return [];
+    }
+}
+
+async function loadTransactions() {
+    const comisionistaId = localStorage.getItem('comisionistaId');
+    if (!comisionistaId) {
+        console.error('No se encontró el ID del comisionista en localStorage.');
+        return;
+    }
+
+    // Obtener transacciones
+    const transactions = await fetchTransactions(comisionistaId);
+    renderTransactions(transactions, 'transactionBody');
+}
+
+function renderTransactions(transactions, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ''; // Limpiar contenido previo
+    transactions.forEach(transaction => {
+        // Obtener el símbolo de la empresa a partir del nombre
+        const stock = stocks.find(s => s.name === transaction.empresa.nombre);
+        const symbol = stock ? stock.symbol : null;
+
+        // Obtener el último precio desde localStorage usando el símbolo
+        let latestPrice = 'N/A';
+        if (symbol) {
+            const storedData = JSON.parse(localStorage.getItem(symbol));
+            if (storedData && storedData.data && storedData.data.length > 0) {
+                latestPrice = storedData.data[storedData.data.length - 1].close;
+            }
+        }
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="border-b border-gray-200 px-4 py-2">${transaction.empresa.nombre}</td>
+            <td class="border-b border-gray-200 px-4 py-2">${transaction.cantidad}</td>
+            <td class="border-b border-gray-200 px-4 py-2">$${transaction.precio}</td>
+            <td class="border-b border-gray-200 px-4 py-2">$${latestPrice}</td>
+            <td class="border-b border-gray-200 px-4 py-2">$${transaction.monto_total}</td>
+            <td class="border-b border-gray-200 px-4 py-2">${transaction.inversionista.usuario.nombre}</td>
+            <td class="border-b border-gray-200 px-4 py-2">
+                <button class="bg-green-500 text-white px-3 py-1 rounded" onclick="acceptTransaction(${transaction.transaccion_id})">Aceptar</button>
+                <button class="bg-red-500 text-white px-3 py-1 rounded" onclick="rejectTransaction(${transaction.transaccion_id})">Rechazar</button>
+            </td>
+        `;
+        container.appendChild(row);
+    });
+}
+
+function acceptTransaction(transactionId) {
+    // Lógica para aceptar la transacción
+    fetch(`http://localhost:8080/api/transaccion/aceptar/${transactionId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Transacción aceptada con éxito');
+            loadTransactions(); // Recargar las transacciones
+        } else {
+            throw new Error('Error al aceptar la transacción');
+        }
+    })
+    .catch(error => {
+        console.error('Error al aceptar la transacción:', error);
+        alert('Error al aceptar la transacción. Por favor, inténtelo de nuevo.');
+    });
+}
+
+function rejectTransaction(transactionId) {
+    // Lógica para rechazar la transacción
+    fetch(`http://localhost:8080/api/transaccion/{id}?id=${transactionId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Transacción rechazada con éxito');
+            loadTransactions(); // Recargar las transacciones
+        } else {
+            throw new Error('Error al rechazar la transacción');
+        }
+    })
+    .catch(error => {
+        console.error('Error al rechazar la transacción:', error);
+        alert('Error al rechazar la transacción. Por favor, inténtelo de nuevo.');
+    });
+}
+
 
 // Llamar a la función para cargar los inversores cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function () {
     loadInvestors();
     loadprofile();
+    loadTransactions();
+
 });
 
 
