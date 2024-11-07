@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generar PDF con Datos de JSON</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.js"></script>
+</head>
+
+<body>
+    <button id="generarPdf">Generar PDF</button>
+
+    <script>
+        document.getElementById("generarPdf").addEventListener("click", function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            cargarLogo(doc);
+            agregarTitulo(doc);
+
+            // Crear un array con todas las promesas de obtención y generación de tablas
+            const promesas = [
+                agregarDatosPersonales(doc),
+                obtenerDatosYGenerarTabla(doc, 2, 0, 'compra', 'Compras Sin aceptar'),
+                obtenerDatosYGenerarTabla(doc, 2, 1, 'venta', 'Ventas Hechas'),
+                obtenerDatosYGenerarTabla(doc, 2, 1, 'compra', 'Compra Aceptadas'),
+                obtenerDatosYGenerarTabla(doc, 2, 0, 'venta', 'Ventas Sin aceptar')
+            ];
+
+            // Esperar a que todas las promesas se resuelvan antes de abrir el PDF
+            Promise.all(promesas).then(() => {
+                abrirPDFEnVentana(doc);
+            }).catch(error => {
+                console.error("Error al generar las tablas:", error);
+            });
+        });
+
+        function cargarLogo(doc) {
+            const logo = new Image();
+            logo.src = "./images/logo.png";  // URL de la imagen
+            logo.onload = function () {
+                doc.addImage(logo, 'JPEG', 10, 13, 50, 10); // (imagen, tipo, X, Y, ancho, alto)
+            }
+        }
+
+        function agregarTitulo(doc) {
+            doc.setFontSize(20);
+            doc.text('Informe', 105, 20, null, null, 'center');
+        }
+
+        function agregarDatosPersonales(doc) {
+            return new Promise((resolve, reject) => {
+                fetch('http://localhost:8080/api/inversionista/2')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Configurar el tamaño de la fuente
+                        doc.setFontSize(12);
+
+                        // Añadir los datos del inversionista al PDF
+                        doc.text('Datos Personales:', 10, 40);
+                        doc.text('Nombre: ' + data.usuario.nombre, 10, 50);
+                        doc.text('Email: ' + data.usuario.email, 10, 60);
+                        doc.text('País: ' + data.pais, 10, 70);
+
+                        resolve();  // Resolver la promesa cuando los datos se agreguen
+                    })
+                    .catch(error => {
+                        console.error('Error al obtener los datos:', error);
+                        reject(error);  // Rechazar la promesa en caso de error
+                    });
+            });
+        }
+
+        // Función para obtener los datos desde la API y generar la tabla en el PDF
+        function obtenerDatosYGenerarTabla(doc, inversionistaId, estado, tipo, tablaTitulo) {
+            const url = `http://localhost:8080/api/transaccion/inversionista/${inversionistaId}/${estado}/${tipo}`;
+            return fetch(url)
+                .then(response => {
+                    console.log(response);
+                    if (response.status === 404) {
+                        console.log(`No se encontraron datos para ${tablaTitulo} (404)`);
+                        return [];  // Devolver un array vacío si no hay datos
+                    } else if (!response.ok) {
+                        throw new Error('Error en la solicitud de datos');
+                    }
+                    return response.json();  // Convertir la respuesta a JSON
+                })
+                .then(data => {
+                    console.log('Datos obtenidos:', data);
+                    if (data && Array.isArray(data) && data.length > 0) {
+                        const headers = Object.keys(data[0]); // Obtener las claves del primer objeto como encabezados
+                        const tableData = data.map(item => Object.values(item)); // Mapear los datos
+                        agregarTabla(doc, headers, tableData, tablaTitulo);
+                    } else {
+                        console.log(`No hay datos para ${tablaTitulo}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al obtener los datos:', error);
+                    alert("Hubo un problema al obtener los datos. Intenta nuevamente.");
+                });
+        }
+
+        function agregarTabla(doc, headers, tableData, tablaTitulo) {
+            let fontSize = 8;
+            let cellPadding = 4;
+
+            if (tableData.length > 10) {
+                fontSize = 7;
+                cellPadding = 3;
+            }
+
+            // Establecer el título de la tabla
+            doc.setFontSize(14);
+            doc.text(tablaTitulo, 10, doc.autoTable.previous ? doc.autoTable.previous.finalY + 10 : 80); // Posición ajustada
+
+            // Agregar la tabla debajo de los datos personales
+            doc.autoTable({
+                startY: doc.autoTable.previous ? doc.autoTable.previous.finalY + 20 : 90, // Ajustar la posición para no sobreponer
+                head: [headers],
+                body: tableData,
+                theme: 'grid',
+                styles: {
+                    cellPadding: cellPadding,
+                    fontSize: fontSize,
+                    textColor: [0, 0, 0],
+                    lineColor: [0, 0, 0],
+                    lineWidth: 0.1
+                },
+                headStyles: {
+                    fillColor: [0, 0, 0],
+                    textColor: [255, 255, 255],
+                    fontStyle: 'bold'
+                },
+                bodyStyles: {
+                    fillColor: [255, 255, 255],
+                },
+                margin: { top: 40, left: 10, bottom: 10, right: 10 },
+                pageBreak: 'auto',
+            });
+        }
+
+
+        // Función para abrir el PDF en una nueva ventana
+        function abrirPDFEnVentana(doc) {
+            const pdfOutput = doc.output('dataurlnewwindow');
+            window.open(pdfOutput, '_blank');
+        }
+    </script>
+</body>
+
+</html>
