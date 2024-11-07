@@ -260,6 +260,7 @@ async function fetchInvestments(investmentBodyhtml, inversionistaId, estado, tip
 
             // Construir el contenido del row
             let rowContent = `
+            <td class="border-b border-gray-200 px-4 py-2">${inversion[0]}</td>
                 <td class="border-b border-gray-200 px-4 py-2">${inversion[2]}</td>
                 <td class="border-b border-gray-200 px-4 py-2">${inversion[3]}</td>
                 <td class="border-b border-gray-200 px-4 py-2">$${inversion[4]}</td>
@@ -520,31 +521,38 @@ function buyStock(symbol) {
 }
 
 
-function venta(id_trasacion) {
-    alert("Processing transaction ID: " + id_trasacion);
+// inversionista.js
 
-    // Make an API request to the backend to process the transaction as a 'venta'
-    fetch(`http://localhost:8080/api/transaccion/venta/${id_trasacion}`, {
-        method: 'PUT',  // Use PUT or PATCH depending on your API
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Transaction not found or failed to update');
+async function venta(id_transaccion) {
+    alert("Procesando transacción ID: " + id_transaccion);
+
+    // Asegúrate de que 'billeteraId' esté definido
+    
+
+    try {
+        // Obtener la cantidad de la compra
+       
+        // Procesar la transacción como 'venta'
+        const ventaResponse = await fetch(`http://localhost:8080/api/transaccion/venta/${id_transaccion}`, {
+            method: 'PUT',  // Usa el método correcto según tu API
+            headers: {
+                'Content-Type': 'application/json'
             }
-        })
-        .then(data => {
-            alert('Transaction successfully processed: ' + JSON.stringify(data));
-        })
-        .catch(error => {
-            alert('Error: ' + error.message);
         });
-}
 
+        if (!ventaResponse.ok) {
+            throw new Error('Transacción no encontrada o fallo al actualizar.');
+            
+        }
+
+        alert('Transacción procesada exitosamente');
+        window.location.reload(); // Recargar la página para actualizar los datos
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+    }
+}
 
 // Función para obtener el nombre de la empresa a partir del símbolo
 function nombreEmpresa(symbol) {
@@ -597,6 +605,10 @@ function sellStock(symbol) {
         });
 
 }
+
+// inversionista.js
+
+
 
 
 

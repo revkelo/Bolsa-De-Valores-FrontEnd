@@ -303,6 +303,24 @@ async function fetchTransactions() {
     }
 }
 
+
+async function fetchVentas(){
+    try {
+        const response = await fetch("http://localhost:8080/api/transaccion/comisionista/"+userId+"/ventas/venta", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Error al obtener datos de la API');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error al obtener las ventas:', error);
+        return [];
+    }
+}
 async function loadTransactions() {
     const comisionistaId = localStorage.getItem('comisionistaId');
     if (!comisionistaId) {
@@ -311,12 +329,17 @@ async function loadTransactions() {
     }
 
     // Obtener transacciones
-    const transactions = await fetchTransactions(comisionistaId);
-    renderTransactions(transactions, 'transactionBody');
+    const transactions = await fetchTransactions();
+    const ventas = await fetchVentas();
+
+    renderTransactions(transactions,ventas, 'transactionBody', 'ventaBody');
+
 }
 
-function renderTransactions(transactions, containerId) {
+function renderTransactions(transactions,ventas, containerId, containerVenta) {
     const container = document.getElementById(containerId);
+    const containerVentaId = document.getElementById(containerVenta);
+    containerVentaId.innerHTML = '';
     container.innerHTML = ''; // Limpiar contenido previo
     transactions.forEach(transaction => {
         // Obtener el símbolo de la empresa a partir del nombre
@@ -347,6 +370,39 @@ function renderTransactions(transactions, containerId) {
         `;
         container.appendChild(row);
     });
+
+    ventas.forEach(venta => {
+
+        const stock = stocks.find(s => s.name === venta.empresa.nombre);
+        const symbol = stock ? stock.symbol : null;
+
+        // Obtener el último precio desde localStorage usando el símbolo
+        let latestPrice = 'N/A';
+        if (symbol) {
+            const storedData = JSON.parse(localStorage.getItem(symbol));
+            if (storedData && storedData.data && storedData.data.length > 0) {
+                latestPrice = storedData.data[storedData.data.length - 1].close;
+            }
+        }
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="border-b border-gray-200 px-4 py-2">${venta.empresa.nombre}</td>
+            <td class="border-b border-gray-200 px-4 py-2">${venta.cantidad}</td>
+            <td class="border-b border-gray-200 px-4 py-2">$${venta.precio}</td>
+            <td class="border-b border-gray-200 px-4 py-2">$${latestPrice}</td>
+            <td class="border-b border-gray-200 px-4 py-2">$${venta.monto_total}</td>
+            <td class="border-b border-gray-200 px-4 py-2">${venta.inversionista.usuario.nombre}</td>
+            <td class="border-b border-gray-200 px-4 py-2">
+                <button class="bg-green-500 text-white px-3 py-1 rounded" onclick="aceptarVenta(${venta.transaccion_id},${latestPrice},${venta.inversionista.inversionista_id})">Realizar Venta</button>
+                <button class="bg-red-500 text-white px-3 py-1 rounded" onclick="rejectTransaction(${venta.transaccion_id})"> Rechazar Venta</button>
+            </td>
+
+        `;
+        containerVentaId.appendChild(row);
+
+    });
+
+
 }
 
 function acceptTransaction(transactionId) {
@@ -391,6 +447,99 @@ function rejectTransaction(transactionId) {
         console.error('Error al rechazar la transacción:', error);
         alert('Error al rechazar la transacción. Por favor, inténtelo de nuevo.');
     });
+}
+
+async function obtenerCantidadCompra(transaccionId) {
+    try {
+        const response = await fetch(`http://localhost:8080/api/cantidad/${transaccionId}`);
+        if (response.ok) {
+            const cantidadText = await response.text(); // Obtiene la respuesta como texto
+            const cantidad = parseInt(cantidadText, 10); // Convierte el texto a un número entero
+            return cantidad;
+        } else {
+            console.error('Error al obtener la cantidad de la compra');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+        return null;
+    }
+}
+// comisionista.js
+
+async function aceptarVenta(id_transaccion, lastPrice, inversionista_id) {
+    alert("Procesando transacción ID: " + id_transaccion);
+
+    console.log('ID de inversor:', inversionista_id);
+
+    try {
+        // Obtener la cantidad de la compra
+        const cantidad = await obtenerCantidadCompra(id_transaccion);
+
+        if (cantidad === null) {
+            alert('No se pudo obtener la cantidad de la compra.');
+            return;
+        }
+
+        // Obtener el billeteraId del inversionista
+        // Obtener el billeteraId del inversionista
+const billeteraResponse = await fetch(`http://localhost:8080/api/billetera/usuario/${inversionista_id}`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
+if (!billeteraResponse.ok) {
+    throw new Error('Error al obtener la billetera del inversionista.');
+}
+
+const billeteraData = await billeteraResponse.json();
+
+// Accede al primer elemento del arreglo para obtener el billetera_id
+const billeteraId = billeteraData.length > 0 ? billeteraData[0].billetera_id : null;
+
+if (billeteraId === null) {
+    throw new Error('No se encontró billetera_id en la respuesta.');
+}
+
+// Calcular el valor de la venta
+const valorVenta = cantidad * lastPrice;
+
+// Actualizar el saldo de la billetera del inversionista
+const saldoResponse = await fetch(`http://localhost:8080/api/billetera/${billeteraId}/saldo?suma=${valorVenta}`, {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
+if (!saldoResponse.ok) {
+    throw new Error('Error al actualizar el saldo de la billetera.');
+}
+
+alert('Saldo del inversionista actualizado exitosamente');
+
+
+        // Procesar la transacción como 'venta aceptada'
+        const ventaResponse = await fetch(`http://localhost:8080/api/transaccion/aceptar/${id_transaccion}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!ventaResponse.ok) {
+            throw new Error('Transacción no encontrada o fallo al actualizar.');
+        }
+
+        const ventaData = await ventaResponse.json();
+        alert('Transacción procesada exitosamente: ' + JSON.stringify(ventaData));
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+    }
 }
 
 
