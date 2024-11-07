@@ -11,6 +11,23 @@ if (userId === null) {
     window.location.href = 'login.html';
 }
 
+const rol = localStorage.getItem('rol');
+
+// Verificar si userId es null o no
+if (rol === null) {
+  
+}else{
+
+    if (rol === 'Comisionista') {
+        window.location.href = 'comisionista.html';
+    } else if (rol === 'Administrador') {
+        window.location.href = 'admin.html';
+    } else {
+    
+    }    
+}
+
+
 // Función para cerrar sesión
 function logout() {
     // Eliminar el ID del usuario de localStorage

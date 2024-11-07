@@ -19,10 +19,20 @@ if (storedData) {
 }
 
 
+const rol = localStorage.getItem('rol');
+
 // Verificar si userId es null o no
-if (userId === null) {
-    // Redirigir a login.html ssi userId es null
-    window.location.href = 'login.html';
+if (rol === null) {
+  
+}else{
+
+    if (rol === 'Inversionista') {
+        window.location.href = 'inversionista.html';
+    } else if (rol === 'Administrador') {
+        window.location.href = 'admin.html';
+    } else {
+    
+    }    
 }
 
 // Función para cerrar sesión
