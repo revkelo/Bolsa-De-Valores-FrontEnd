@@ -44,73 +44,75 @@ function logout() {
 }
 
 function loadprofile() {
-
-
+    // Primer `fetch` para el usuario
     fetch('http://localhost:8080/api/usuario/' + userId, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
     })
-        .then(response => response.json())
-        .then(data => {
-
-            fetch('http://localhost:8080/api/inversionista/' + userId, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => response.json())
-                .then(data => {
-                    document.querySelector('.profile-pais').textContent = data.pais;
-                    document.querySelector('.profile-perfil-riesgo').textContent = data.perfil_riesgo;
-                }).catch(error => {
-                    console.error('Error al obtener los datos del perfil:', error);
-                    alert('Error al cargar el perfil. Por favor, inténtelo de nuevo.');
-                });
-            // Insertar los datos obtenidos en el HTML
-
-            // Nombre del perfil
-            document.querySelectorAll('.profile-name').forEach(element => {
-                element.textContent = data.nombre;
-            });
-
-            // Correo electrónico
-            document.querySelector('.profile-email').textContent = data.email;
-
-            // DNI (suponiendo que es el "usuario_id")
-            document.querySelector('.profile-dni').textContent = data.usuario_id;
-
-            // Fecha de nacimiento (formateada)
-            const formattedDate = new Date(data.fecha_creacion).toLocaleDateString();
-            document.querySelector('.profile-birthdate').textContent = formattedDate;
-        })
-        .catch(error => {
-            console.error('Error al obtener los datos del perfil:', error);
-            alert('Error al cargar el perfil. Por favor, inténtelo de nuevo.');
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del usuario');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Insertar los datos obtenidos del usuario en el HTML
+        document.querySelectorAll('.profile-name').forEach(element => {
+            element.textContent = data.nombre;
         });
+        document.querySelector('.profile-email').textContent = data.email;
+        document.querySelector('.profile-dni').textContent = data.usuario_id;
+        const formattedDate = new Date(data.fecha_creacion).toLocaleDateString();
+        document.querySelector('.profile-birthdate').textContent = formattedDate;
 
+        // Segundo `fetch` para el inversionista
+        return fetch('http://localhost:8080/api/inversionista/' + userId, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del inversionista');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Insertar los datos obtenidos del inversionista en el HTML
+        document.querySelector('.profile-pais').textContent = data.pais;
+        document.querySelector('.profile-perfil-riesgo').textContent = data.perfil_riesgo;
+    })
+    .catch(error => {
+        console.error('Error al obtener los datos del perfil:', error);
+        alert('Error al cargar el perfil. Por favor, inténtelo de nuevo.');
+    });
+
+    // `fetch` para el comisionista seleccionado
     fetch('http://localhost:8080/api/usuario/' + comisionista_seleccionado, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
     })
-        .then(response => response.json())
-        .then(usuario => {
-            // Insertar los datos obtenidos en el HTML
-
-            // Nombre del comisionista
-            document.querySelector('.comisionista-name').textContent = usuario.nombre ? usuario.nombre : 'No hay contrato con comisionista';
-
-            // Correo electrónico
-            document.querySelector('.comisionista-email').textContent = usuario.email ? usuario.email : 'No hay contrato con comisionista';
-
-        })
-        .catch(error => {
-            console.error('Error al obtener los datos del comisionista:', error);
-            alert('Error al cargar el comisionista. Por favor, inténtelo de nuevo.');
-        });
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del comisionista');
+        }
+        return response.json();
+    })
+    .then(usuario => {
+        // Insertar los datos obtenidos del comisionista en el HTML
+        document.querySelector('.comisionista-name').textContent = usuario.nombre ? usuario.nombre : 'No hay contrato con comisionista';
+        document.querySelector('.comisionista-email').textContent = usuario.email ? usuario.email : 'No hay contrato con comisionista';
+    })
+    .catch(error => {
+        console.error('Error al obtener los datos del comisionista:', error);
+        alert('Error al cargar el comisionista. Por favor, inténtelo de nuevo.');
+    });
 }
 
 

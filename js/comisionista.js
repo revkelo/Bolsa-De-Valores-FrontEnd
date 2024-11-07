@@ -48,53 +48,55 @@ function logout() {
     window.location.href = 'login.html';
 }
 
-function loadprofile() {
-
+async function loadprofile() {
     fetch('http://localhost:8080/api/usuario/' + userId, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del usuario');
+        }
+        return response.json();
+    })
     .then(data => {
+        // Actualizar el perfil de usuario en el DOM
+        document.querySelectorAll('.profile-name').forEach(element => {
+            element.textContent = data.nombre;
+        });
+        document.querySelector('.profile-email').textContent = data.email;
+        document.querySelector('.profile-dni').textContent = data.usuario_id;
+        const formattedDate = new Date(data.fecha_creacion).toLocaleDateString();
+        document.querySelector('.profile-birthdate').textContent = formattedDate;
 
-        fetch('http://localhost:8080/api/comisionista/' + userId, {
+        // Segunda solicitud para obtener datos del comisionista
+        return fetch('http://localhost:8080/api/comisionista/' + userId, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(response => response.json())
-        .then(data => {
-            document.querySelector('.profile-pais').textContent = data.pais;
-            document.querySelector('.profile-comision').textContent = data.comision;
-            document.querySelector('.profile-empresa').textContent = data.empresa;
-        }).catch(error => { 
-            console.error('Error al obtener los datos del perfil:', error);
-            alert('Error al cargar el perfil. Por favor, inténtelo de nuevo.');
         });
-        // Insertar los datos obtenidos en el HTML
-
-        // Nombre del perfil
-        document.querySelectorAll('.profile-name').forEach(element => {
-            element.textContent = data.nombre;
-        });
-
-        // Correo electrónico
-        document.querySelector('.profile-email').textContent = data.email;
-
-        // DNI (suponiendo que es el "usuario_id")
-        document.querySelecGtor('.profile-dni').textContent = data.usuario_id;
-
-        // Fecha de nacimiento (formateada)
-        const formattedDate = new Date(data.fecha_creacion).toLocaleDateString();
-        document.querySelector('.profile-birthdate').textContent = formattedDate;
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del comisionista');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Actualizar los datos del comisionista en el DOM
+        document.querySelector('.profile-pais').textContent = data.pais;
+        document.querySelector('.profile-comision').textContent = data.comision;
+        document.querySelector('.profile-empresa').textContent = data.empresa;
     })
     .catch(error => {
         console.error('Error al obtener los datos del perfil:', error);
         alert('Error al cargar el perfil. Por favor, inténtelo de nuevo.');
     });
 }
+
 
 function formatDateToInput(date) {
     const year = date.getFullYear();
