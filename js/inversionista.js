@@ -15,16 +15,16 @@ const rol = localStorage.getItem('rol');
 
 // Verificar si userId es null o no
 if (rol === null) {
-  
-}else{
+
+} else {
 
     if (rol === 'Comisionista') {
         window.location.href = 'comisionista.html';
     } else if (rol === 'Administrador') {
         window.location.href = 'admin.html';
     } else {
-    
-    }    
+
+    }
 }
 
 
@@ -51,45 +51,45 @@ function loadprofile() {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error en la respuesta del usuario');
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Insertar los datos obtenidos del usuario en el HTML
-        document.querySelectorAll('.profile-name').forEach(element => {
-            element.textContent = data.nombre;
-        });
-        document.querySelector('.profile-email').textContent = data.email;
-        document.querySelector('.profile-dni').textContent = data.usuario_id;
-        const formattedDate = new Date(data.fecha_creacion).toLocaleDateString();
-        document.querySelector('.profile-birthdate').textContent = formattedDate;
-
-        // Segundo `fetch` para el inversionista
-        return fetch('http://localhost:8080/api/inversionista/' + userId, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del usuario');
             }
+            return response.json();
+        })
+        .then(data => {
+            // Insertar los datos obtenidos del usuario en el HTML
+            document.querySelectorAll('.profile-name').forEach(element => {
+                element.textContent = data.nombre;
+            });
+            document.querySelector('.profile-email').textContent = data.email;
+            document.querySelector('.profile-dni').textContent = data.usuario_id;
+            const formattedDate = new Date(data.fecha_creacion).toLocaleDateString();
+            document.querySelector('.profile-birthdate').textContent = formattedDate;
+
+            // Segundo `fetch` para el inversionista
+            return fetch('http://localhost:8080/api/inversionista/' + userId, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del inversionista');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Insertar los datos obtenidos del inversionista en el HTML
+            document.querySelector('.profile-pais').textContent = data.pais;
+            document.querySelector('.profile-perfil-riesgo').textContent = data.perfil_riesgo;
+        })
+        .catch(error => {
+            console.error('Error al obtener los datos del perfil:', error);
+            alert('Error al cargar el perfil. Por favor, inténtelo de nuevo.');
         });
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error en la respuesta del inversionista');
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Insertar los datos obtenidos del inversionista en el HTML
-        document.querySelector('.profile-pais').textContent = data.pais;
-        document.querySelector('.profile-perfil-riesgo').textContent = data.perfil_riesgo;
-    })
-    .catch(error => {
-        console.error('Error al obtener los datos del perfil:', error);
-        alert('Error al cargar el perfil. Por favor, inténtelo de nuevo.');
-    });
 
     // `fetch` para el comisionista seleccionado
     fetch('http://localhost:8080/api/usuario/' + comisionista_seleccionado, {
@@ -98,21 +98,21 @@ function loadprofile() {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error en la respuesta del comisionista');
-        }
-        return response.json();
-    })
-    .then(usuario => {
-        // Insertar los datos obtenidos del comisionista en el HTML
-        document.querySelector('.comisionista-name').textContent = usuario.nombre ? usuario.nombre : 'No hay contrato con comisionista';
-        document.querySelector('.comisionista-email').textContent = usuario.email ? usuario.email : 'No hay contrato con comisionista';
-    })
-    .catch(error => {
-        console.error('Error al obtener los datos del comisionista:', error);
-        alert('Error al cargar el comisionista. Por favor, inténtelo de nuevo.');
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del comisionista');
+            }
+            return response.json();
+        })
+        .then(usuario => {
+            // Insertar los datos obtenidos del comisionista en el HTML
+            document.querySelector('.comisionista-name').textContent = usuario.nombre ? usuario.nombre : 'No hay contrato con comisionista';
+            document.querySelector('.comisionista-email').textContent = usuario.email ? usuario.email : 'No hay contrato con comisionista';
+        })
+        .catch(error => {
+            console.error('Error al obtener los datos del comisionista:', error);
+            alert('Error al cargar el comisionista. Por favor, inténtelo de nuevo.');
+        });
 }
 
 
@@ -262,12 +262,13 @@ async function fetchInvestments(investmentBodyhtml, inversionistaId, estado, tip
 
             // Construir el contenido del row
             let rowContent = `
-            <td class="border-b border-gray-200 px-4 py-2">${inversion[0]}</td>
-                <td class="border-b border-gray-200 px-4 py-2">${inversion[2]}</td>
+            <td class="border-b border-gray-200 px-4 py-2">${inversion[2]}</td>
                 <td class="border-b border-gray-200 px-4 py-2">${inversion[3]}</td>
-                <td class="border-b border-gray-200 px-4 py-2">$${inversion[4]}</td>
+                <td class="border-b border-gray-200 px-4 py-2">${inversion[4]}</td>
+            
                 <td class="border-b border-gray-200 px-4 py-2">$${latestPrice}</td>
-                <td class="border-b border-gray-200 px-4 py-2">$${inversion[5]}</td>
+                    <td class="border-b border-gray-200 px-4 py-2">$${inversion[5]}</td>
+       
             `;
 
             // Añadir el precio más reciente si accion es 0
@@ -529,11 +530,11 @@ async function venta(id_transaccion) {
     alert("Procesando transacción ID: " + id_transaccion);
 
     // Asegúrate de que 'billeteraId' esté definido
-    
+
 
     try {
         // Obtener la cantidad de la compra
-       
+
         // Procesar la transacción como 'venta'
         const ventaResponse = await fetch(`http://localhost:8080/api/transaccion/venta/${id_transaccion}`, {
             method: 'PUT',  // Usa el método correcto según tu API
@@ -544,7 +545,7 @@ async function venta(id_transaccion) {
 
         if (!ventaResponse.ok) {
             throw new Error('Transacción no encontrada o fallo al actualizar.');
-            
+
         }
 
         alert('Transacción procesada exitosamente');
@@ -588,11 +589,11 @@ function sellStock(symbol) {
         .then(response => {
             if (response.ok) {
                 response.json().then(isVerified => {
-     
+
                     if (isVerified) {
-                    
+
                         togglePanel("investmentPanel");
-                   
+
                     } else {
                         alert("No ha comprado ninguna acción de esta empresa");
                     }

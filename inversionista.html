@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/inverionista.css">
     <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.js"></script>
     <style>
         .hidden {
             display: none;
@@ -108,6 +110,12 @@
                 <div id="billetera-container">
                     <!-- Aquí se insertarán los saldos -->
                 </div>
+
+                <button id="generarPdf" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-md transition duration-200 ease-in-out transform hover:scale-105">
+                    Generar PDF
+                </button>
+                
+
                 <h2 class="text-2xl font-semibold mb-4">Compras Activas</h2>
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white border border-gray-200" id="investmentTable">
@@ -314,6 +322,7 @@
     <!-- Tailwind requiere que esto esté al final -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./js/inversionista.js"></script>
+    <script src="./js/informeIn.js"></script>
     <script>
 
 
