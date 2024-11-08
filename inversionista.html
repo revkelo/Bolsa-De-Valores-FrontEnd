@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/inverionista.css">
     <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.js"></script>
     <style>
         .hidden {
             display: none;
@@ -103,39 +105,98 @@
             </div>
             <div id="investmentPanel" class="panel mb-8 hidden">
                 <h1 class="text-2xl font-semibold mb-4">Inversiones</h1>
-                <table class="min-w-full bg-white border border-gray-200">
-                    <thead>
-                        <tr>
-                            <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
-                            <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
-                            <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
-                            <th class="border-b-2 border-gray-200 px-4 py-2">Valor Actual</th>
-                            <th class="border-b-2 border-gray-200 px-4 py-2">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="border-b border-gray-200 px-4 py-2">Tesla</td>
-                            <td class="border-b border-gray-200 px-4 py-2">10</td>
-                            <td class="border-b border-gray-200 px-4 py-2">$200</td>
-                            <td class="border-b border-gray-200 px-4 py-2">$250</td>
-                            <td class="border-b border-gray-200 px-4 py-2">
-                                <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="sellStock('TSLA')">Vender</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="border-b border-gray-200 px-4 py-2">Apple</td>
-                            <td class="border-b border-gray-200 px-4 py-2">5</td>
-                            <td class="border-b border-gray-200 px-4 py-2">$150</td>
-                            <td class="border-b border-gray-200 px-4 py-2">$180</td>
-                            <td class="border-b border-gray-200 px-4 py-2">
-                                <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="sellStock('AAPL')">Vender</button>
-                            </td>
-                        </tr>
-                        <!-- Agrega más filas aquí según sea necesario -->
-                    </tbody>
-                </table>
+
+                <h1>Saldo de Billeteras del Usuario</h1>
+                <div id="billetera-container">
+                    <!-- Aquí se insertarán los saldos -->
+                </div>
+
+                <button id="generarPdf" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-md transition duration-200 ease-in-out transform hover:scale-105">
+                    Generar PDF
+                </button>
+                
+
+                <h2 class="text-2xl font-semibold mb-4">Compras Activas</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200" id="investmentTable">
+                        <thead>
+                            <tr>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Valor actual</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Monto total</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="investmentBody">
+                            <!-- Las filas se llenarán aquí con JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Tabla de Inversiones Finalizadas -->
+                <h2 class="text-2xl font-semibold mt-8 mb-4">Compras Pendientes</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200" id="investmentTableInactive">
+                        <thead>
+                            <tr>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Valor actual</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Monto total</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="investmentBodyInactive">
+                            <!-- Filas de inversiones finalizadas -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Tabla de Inversiones Finalizadas -->
+                <h2 class="text-2xl font-semibold mt-8 mb-4">Ventas Activas</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200" id="investmentTableInactive">
+                        <thead>
+                            <tr>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Valor actual</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Monto total</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="ventaBody">
+                            <!-- Filas de inversiones finalizadas -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Tabla de Inversiones Finalizadas -->
+                <h2 class="text-2xl font-semibold mt-8 mb-4">Ventas Pendientes</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200" id="investmentTableInactive">
+                        <thead>
+                            <tr>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Valor actual</th>
+                                <th class="border-b-2 border-gray-200 px-4 py-2">Monto total</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="ventaBodyInactive">
+                            <!-- Filas de inversiones finalizadas -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
+
+
+
 
             <div id="profilePanel" class="panel mb-8 hidden">
                 <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
@@ -208,6 +269,28 @@
                         </div>
                     </div>
                     <h3 class="text-[#1C160C] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">
+                        Contrato</h3>
+                    <div class="p-4 grid grid-cols-[20%_1fr] gap-x-6">
+                        <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
+                            <p class="text-[#A18249] text-sm font-normal leading-normal">Nombre comisionista</p>
+                            <p class="text-[#1C160C] text-sm font-normal leading-normal comisionista-name">
+                            </p>
+                        </div>
+                        <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
+                            <p class="text-[#A18249] text-sm font-normal leading-normal">Email Comisionista</p>
+                            <p class="text-[#1C160C] text-sm font-normal leading-normal comisionista-email"></p>
+                        </div>
+                        <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
+
+                            <button
+                                class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#F4EFE6] text-[#1C160C] text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto"
+                                onclick="cancelarContrato()" id="boton-cancelar-contrato">
+                                <span class="truncate">Cancelar contrato</span>
+                            </button>
+                        </div>
+
+                    </div>
+                    <h3 class="text-[#1C160C] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">
                         Contacto</h3>
                     <div class="p-4 grid grid-cols-[20%_1fr] gap-x-6">
                         <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
@@ -239,193 +322,10 @@
     <!-- Tailwind requiere que esto esté al final -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./js/inversionista.js"></script>
+    <script src="./js/informeIn.js"></script>
     <script>
 
-        const stocks = [
-            { name: 'Ecopetrol', symbol: 'EC' },
-            { name: 'Apple', symbol: 'AAPL' },
-            { name: 'Tesla', symbol: 'TSLA' },
-            { name: 'Microsoft', symbol: 'MSFT' },
-            { name: 'Amazon', symbol: 'AMZN' },
-            { name: 'Google', symbol: 'GOOGL' },
-            { name: 'NVIDIA', symbol: 'NVDA' },
-            { name: 'Mazda', symbol: 'TYO' },
-            { name: 'Coca-Cola', symbol: 'KO' },
-            { name: 'Walmart', symbol: 'WMT' },
-            { name: 'Disney', symbol: 'DIS' },
-            { name: 'IBM', symbol: 'IBM' }
 
-        ];
-
-
-        function createStockCard(stock) {
-            return `
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title text-center">${stock.name} (${stock.symbol})</h3>
-                    <div class="chart-container" id="container-${stock.symbol}"></div>
-                    <div class="text-center">
-                        <p id="price-${stock.symbol}" class="font-weight-bold"></p>
-                        <button class="btn btn-success" onclick="buyStock('${stock.symbol}')">Comprar</button>
-                        <button class="btn btn-danger" onclick="sellStock('${stock.symbol}')">Vender</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-        }
-
-        function renderStocks() {
-            const stockContainer = document.getElementById('stock-container');
-            let html = '<div class="row mb-4">';
-            stocks.forEach((stock, index) => {
-                html += createStockCard(stock);
-                // Cerrar la fila cada dos columnas
-                if ((index + 1) % 2 === 0 && index !== stocks.length - 1) {
-                    html += '</div><div class="row mb-4">';
-                }
-            });
-            html += '</div>'; // Cerrar la última fila
-            stockContainer.innerHTML = html;
-        }
-
-        // Llama a la función para renderizar las acciones
-        renderStocks();
-
-
-
-
-        const apiKey = 'BI2G66ESVQSXQZ0F';
-        const expirationTime = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
-
-        // Función para verificar si los datos están en localStorage y no han expirado
-        function getStoredData(symbol) {
-            const storedData = localStorage.getItem(symbol);
-            if (storedData) {
-                const parsedData = JSON.parse(storedData);
-                const now = new Date().getTime();
-                if (now - parsedData.timestamp < expirationTime) {
-                    return parsedData.data;
-                }
-            }
-            return null;
-        }
-
-        // Función para guardar los datos en localStorage
-        function storeData(symbol, data) {
-            const now = new Date().getTime();
-            const storedData = {
-                timestamp: now,
-                data: data
-            };
-            localStorage.setItem(symbol, JSON.stringify(storedData));
-        }
-
-        let apiLimitReached = false; // Variable para controlar si el límite ya fue alcanzado
-
-        function fetchDataAndCreateChart(symbol, containerId) {
-            const storedData = getStoredData(symbol);
-            if (storedData) {
-                createChart(storedData, containerId);
-                console.log("LOCAL");
-            } else {
-                const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}&outputsize=compact`;
-                console.log("API");
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.Information && !apiLimitReached) {
-                            // Verifica si el mensaje de límite se recibe y no se ha mostrado antes
-                            alert("Se llegó el límite de la API"); // O usa console.log() si prefieres
-                            apiLimitReached = true; // Cambia el estado a verdadero para no mostrarlo nuevamente
-                            return; // Salir de la función si se alcanzó el límite
-                        }
-
-                        const timeSeries = data['Time Series (Daily)'];
-                        if (!timeSeries) {
-                            console.error('No se encontraron datos.');
-                            return;
-                        }
-
-                        const candlestickData = [];
-                        const dates = Object.keys(timeSeries).reverse();
-
-                        for (let date of dates) {
-                            const dailyData = timeSeries[date];
-                            candlestickData.push({
-                                time: new Date(date).getTime() / 1000,
-                                open: parseFloat(dailyData['1. open']),
-                                high: parseFloat(dailyData['2. high']),
-                                low: parseFloat(dailyData['3. low']),
-                                close: parseFloat(dailyData['4. close']),
-                            });
-                        }
-
-                        storeData(symbol, candlestickData); // Almacenar los datos en localStorage
-                        createChart(candlestickData, containerId); // Crear la gráfica
-                    })
-                    .catch(error => console.error('Error al obtener los datos:', error));
-            }
-        }
-
-
-        // Función para crear la gráfica con los datos
-        function createChart(data, containerId) {
-            const chart = LightweightCharts.createChart(document.getElementById(containerId), {
-                layout: {
-                    textColor: '#000',
-                    background: { type: 'solid', color: '#fff' }
-                },
-                width: document.getElementById(containerId).offsetWidth,
-                height: 400
-            });
-            const candlestickSeries = chart.addCandlestickSeries();
-            candlestickSeries.setData(data);
-        }
-
-        var graficas = false;
-        function togglePanel(panelId) {
-            const panels = document.querySelectorAll('.panel');
-            panels.forEach(panel => {
-                if (panel.id === panelId) {
-                    panel.classList.toggle('hidden');
-
-
-                    if (graficas === false) {
-                        stocks.forEach(stock => {
-                            const containerId = `container-${stock.symbol}`;
-                            fetchDataAndCreateChart(stock.symbol, containerId);
-                        });
-                        graficas = true;
-                    }
-
-                } else {
-                    panel.classList.add('hidden'); // Ocultar otros paneles
-                }
-            });
-        }
-        function buyStock(symbol) {
-            // Obtener los datos de la acción almacenada en localStorage
-            const storedData = JSON.parse(localStorage.getItem(symbol));
-            const latestPrice = storedData.data[storedData.data.length - 1].close;
-
-            localStorage.setItem('cvempresa', symbol);
-            localStorage.setItem('cvprecio', latestPrice);
-            window.location.href = 'compra.html';
-
-        }
-
-        function sellStock(symbol) {
-            // Obtener los datos de la acción almacenada en localStorage
-            const storedData = JSON.parse(localStorage.getItem(symbol));
-            const latestPrice = storedData.data[storedData.data.length - 1].close;
-
-            localStorage.setItem('cvempresa', symbol);
-            localStorage.setItem('cvprecio', latestPrice);
-            window.location.href = 'vender.html';
-
-        }
 
 
     </script>

@@ -7,6 +7,30 @@
   <title>Admin</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+    .table-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.log-table {
+  width: 80%; /* Ajusta el ancho de la tabla según sea necesario */
+  border-collapse: collapse;
+}
+
+.log-table th, .log-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.log-table th {
+  background-color: #f2f2f2;
+}
+
+  </style>
 </head>
 
 <body class="bg-gray-100 font-sans antialiased">
@@ -39,16 +63,22 @@
             <a href="#" class="flex items-center text-gray-600 hover:text-gray-900"
               onclick="togglePanel('investorManagementPanel')">
               <span class="material-icons">people</span>
-              <span class="ml-3">Investor Management</span>
+              <span class="ml-3">Administrar Inversores</span>
             </a>
           </li>
           <li class="mb-3">
             <a href="#" class="flex items-center text-gray-600 hover:text-gray-900"
               onclick="togglePanel('commissionerManagementPanel')">
               <span class="material-icons">account_circle</span>
-              <span class="ml-3">Commissioner Management</span>
+              <span class="ml-3">Administrar comisionistas</span>
             </a>
           </li>
+          <li class="mb-3">
+            <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('logPanel')">
+              <span class="material-icons">history</span>
+              <span class="ml-3">Ver Logs de Usuario</span>
+            </a>
+          </li>          
           <li class="mt-6">
             <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="logout()">
               <span class="material-icons">logout</span>
@@ -67,30 +97,30 @@
 
       <!-- Investor Management Panel -->
       <div id="investorManagementPanel" class="panel mb-8 hidden">
-        <h1 class="text-2xl font-semibold mb-4">Investor Management</h1>
+        <h1 class="text-2xl font-semibold mb-4">Administrar inversionista</h1>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <!-- Create Investor Card -->
           <div class="bg-white p-4 rounded shadow">
-            <h2 class="text-lg font-semibold mb-2">Create Investor</h2>
+            <h2 class="text-lg font-semibold mb-2">Crear inversionista</h2>
             <form class="mb-4" id="create-investor-form">
-              <input type="text" placeholder="Investor Name" class="border rounded p-2 mb-2 w-full"
+              <input type="text" placeholder="Nombre" class="border rounded p-2 mb-2 w-full"
                 id="name-inversionista" required />
-              <input type="email" placeholder="Investor Email" class="border rounded p-2 mb-2 w-full"
+              <input type="email" placeholder="Email" class="border rounded p-2 mb-2 w-full"
                 id="email-inversionista" required />
-              <input type="password" placeholder="Investor Password" class="border rounded p-2 mb-2 w-full"
+              <input type="password" placeholder="Contraseña" class="border rounded p-2 mb-2 w-full"
                 id="password-inversionista" required />
               <input type="date" class="border rounded p-2 mb-2 w-full" id="date-of-birth-inversionista">
               <input type="text" class="border rounded p-2 mb-2 w-full" id="risk-profile-inversionista"
                 placeholder="Ingresa tu perfil de riesgo">
               <input type="text" class="border rounded p-2 mb-2 w-full" id="country-inversionista"
                 placeholder="Ingresa tu país">
-              <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Create</button>
+              <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Crear</button>
             </form>
           </div>
 
           <!-- Update Investor Card -->
           <div class="bg-white p-4 rounded shadow">
-            <h2 class="text-lg font-semibold mb-2">Update Investor</h2>
+            <h2 class="text-lg font-semibold mb-2">Actualizar inversionista</h2>
             <form class="mb-4" id="update-investor-form">
               <input type="text" placeholder="ID inversionista" class="border rounded p-2 mb-2 w-full"
                 id="id-inversionista-update" required />
@@ -106,17 +136,17 @@
                 id="risk-profile-inversionista-update" required />
               <input type="text" placeholder="País" class="border rounded p-2 mb-2 w-full"
                 id="country-inversionista-update" required />
-              <button type="submit" class="bg-yellow-500 text-white p-2 rounded w-full">Update</button>
+              <button type="submit" class="bg-yellow-500 text-white p-2 rounded w-full">Actualizar</button>
             </form>
           </div>
 
           <!-- Delete Investor Card -->
           <div class="bg-white p-4 rounded shadow">
-            <h2 class="text-lg font-semibold mb-2">Delete Investor</h2>
+            <h2 class="text-lg font-semibold mb-2">Borrar inversionista</h2>
             <form class="mb-4" id="delete-investor-form">
               <input type="text" placeholder="Investor ID" class="border rounded p-2 mb-2 w-full"
                 id="id-inversionista-delete" required />
-              <button type="submit" class="bg-red-500 text-white p-2 rounded w-full">Delete</button>
+              <button type="submit" class="bg-red-500 text-white p-2 rounded w-full">Borrar</button>
             </form>
           </div>
 
@@ -146,11 +176,11 @@
     </div>
     <!-- Commissioner Management Panel -->
     <div id="commissionerManagementPanel" class="panel mb-8 hidden">
-      <h1 class="text-2xl font-semibold mb-4">Commissioner Management</h1>
+      <h1 class="text-2xl font-semibold mb-4">Administrar comisionista</h1>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Create Commissioner Card -->
         <div class="bg-white p-4 rounded shadow">
-          <h2 class="text-lg font-semibold mb-2">Create Commissioner</h2>
+          <h2 class="text-lg font-semibold mb-2">Crear comisionista</h2>
           <form id="create-commissioner-form" class="mb-4">
             <input type="text" placeholder="Nombre del Comisionista" class="border rounded p-2 mb-2 w-full"
               id="name-comisionista" required />
@@ -165,13 +195,13 @@
               placeholder="Comisión" required>
             <input type="text" class="border rounded p-2 mb-2 w-full" id="country-comisionista" placeholder="País"
               required>
-            <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Create</button>
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded w-full">Crear</button>
           </form>
         </div>
 
         <!-- Update Commissioner Card -->
         <div class="bg-white p-4 rounded shadow">
-          <h2 class="text-lg font-semibold mb-2">Update Commissioner</h2>
+          <h2 class="text-lg font-semibold mb-2">Actualizar comisionista</h2>
           <form class="mb-4" id="update-commissioner-form">
             <input type="number" placeholder="ID comisionista" class="border rounded p-2 mb-2 w-full"
               id="id-comisionista-update" required />
@@ -188,32 +218,32 @@
               id="commission-comisionista-update" required />
             <input type="text" placeholder="País Comisionista" class="border rounded p-2 mb-2 w-full"
               id="country-comisionista-update" required />
-            <button type="submit" class="bg-yellow-500 text-white p-2 rounded w-full">Update</button>
+            <button type="submit" class="bg-yellow-500 text-white p-2 rounded w-full">Actualizar</button>
           </form>
         </div>
 
         <!-- Delete Commissioner Card -->
         <div class="bg-white p-4 rounded shadow">
-          <h2 class="text-lg font-semibold mb-2">Delete Commissioner</h2>
+          <h2 class="text-lg font-semibold mb-2">Borrar comisionista</h2>
           <form class="mb-4" id="delete-commissioner-form">
-            <input type="text" placeholder="Commissioner ID" class="border rounded p-2 mb-2 w-full"
+            <input type="text" placeholder="ID comisionista" class="border rounded p-2 mb-2 w-full"
               id="id-comisionista-delete" required />
-            <button type="submit" class="bg-red-500 text-white p-2 rounded w-full">Delete</button>
+            <button type="submit" class="bg-red-500 text-white p-2 rounded w-full">Borrar</button>
           </form>
         </div>
 
         <!-- Show List of Commissioners Card -->
         <div class="bg-white p-4 rounded shadow">
-          <h2 class="text-lg font-semibold mb-2">Show Commissioners</h2>
+          <h2 class="text-lg font-semibold mb-2">Mostrar comisionista</h2>
           <!-- Botón para mostrar la lista de comisionistas -->
-          <button onclick="showCommissioners()" class="bg-gray-500 text-white p-2 rounded w-full">Show List</button>
+          <button onclick="showCommissioners()" class="bg-gray-500 text-white p-2 rounded w-full">Mostrar lista</button>
 
           <!-- Contenedor de la tabla, inicialmente oculto con la clase 'hidden' -->
           <div id="commissionerList" class="mt-2 hidden">
             <table class="min-w-full mt-2 border">
               <thead>
                 <tr class="bg-gray-200">
-                  <th class="border px-4 py-2">Commissioner ID</th>
+                  <th class="border px-4 py-2">ID comisionista</th>
                   <th class="border px-4 py-2">Empresa</th>
                   <th class="border px-4 py-2">Comisión</th>
                   <th class="border px-4 py-2">País</th>
@@ -227,6 +257,34 @@
         </div>
       </div>
     </div>
+
+    <!-- Log Management Panel -->
+<div id="logPanel" class="panel mb-8 hidden">
+  <h1 class="text-2xl font-semibold mb-4">Logs de Usuario</h1>
+  <button onclick="showLogs()" class="bg-gray-500 text-white p-2 rounded w-full mb-4">Mostrar Logs</button>
+
+  <!-- Contenedor de la tabla de logs -->
+  <!-- Contenedor de la tabla de logs -->
+<div id="logList" class="table-container">
+  <table class="log-table">
+    <thead>
+      <tr>
+        <th>ID Transacción</th>
+        <th>ID Usuario</th>
+        <th>Nombre Usuario</th>
+        <th>Email Usuario</th>
+        <th>Rol Usuario</th>
+        <th>Tipo Modificación</th>
+        <th>Fecha Modificación</th>
+      </tr>
+    </thead>
+    <tbody id="logTableBody">
+      <!-- Las filas de la tabla se agregarán aquí dinámicamente con JavaScript -->
+    </tbody>
+  </table>
+</div>
+</div>
+
   </div>
   </div>
   <script src="./js/admin.js"></script>

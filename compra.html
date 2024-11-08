@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,13 +28,15 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .product-overview, .payment-section {
+        .product-overview,
+        .payment-section {
             flex: 1;
             padding: 20px;
             margin-bottom: 20px;
         }
 
-        .product-overview h2, .payment-section h2 {
+        .product-overview h2,
+        .payment-section h2 {
             margin-bottom: 20px;
         }
 
@@ -105,12 +108,14 @@
                 flex-direction: row;
             }
 
-            .product-overview, .payment-section {
+            .product-overview,
+            .payment-section {
                 margin-bottom: 0;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container" id="checkout-container">
         <div class="product-overview">
@@ -133,6 +138,9 @@
                 <label>CVV</label>
                 <input type="text" id="cvv-input" placeholder="***" maxlength="3" required>
 
+                <label>Cantidad *</label>
+                <input type="number" id="quantity-input" value="1" min="1" required>
+
                 <div class="order-summary" id="order-summary"></div> <!-- Contenedor para resumen de la orden -->
                 <button type="submit" class="pay-button">Pagar</button>
             </form>
@@ -140,10 +148,31 @@
     </div>
 
     <div class="confirmation-message" id="confirmation-message">
-        <p> Petición de compra de acción hecha. Esperar al comisionista.✔️</p>
+        <p></p>
     </div>
 
     <script>
+        const stocks = [
+            { name: 'Ecopetrol', symbol: 'EC' },
+            { name: 'Apple', symbol: 'AAPL' },
+            { name: 'Tesla', symbol: 'TSLA' },
+            { name: 'Microsoft', symbol: 'MSFT' },
+            { name: 'Amazon', symbol: 'AMZN' },
+            { name: 'Google', symbol: 'GOOGL' },
+            { name: 'NVIDIA', symbol: 'NVDA' },
+            { name: 'Mazda', symbol: 'TYO' },
+            { name: 'Coca-Cola', symbol: 'KO' },
+            { name: 'Walmart', symbol: 'WMT' },
+            { name: 'Disney', symbol: 'DIS' },
+            { name: 'IBM', symbol: 'IBM' }
+        ];
+
+        // Función para obtener el nombre de la empresa a partir del símbolo
+        function nombreEmpresa(symbol) {
+            const stock = stocks.find(s => s.symbol === symbol);
+            return stock ? stock.name : 'Símbolo no encontrado';
+        }
+
         // Obtener el símbolo y precio de la acción desde localStorage
         const symbol = localStorage.getItem('cvempresa');
         const price = localStorage.getItem('cvprecio');
@@ -165,7 +194,7 @@
 
                 productDetails.innerHTML = `
                     <p><strong>${stock.name}</strong></p>
-                    <p><strong>$${stock.price}</strong></p>
+                    <p><strong>$${stock.price.toFixed(2)}</strong></p>
                 `;
 
                 productItem.appendChild(productDetails);
@@ -178,25 +207,32 @@
 
             // Calcular el total a pagar
             function calculateTotal() {
-                return stock.price.toFixed(2); // Formato a dos decimales
+                const quantity = parseInt(document.getElementById('quantity-input').value, 10);
+                return (stock.price * quantity).toFixed(2); // Multiplica el precio por la cantidad
             }
 
             // Mostrar el resumen de la orden
             function displayOrderSummary() {
                 const orderSummary = document.getElementById('order-summary');
                 const total = calculateTotal();
+                const quantity = document.getElementById('quantity-input').value; // Obtener cantidad
                 orderSummary.innerHTML = `
+                    <p><strong>Cantidad:</strong> <span>${quantity}</span></p>
                     <p><strong>Total</strong> <span>$${total}</span></p>
                 `;
             }
 
             // Ejecutar al cargar la página
             displayOrderSummary();
+
+            // Manejar cambios en la cantidad
+            const quantityInput = document.getElementById('quantity-input');
+            quantityInput.addEventListener('input', displayOrderSummary);
         }
 
         // Formatear la entrada de la tarjeta
         const cardInput = document.getElementById('card-input');
-        cardInput.addEventListener('input', function() {
+        cardInput.addEventListener('input', function () {
             let value = this.value.replace(/\D/g, '');
             let formattedValue = '';
 
@@ -209,7 +245,7 @@
 
         // Formatear la entrada de la fecha de expiración
         const expiryInput = document.getElementById('expiry-input');
-        expiryInput.addEventListener('input', function() {
+        expiryInput.addEventListener('input', function () {
             let value = this.value.replace(/\D/g, '');
             if (value.length >= 3) {
                 value = value.slice(0, 2) + '/' + value.slice(2, 4);
@@ -219,22 +255,101 @@
 
         // Filtrar la entrada del CVV para permitir solo 3 dígitos
         const cvvInput = document.getElementById('cvv-input');
-        cvvInput.addEventListener('input', function() {
+        cvvInput.addEventListener('input', function () {
             this.value = this.value.replace(/\D/g, '').slice(0, 3); // Permitir solo 3 dígitos
         });
 
+        // Función para obtener el ID de la empresa
+        function obtenerEmpresaId() {
+            return fetch('http://localhost:8080/api/empresa/nombre/' + nombreEmpresa(localStorage.getItem('cvempresa')), {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Obtener la respuesta como JSON
+                    } else {
+                        throw new Error('Error al obtener el ID de la empresa');
+                    }
+                })
+                .then(data => {
+                    console.log(data);
+                    return data.empresa_id; // Retornar el ID de la empresa
+                });
+        }
+
+        // Función para realizar la transacción
+        function realizarTransaccion(empresaId) {
+
+            const inversionistaId = localStorage.getItem('userId');
+            const comisionistaId = localStorage.getItem('comisionista_seleccionado');
+            const contratoId = localStorage.getItem('contratoId');
+            const estado = false;
+            const tipo = 'compra';
+            const fecha = new Date().toISOString().split('T')[0]; // Fecha actual en formato yyyy-MM-dd
+            const cantidad = parseFloat(document.getElementById('quantity-input').value); // Cantidad desde el input
+            const precio = parseFloat(localStorage.getItem('cvprecio')); // Precio desde localStorage
+            const montoTotal = cantidad * precio; // Calcular monto total
+            console.log(empresaId);
+            
+            return fetch(`http://localhost:8080/api/transaccion?inversionista_id=${inversionistaId}&comisionista_id=${comisionistaId}&tipo=${tipo}&fecha=${fecha}&cantidad=${cantidad}&precio=${precio}&monto_total=${montoTotal}&contrato_id=${contratoId}&empresa_id=${empresaId}&estado=${estado}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+
         // Manejar el envío del formulario
         const paymentForm = document.getElementById('payment-form');
-        paymentForm.addEventListener('submit', function(event) {
+        paymentForm.addEventListener('submit', function (event) {
             event.preventDefault(); // Prevenir el envío del formulario
 
-            // Ocultar el contenedor del checkout
-            document.getElementById('checkout-container').style.display = 'none';
+            // Mostrar todas las variables en localStorage
+            console.log("Variables en localStorage:");
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                // Filtrar símbolos de acciones
+                if (!stocks.some(stock => stock.symbol === key) && !key.startsWith('stockData_')) {
+                    console.log(`${key}: ${value}`);
+                }
+            }
 
-            // Mostrar el mensaje de confirmación
-            document.getElementById('confirmation-message').style.display = 'block';
+            // Obtener el ID de la empresa y realizar la transacción
+            obtenerEmpresaId()
+                .then(empresaId => realizarTransaccion(empresaId))
+                .then(response => {
+                    if (response.ok) {
+
+
+                        return response.json(); // Obtener la respuesta como JSON
+                    } else {
+                        throw new Error('Error al realizar la transacción');
+                    }
+                })
+                .then(data => {
+                    console.log('Transacción realizada con éxito:', data);
+
+                    // Ocultar el contenedor del checkout
+                    document.getElementById('checkout-container').style.display = 'none';
+
+                    // Mostrar el mensaje de confirmación
+                    const quantity = document.getElementById('quantity-input').value; // Obtener cantidad
+                    const confirmationMessage = document.getElementById('confirmation-message');
+                    confirmationMessage.innerHTML = `
+                        <p>Petición de compra de <strong>${quantity}</strong> acción(es) de <strong>${nombreEmpresa(symbol)}</strong> a un precio total de <strong>$${calculateTotal()}</strong>. Esperar al comisionista. ✔️</p>
+                    `;
+                    confirmationMessage.style.display = 'block';
+                })
+                .catch(error => {
+                    alert(error.message); // Manejar errores
+                });
         });
-
     </script>
+
 </body>
+
 </html>

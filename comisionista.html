@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/comisionista.css">
     <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.js"></script>
     <style>
         .hidden {
             display: none;
@@ -23,14 +25,15 @@
     <div class="flex flex-col min-h-screen lg:flex-row">
 
         <!-- Barra lateral -->
-        <aside class="w-full lg:w-64 bg-white p-6 border-b lg:border-b-0 lg:border-r border-gray-200 lg:h-screen lg:overflow-y-auto lg:fixed lg:left-0 lg:top-0 z-10" id="sidebar">
+        <aside
+            class="w-full lg:w-64 bg-white p-6 border-b lg:border-b-0 lg:border-r border-gray-200 lg:h-screen lg:overflow-y-auto lg:fixed lg:left-0 lg:top-0 z-10"
+            id="sidebar">
             <div class="flex items-center gap-4 text-[#111418] mb-4">
                 <div class="size-4">
                     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z"
-                            fill="currentColor"
-                        ></path>
+                            fill="currentColor"></path>
                     </svg>
                 </div>
                 <h2 class="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]">Andina Trading</h2>
@@ -38,74 +41,111 @@
             <nav>
                 <ul>
                     <li class="mb-3">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('homePanel')">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900"
+                            onclick="togglePanel('homePanel')">
                             <span class="material-icons">home</span>
                             <span class="ml-3">Inicio</span>
                         </a>
                     </li>
                     <li class="mb-3">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('investorsPanel')">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900"
+                            onclick="togglePanel('investorsPanel')">
                             <span class="material-icons">people</span>
                             <span class="ml-3">Inversores</span>
                         </a>
                     </li>
                     <li class="mb-3">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('ordersPanel')">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900"
+                            onclick="togglePanel('transactionsPanel')">
                             <span class="material-icons">shopping_cart</span>
                             <span class="ml-3">Órdenes</span>
                         </a>
                     </li>
+               
                     <li class="mb-3">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('reportsPanel')">
-                            <span class="material-icons">assessment</span>
-                            <span class="ml-3">Informes</span>
-                        </a>
-                    </li>
-                    <li class="mb-3">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('marketGraphsPanel')">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900"
+                            onclick="togglePanel('marketGraphsPanel')">
                             <span class="material-icons">bar_chart</span>
                             <span class="ml-3">Gráficas de Mercado</span>
                         </a>
                     </li>
                     <li class="mb-3">
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('profilePanel')">
+                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900"
+                            onclick="togglePanel('profilePanel')">
                             <span class="material-icons">person</span>
                             <span class="ml-3">Perfil</span>
                         </a>
                     </li>
                     <li class="mt-6">
                         <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="logout()">
-                          <span class="material-icons">logout</span>
-                          <span class="ml-3">Cerrar Sesión</span>
+                            <span class="material-icons">logout</span>
+                            <span class="ml-3">Cerrar Sesión</span>
                         </a>
-                      </li>
+                    </li>
                 </ul>
             </nav>
         </aside>
-        
+
         <!-- Contenido principal -->
         <div class="flex-1 p-6 lg:ml-64">
             <div id="homePanel" class="panel mb-8 ">
                 <img src="./images/home.jpg" alt="Descripción de la imagen" class="w-full h-auto mb-4">
             </div>
-             <!-- Panel de Inversores -->
-            <div id="investorsPanel" class="hidden panel mb-8 p-6">
+            <!-- Panel de Inversores -->
+            <div id="investorsPanel" class="panel mb-8 p-6 hidden" >
                 <h1 class="text-2xl font-semibold mb-4">Inversores</h1>
                 <p class="text-gray-600 mb-8">Visualiza los inversores que gestionas.</p>
 
                 <!-- Contenedor donde se agregarán las tarjetas de inversores -->
-                <div id="investorsContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div id="investorsContainer"
+                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     <!-- Aquí se agregarán dinámicamente las tarjetas de los inversores con JavaScript -->
                 </div>
             </div>
-            <div id="ordersPanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Órdenes</h1>
-                <p class="text-gray-600 mb-8">Ve las órdenes de compra/venta y acéptalas o deniégalas.</p>
+            <div id="transactionsPanel" class="panel mb-8 hidden">
+                <h1 class="text-2xl font-semibold mb-4">Transacciones</h1>
+
+                <button id="generarPdf" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-md transition duration-200 ease-in-out transform hover:scale-105">
+                    Generar PDF
+                </button>
+                <table class="min-w-full bg-white border border-gray-200" id="transactionTable">
+                    <thead>
+                        <tr>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Valor actual</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Monto total</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Inversionista</th>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionBody">
+                        <!-- Las filas se llenarán aquí con JavaScript -->
+                    </tbody>
+
+                   
+
+                </table>
+                <h1 class="text-2xl font-semibold mb-4">Ventas</h1>
+                <table class="min-w-full bg-white border border-gray-200" id="ventasTable">
+                    <thead>
+                        <tr>
+                            <th class="border-b-2 border-gray-200 px-4 py-2">Empresa</th>
+                <th class="border-b-2 border-gray-200 px-4 py-2">Cantidad</th>
+                <th class="border-b-2 border-gray-200 px-4 py-2">Valor de Compra</th>
+                <th class="border-b-2 border-gray-200 px-4 py-2">Valor actual</th>
+                <th class="border-b-2 border-gray-200 px-4 py-2">Monto total</th>
+                <th class="border-b-2 border-gray-200 px-4 py-2">Inversionista</th>
+                <th class="border-b-2 border-gray-200 px-4 py-2">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ventaBody">
+                        <!-- Las filas se llenarán aquí con JavaScript -->
+                    </tbody>
+                </table>
             </div>
-            <div id="reportsPanel" class="panel mb-8 hidden">
-                <h1 class="text-2xl font-semibold mb-4">Informes</h1>
-                <p class="text-gray-600 mb-8">Genera informes para cada inversor.</p>
-            </div>
+  
             <div id="marketGraphsPanel" class="panel mb-8 hidden">
                 <div id="stock-container"></div>
             </div>
@@ -117,29 +157,40 @@
                                 Perfil del Comisionista
                             </p>
                             <p class="text-[#A18249] text-sm font-normal leading-normal">
-                                Bienvenido, <span class="profile-name"></span>. Este es tu perfil de Comisionista. Puedes actualizar tus datos personales, foto de perfil, etc. Si necesitas ayuda, no dudes en ponerte en contacto con nuestro equipo de soporte.
+                                Bienvenido, <span class="profile-name"></span>. Este es tu perfil de Comisionista.
+                                Puedes actualizar tus datos personales, foto de perfil, etc. Si necesitas ayuda, no
+                                dudes en ponerte en contacto con nuestro equipo de soporte.
                             </p>
                         </div>
                     </div>
                     <div class="flex p-4 @container">
-                        <div class="flex w-full flex-col gap-4 @[520px]:flex-row @[520px]:justify-between @[520px]:items-center">
+                        <div
+                            class="flex w-full flex-col gap-4 @[520px]:flex-row @[520px]:justify-between @[520px]:items-center">
                             <div class="flex gap-4">
                                 <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32"
                                     style='background-image: url("/images/profile-com.jpg");'>
                                 </div>
                                 <div class="flex flex-col justify-center">
-                                    <p class="text-[#1C160C] text-[22px] font-bold leading-tight profile-name" id="nombre-com" ></p>
-                                    <input type="text" class="hidden profile-name-input" id="input-profile-name" placeholder="Ingresar Nuevo nombre">
+                                    <p class="text-[#1C160C] text-[22px] font-bold leading-tight profile-name"
+                                        id="nombre-com"></p>
+                                    <input type="text" class="hidden profile-name-input" id="input-profile-name"
+                                        placeholder="Ingresar Nuevo nombre">
                                     <p class="text-[#A18249] text-base font-normal leading-normal">Comisionista</p>
                                 </div>
                             </div>
-                            <button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#F4EFE6] text-[#1C160C] text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto" onclick="enableEditProfile()" id="boton-actualizar">
+                            <button
+                                class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#F4EFE6] text-[#1C160C] text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto"
+                                onclick="enableEditProfile()" id="boton-actualizar">
                                 <span class="truncate">Actualizar perfil</span>
                             </button>
-                            <button class="hidden flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#F4EFE6] text-[#1C160C] text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto" onclick="saveProfile()" id="boton-guardar">
+                            <button
+                                class="hidden flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#F4EFE6] text-[#1C160C] text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto"
+                                onclick="saveProfile()" id="boton-guardar">
                                 <span class="truncate">Guardar Cambios</span>
                             </button>
-                            <button class=" hidden flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#F4EFE6] text-[#1C160C] text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto" onclick="cancelar()" id="boton-cancelar">
+                            <button
+                                class=" hidden flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#F4EFE6] text-[#1C160C] text-sm font-bold leading-normal tracking-[0.015em] w-full max-w-[480px] @[480px]:w-auto"
+                                onclick="cancelar()" id="boton-cancelar">
                                 <span class="truncate">Cancelar</span>
                             </button>
                         </div>
@@ -152,7 +203,8 @@
                         </div>
                         <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
                             <p class="text-[#A18249] text-sm font-normal leading-normal">Fecha de nacimiento</p>
-                            <p class="text-[#1C160C] text-sm font-normal leading-normal profile-birthdate" id="birthdate-com"></p>
+                            <p class="text-[#1C160C] text-sm font-normal leading-normal profile-birthdate"
+                                id="birthdate-com"></p>
                             <input type="date" class="hidden profile-date-input" id="input-profile-birthdate">
                         </div>
                         <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
@@ -162,20 +214,24 @@
                         </div>
                         <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
                             <p class="text-[#A18249] text-sm font-normal leading-normal">Empresa</p>
-                            <p class="text-[#1C160C] text-sm font-normal leading-normal profile-empresa" id="empresa-com"></p>
+                            <p class="text-[#1C160C] text-sm font-normal leading-normal profile-empresa"
+                                id="empresa-com"></p>
                             <input type="text" class="hidden profile-company-input" id="input-profile-company">
                         </div>
                         <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
                             <p class="text-[#A18249] text-sm font-normal leading-normal">Comision</p>
-                            <p class="text-[#1C160C] text-sm font-normal leading-normal profile-comision" id="comision-com"></p>
+                            <p class="text-[#1C160C] text-sm font-normal leading-normal profile-comision"
+                                id="comision-com"></p>
                             <input type="text" class="hidden profile-commision-input" id="input-profile-commision">
                         </div>
                     </div>
-                    <h3 class="text-[#1C160C] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Contacto</h3>
+                    <h3 class="text-[#1C160C] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">
+                        Contacto</h3>
                     <div class="p-4 grid grid-cols-[20%_1fr] gap-x-6">
                         <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
                             <p class="text-[#A18249] text-sm font-normal leading-normal">Correo electrónico</p>
-                            <p class="text-[#1C160C] text-sm font-normal leading-normal profile-email" id="email-com"></p>
+                            <p class="text-[#1C160C] text-sm font-normal leading-normal profile-email" id="email-com">
+                            </p>
                             <input type="email" class="hidden profile-email-input" id="input-profile-email">
 
                         </div>
@@ -184,7 +240,8 @@
                             <p class="text-[#1C160C] text-sm font-normal leading-normal">+123 456 7890</p>
                         </div>
                     </div>
-                    <h3 class="text-[#1C160C] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Documentos</h3>
+                    <h3 class="text-[#1C160C] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">
+                        Documentos</h3>
                     <div class="p-4 grid grid-cols-[20%_1fr] gap-x-6">
                         <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#E9DFCE] py-5">
                             <p class="text-[#A18249] text-sm font-normal leading-normal">Documentos de identidad</p>
@@ -198,24 +255,10 @@
 
     <!-- Tailwind requiere que esto esté al final -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./js/stocks.js"></script>"
     <script src="./js/comisionista.js"></script>
     <script>
 
-        const stocks = [
-            { name: 'Ecopetrol', symbol: 'EC' },
-            { name: 'Apple', symbol: 'AAPL' },
-            { name: 'Tesla', symbol: 'TSLA' },
-            { name: 'Microsoft', symbol: 'MSFT' },
-            { name: 'Amazon', symbol: 'AMZN' },
-            { name: 'Google', symbol: 'GOOGL' },
-            { name: 'NVIDIA', symbol: 'NVDA' },
-            { name: 'Mazda', symbol: 'TYO' },
-            { name: 'Coca-Cola', symbol: 'KO' },
-            { name: 'Walmart', symbol: 'WMT' },
-            { name: 'Disney', symbol: 'DIS' },
-            { name: 'IBM', symbol: 'IBM' }
-
-        ];
 
 
         function createStockCard(stock) {
@@ -350,13 +393,14 @@
                 if (panel.id === panelId) {
                     panel.classList.toggle('hidden');
 
-
-                    if (graficas === false) {
-                        stocks.forEach(stock => {
-                            const containerId = `container-${stock.symbol}`;
-                            fetchDataAndCreateChart(stock.symbol, containerId);
-                        });
-                        graficas = true;
+                    if ("marketGraphsPanel" === panelId) {
+                        if (graficas === false) {
+                            stocks.forEach(stock => {
+                                const containerId = `container-${stock.symbol}`;
+                                fetchDataAndCreateChart(stock.symbol, containerId);
+                            });
+                            graficas = true;
+                        }
                     }
 
                 } else {
@@ -388,6 +432,7 @@
 
 
     </script>
+     <script src="./js/informeCo.js"></script>
 </body>
 
 </html>
