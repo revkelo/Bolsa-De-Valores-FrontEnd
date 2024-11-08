@@ -49,9 +49,10 @@ togglePanel('homePanel');
 //CRUD DEL ADMIN PARA COMISIONISTAS
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('create-commissioner-form');
-    form.addEventListener('submit', function (event) {
+    
+    form.addEventListener('submit', async function (event) {
         event.preventDefault();
-
+        
         const nombre = document.getElementById('name-comisionista').value;
         const email = document.getElementById('email-comisionista').value;
         const password = document.getElementById('password-comisionista').value;
@@ -61,50 +62,64 @@ document.addEventListener('DOMContentLoaded', function () {
         const commission = document.getElementById('commission-comisionista').value;
         const pais = document.getElementById('country-comisionista').value;
 
-        fetch('http://localhost:8080/api/usuario?nombre=' + nombre + '&email=' + email +
-            '&contrase%C3%B1a=' + password + '&rol=' + rol + '&fecha_creacion=' + dateOfBirth, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+        try {
+            // Verificar si el email ya existe
+            const emailResponse = await fetch('http://localhost:8080/api/emails');
+            const emailList = await emailResponse.json();
+
+            if (emailList.includes(email)) {
+                alert('El email ingresado ya existe. Por favor, ingrese un email diferente.');
+                return; // Se detiene el proceso si el email ya existe
             }
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.usuario_id) {
-                    const usuario_id = data.usuario_id;
-                    alert('Usuario creado exitosamente con ID: ' + usuario_id);
 
-                    localStorage.setItem('userId', usuario_id);
-                    localStorage.setItem('rol', rol);
-
-                    fetch('http://localhost:8080/api/comisionista?empresa=' + company + '&comision=' + commission + '&pais=' + pais + '&usuarioId=' + usuario_id, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            alert('Comisionista creado exitosamente');
-                            form.reset();
-                        })
-                        .catch(error => {
-                            console.error('Error al crear el comisionista:', error);
-                        });
-                }
-            })
-            .catch(error => {
-                console.error('Error al crear el usuario:', error);
+            // Crear usuario
+            const usuarioResponse = await fetch(`http://localhost:8080/api/usuario?nombre=${nombre}&email=${email}&contrase%C3%B1a=${password}&rol=${rol}&fecha_creacion=${dateOfBirth}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
             });
+            const usuarioData = await usuarioResponse.json();
+
+            if (!usuarioData.usuario_id) {
+                throw new Error('No se pudo crear el usuario');
+            }
+
+            const usuario_id = usuarioData.usuario_id;
+            alert('Usuario creado exitosamente con ID: ' + usuario_id);
+
+            // Crear comisionista
+            const comisionistaResponse = await fetch(`http://localhost:8080/api/comisionista?empresa=${company}&comision=${commission}&pais=${pais}&usuarioId=${usuario_id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const comisionistaData = await comisionistaResponse.json();
+
+            alert('Comisionista creado exitosamente');
+
+            // Crear billetera
+            const billeteraResponse = await fetch(`http://localhost:8080/api/billetera?inversionista_id=${usuario_id}&saldo=0`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const billeteraData = await billeteraResponse.json();
+
+            alert('Billetera creada con éxito');
+            form.reset();
+
+        } catch (error) {
+            console.error('Error en el proceso de creación:', error);
+            alert('Hubo un error en el proceso de creación: ' + error.message);
+        }
     });
 });
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('update-commissioner-form');
     form.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        const userId = document.getElementById('id-comisionista-update').value;
+        const user_Id = document.getElementById('id-comisionista-update').value;
         const empresa = document.getElementById('company-comisionista-update').value;
         const nombre = document.getElementById('name-comisionista-update').value;
         const email = document.getElementById('email-comisionista-update').value;
@@ -115,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const pais = document.getElementById('country-comisionista-update').value;
 
 
-        fetch("http://localhost:8080/api/usuario/" + userId + "?nombre=" + nombre + "&email=" + email + "&contraseña=" + password + "&rol=" + rol + "&fecha_creacion=" + dateOfBirth,
+        fetch("http://localhost:8080/api/usuario/" + user_Id + "?nombre=" + nombre + "&email=" + email + "&contraseña=" + password + "&rol=" + rol + "&fecha_creacion=" + dateOfBirth,
             {
                 method: 'PUT',
                 headers: {
@@ -124,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(response => response.json())
             .then(data => {
-                fetch("http://localhost:8080/api/comisionista/{" + userId + "}?empresa=" + empresa + "&comision=" + commission + "&pais=" + pais + "&comisionista_id=" + userId, {
+                fetch("http://localhost:8080/api/comisionista/{" + user_Id + "}?empresa=" + empresa + "&comision=" + commission + "&pais=" + pais + "&comisionista_id=" + user_Id, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -148,9 +163,9 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        const userId = document.getElementById('id-comisionista-delete').value;
+        const user_Id = document.getElementById('id-comisionista-delete').value;
 
-        fetch(`http://localhost:8080/api/comisionista/${userId}`, {
+        fetch(`http://localhost:8080/api/comisionista/${user_Id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -236,9 +251,10 @@ function showCommissioners() {
 //CRUD DEL ADMIN PARA INVERSIONISTAS
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('create-investor-form');
-    form.addEventListener('submit', function (event) {
+    
+    form.addEventListener('submit', async function (event) {
         event.preventDefault();
-
+        
         const nombre = document.getElementById('name-inversionista').value;
         const email = document.getElementById('email-inversionista').value;
         const password = document.getElementById('password-inversionista').value;
@@ -247,50 +263,64 @@ document.addEventListener('DOMContentLoaded', function () {
         const riskProfile = document.getElementById('risk-profile-inversionista').value;
         const pais = document.getElementById('country-inversionista').value;
 
-        fetch('http://localhost:8080/api/usuario?nombre=' + nombre + '&email=' + email +
-            '&contrase%C3%B1a=' + password + '&rol=' + rol + '&fecha_creacion=' + dateOfBirth, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+        try {
+            // Verificar si el email ya existe
+            const emailResponse = await fetch('http://localhost:8080/api/emails');
+            const emailList = await emailResponse.json();
+
+            if (emailList.includes(email)) {
+                alert('El email ingresado ya existe. Por favor, ingrese un email diferente.');
+                return; // Se detiene el proceso si el email ya existe
             }
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.usuario_id) {
-                    const usuario_id = data.usuario_id;
-                    alert('Usuario creado exitosamente con ID: ' + usuario_id);
 
-                    localStorage.setItem('userId', usuario_id);
-                    localStorage.setItem('rol', rol);
-
-                    fetch('http://localhost:8080/api/inversionista?perfil_riesgo=' + riskProfile + '&pais=' + pais + '&usuario_id=' + usuario_id, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            alert('Inversionista creado exitosamente');
-                            form.reset();
-                        })
-                        .catch(error => {
-                            console.error('Error al crear el inversionista:', error);
-                        });
-                }
-            })
-            .catch(error => {
-                console.error('Error al crear el usuario:', error);
+            // Crear usuario
+            const usuarioResponse = await fetch(`http://localhost:8080/api/usuario?nombre=${nombre}&email=${email}&contrase%C3%B1a=${password}&rol=${rol}&fecha_creacion=${dateOfBirth}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
             });
+            const usuarioData = await usuarioResponse.json();
+
+            if (!usuarioData.usuario_id) {
+                throw new Error('No se pudo crear el usuario');
+            }
+
+            const usuario_id = usuarioData.usuario_id;
+            alert('Usuario creado exitosamente con ID: ' + usuario_id);
+
+
+            // Crear inversionista
+            const inversionistaResponse = await fetch(`http://localhost:8080/api/inversionista?perfil_riesgo=${riskProfile}&pais=${pais}&usuario_id=${usuario_id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const inversionistaData = await inversionistaResponse.json();
+
+            alert('Inversionista creado exitosamente');
+
+            // Crear billetera
+            const billeteraResponse = await fetch(`http://localhost:8080/api/billetera?inversionista_id=${usuario_id}&saldo=0`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const billeteraData = await billeteraResponse.json();
+
+            alert('Billetera creada con éxito');
+            form.reset();
+
+        } catch (error) {
+            console.error('Error en el proceso de creación:', error);
+            alert('Hubo un error en el proceso de creación: ' + error.message);
+        }
     });
 });
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('update-investor-form');
     form.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        const userId = document.getElementById('id-inversionista-update').value;
+        const user_Id = document.getElementById('id-inversionista-update').value;
         const nombre = document.getElementById('name-inversionista-update').value;
         const email = document.getElementById('email-inversionista-update').value;
         const password = document.getElementById('password-inversionista-update').value;
@@ -300,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const pais = document.getElementById('country-inversionista-update').value;
 
 
-        fetch("http://localhost:8080/api/usuario/" + userId + "?nombre=" + nombre + "&email=" + email + "&contraseña=" + password + "&rol=" + rol + "&fecha_creacion=" + dateOfBirth,
+        fetch("http://localhost:8080/api/usuario/" + user_Id + "?nombre=" + nombre + "&email=" + email + "&contraseña=" + password + "&rol=" + rol + "&fecha_creacion=" + dateOfBirth,
             {
                 method: 'PUT',
                 headers: {
@@ -309,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(response => response.json())
             .then(data => {
-                fetch("http://localhost:8080/api/inversionista/{" + userId + "}?perfil_riesgo=" + perfilRiesgo + "&pais=" + pais + "&inversionista_id=" + userId, {
+                fetch("http://localhost:8080/api/inversionista/{" + user_Id + "}?perfil_riesgo=" + perfilRiesgo + "&pais=" + pais + "&inversionista_id=" + user_Id, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -335,9 +365,9 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        const userId = document.getElementById('id-inversionista-delete').value;
+        const user_Id = document.getElementById('id-inversionista-delete').value;
 
-        fetch(`http://localhost:8080/api/inversionista/${userId}`, {
+        fetch(`http://localhost:8080/api/inversionista/${user_Id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
