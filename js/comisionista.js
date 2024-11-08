@@ -324,7 +324,7 @@ async function fetchVentas(){
     }
 }
 async function loadTransactions() {
-    const comisionistaId = localStorage.getItem('comisionistaId');
+    const comisionistaId = localStorage.getItem('userId');
     if (!comisionistaId) {
         console.error('No se encontró el ID del comisionista en localStorage.');
         return;

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,29 +8,37 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.js"></script>
 </head>
+
 <body>
     <button id="generarPdf">Generar PDF</button>
 
     <script>
-        document.getElementById("generarPdf").addEventListener("click", function () {
+        const userId = localStorage.getItem('userId');
+        document.getElementById("generarPdf").addEventListener("click", async function () {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
             cargarLogo(doc);
             agregarTitulo(doc);
 
-            // Crear un array con todas las promesas de obtención y generación de tablas
-            const promesas = [
-                agregarDatosPersonales(doc),
-                obtenerDatosComisionistaYGenerarTabla(doc, 3, 'Transacciones del Comisionista')
-            ];
+            try {
+                // Obtener las transacciones y las ventas
+                const transacciones = await fetchTransactions();
+                const ventas = await fetchVentas();
 
-            // Esperar a que todas las promesas se resuelvan antes de abrir el PDF
-            Promise.all(promesas).then(() => {
+                // Generar las tablas en el PDF
+                if (transacciones.length > 0) {
+                    agregarTabla(doc, 'Transacciones del Comisionista', transacciones);
+                }
+                if (ventas.length > 0) {
+                    agregarTabla(doc, 'Ventas del Comisionista', ventas);
+                }
+
                 abrirPDFEnVentana(doc);
-            }).catch(error => {
-                console.error("Error al generar las tablas:", error);
-            });
+            } catch (error) {
+                console.error("Error al generar el PDF:", error);
+                alert("Ocurrió un error al generar el PDF. Por favor, intenta nuevamente.");
+            }
         });
 
         function cargarLogo(doc) {
@@ -45,84 +54,81 @@
             doc.text('Informe', 105, 20, null, null, 'center');
         }
 
-        function agregarDatosPersonales(doc) {
-            return new Promise((resolve, reject) => {
-                fetch('http://localhost:8080/api/inversionista/2')
-                    .then(response => response.json())
-                    .then(data => {
-                        doc.setFontSize(12);
-                        doc.text('Datos Personales:', 10, 40);
-                        doc.text('Nombre: ' + data.usuario.nombre, 10, 50);
-                        doc.text('Email: ' + data.usuario.email, 10, 60);
-                        doc.text('País: ' + data.pais, 10, 70);
-                        resolve();
-                    })
-                    .catch(error => {
-                        console.error('Error al obtener los datos:', error);
-                        reject(error);
-                    });
-            });
-        }
-
-        function obtenerDatosComisionistaYGenerarTabla(doc, idcomisionista, tablaTitulo) {
-            const url = `http://localhost:8080/api/transaccion/comisionista/${idcomisionista}/transacciones`;
-            return fetch(url)
-                .then(response => {
-                    if (response.status === 404) {
-                        return [];
-                    } else if (!response.ok) {
-                        throw new Error('Error en la solicitud de datos');
+        async function fetchTransactions() {
+            try {
+                const response = await fetch(`http://localhost:8080/api/transaccion/comisionista/${userId}/transacciones`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data && Array.isArray(data) && data.length > 0) {
-                        const headers = Object.keys(data[0]);
-                        const tableData = data.map(item => Object.values(item));
-                        agregarTabla(doc, headers, tableData, tablaTitulo);
-                    }
-                })
-                .catch(error => {
-                    alert("Hubo un problema al obtener los datos. Intenta nuevamente.");
                 });
-        }
-
-        function agregarTabla(doc, headers, tableData, tablaTitulo) {
-            let fontSize = 8;
-            let cellPadding = 4;
-
-            if (tableData.length > 10) {
-                fontSize = 7;
-                cellPadding = 3;
+                if (!response.ok) {
+                    throw new Error('Error al obtener datos de la API');
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error al obtener las transacciones:', error);
+                return [];
             }
-
-            doc.setFontSize(14);
-            doc.text(tablaTitulo, 10, doc.autoTable.previous ? doc.autoTable.previous.finalY + 10 : 80);
-
-            doc.autoTable({
-                startY: doc.autoTable.previous ? doc.autoTable.previous.finalY + 20 : 90,
-                head: [headers],
-                body: tableData,
-                theme: 'grid',
-                styles: {
-                    cellPadding: cellPadding,
-                    fontSize: fontSize,
-                    textColor: [0, 0, 0],
-                    lineColor: [0, 0, 0],
-                    lineWidth: 0.1
-                },
-                headStyles: {
-                    fillColor: [0, 0, 0],
-                    textColor: [255, 255, 255],
-                    fontStyle: 'bold'
-                },
-                bodyStyles: {
-                    fillColor: [255, 255, 255],
-                },
-                margin: { top: 40, left: 10, bottom: 10, right: 10 },
-                pageBreak: 'auto',
-            });
         }
+
+        async function fetchVentas() {
+            try {
+                const response = await fetch(`http://localhost:8080/api/transaccion/comisionista/${userId}/ventas/venta`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Error al obtener datos de la API');
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error al obtener las ventas:', error);
+                return [];
+            }
+        }
+
+        function agregarTabla(doc, titulo, data) {
+            if (data && Array.isArray(data) && data.length > 0) {
+                // Filtrar las claves del primer objeto para evitar incluir columnas que contienen objetos
+                const headers = Object.keys(data[0]).filter(key => typeof data[0][key] !== 'object');
+
+                // Filtrar cada fila para incluir solo los valores que corresponden a los headers seleccionados
+                const tableData = data.map(item =>
+                    headers.map(header => typeof item[header] !== 'object' ? item[header] : "")
+                );
+
+                doc.setFontSize(14);
+                doc.text(titulo, 10, doc.autoTable.previous ? doc.autoTable.previous.finalY + 10 : 80);
+
+                doc.autoTable({
+                    startY: doc.autoTable.previous ? doc.autoTable.previous.finalY + 20 : 90,
+                    head: [headers],
+                    body: tableData,
+                    theme: 'grid',
+                    styles: {
+                        cellPadding: 4,
+                        fontSize: 8,
+                        textColor: [0, 0, 0],
+                        lineColor: [0, 0, 0],
+                        lineWidth: 0.1
+                    },
+                    headStyles: {
+                        fillColor: [0, 0, 0],
+                        textColor: [255, 255, 255],
+                        fontStyle: 'bold'
+                    },
+                    bodyStyles: {
+                        fillColor: [255, 255, 255],
+                    },
+                    margin: { top: 40, left: 10, bottom: 10, right: 10 },
+                    pageBreak: 'auto',
+                });
+            }
+        }
+
 
         function abrirPDFEnVentana(doc) {
             const pdfOutput = doc.output('dataurlnewwindow');
@@ -130,4 +136,5 @@
         }
     </script>
 </body>
+
 </html>
