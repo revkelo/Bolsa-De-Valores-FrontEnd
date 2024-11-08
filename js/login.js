@@ -59,8 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (billeteraData.length > 0) {
                         const billetera = billeteraData[0];
                         localStorage.setItem('billeteraId', billetera.billetera_id);
-                        alert('Billetera guardada con éxito');
-                        alert('ID de la billetera: ' + billetera.billetera_id); // Mostrar la alerta con el ID de la billetera
+               
         
                         // Redirigir según el rol
                         if (data.rol === 'Inversionista') {
@@ -80,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     localStorage.setItem('contratoId', contratoId); // Almacena el ID del contrato
                                     localStorage.setItem('comisionista_seleccionado', comisionistaId); // Almacena el ID del comisionista
         
-                                    alert('Sesión iniciada exitosamente. ID de usuario almacenado: ' + data.usuario_id);
+                               
         
                                     window.location.href = 'inversionista.html';
                                 } else {
@@ -91,10 +90,10 @@ document.addEventListener("DOMContentLoaded", function() {
                                 alert('Error al obtener los datos del contrato: ' + error.message);
                             });
                         } else if (data.rol === 'Comisionista') {
-                            alert('Sesión iniciada exitosamente. ID de usuario almacenado: ' + data.usuario_id);
+                  
                             window.location.href = 'comisionista.html';
                         } else if (data.rol === 'Administrador') {
-                            alert('Sesión iniciada exitosamente. ID de usuario almacenado: ' + data.usuario_id);
+               
                             window.location.href = 'admin.html';
                         } else {
                             throw new Error('Rol desconocido');
