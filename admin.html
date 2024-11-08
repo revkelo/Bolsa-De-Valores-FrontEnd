@@ -7,6 +7,30 @@
   <title>Admin</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+    .table-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.log-table {
+  width: 80%; /* Ajusta el ancho de la tabla según sea necesario */
+  border-collapse: collapse;
+}
+
+.log-table th, .log-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.log-table th {
+  background-color: #f2f2f2;
+}
+
+  </style>
 </head>
 
 <body class="bg-gray-100 font-sans antialiased">
@@ -49,6 +73,12 @@
               <span class="ml-3">Administrar comisionistas</span>
             </a>
           </li>
+          <li class="mb-3">
+            <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="togglePanel('logPanel')">
+              <span class="material-icons">history</span>
+              <span class="ml-3">Ver Logs de Usuario</span>
+            </a>
+          </li>          
           <li class="mt-6">
             <a href="#" class="flex items-center text-gray-600 hover:text-gray-900" onclick="logout()">
               <span class="material-icons">logout</span>
@@ -227,6 +257,34 @@
         </div>
       </div>
     </div>
+
+    <!-- Log Management Panel -->
+<div id="logPanel" class="panel mb-8 hidden">
+  <h1 class="text-2xl font-semibold mb-4">Logs de Usuario</h1>
+  <button onclick="showLogs()" class="bg-gray-500 text-white p-2 rounded w-full mb-4">Mostrar Logs</button>
+
+  <!-- Contenedor de la tabla de logs -->
+  <!-- Contenedor de la tabla de logs -->
+<div id="logList" class="table-container">
+  <table class="log-table">
+    <thead>
+      <tr>
+        <th>ID Transacción</th>
+        <th>ID Usuario</th>
+        <th>Nombre Usuario</th>
+        <th>Email Usuario</th>
+        <th>Rol Usuario</th>
+        <th>Tipo Modificación</th>
+        <th>Fecha Modificación</th>
+      </tr>
+    </thead>
+    <tbody id="logTableBody">
+      <!-- Las filas de la tabla se agregarán aquí dinámicamente con JavaScript -->
+    </tbody>
+  </table>
+</div>
+</div>
+
   </div>
   </div>
   <script src="./js/admin.js"></script>

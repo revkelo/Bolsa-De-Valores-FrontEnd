@@ -293,6 +293,7 @@
             const precio = parseFloat(localStorage.getItem('cvprecio')); // Precio desde localStorage
             const montoTotal = cantidad * precio; // Calcular monto total
             console.log(empresaId);
+            
             return fetch(`http://localhost:8080/api/transaccion?inversionista_id=${inversionistaId}&comisionista_id=${comisionistaId}&tipo=${tipo}&fecha=${fecha}&cantidad=${cantidad}&precio=${precio}&monto_total=${montoTotal}&contrato_id=${contratoId}&empresa_id=${empresaId}&estado=${estado}`, {
                 method: 'POST',
                 headers: {

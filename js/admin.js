@@ -418,3 +418,76 @@ function showInvestors() {
             alert('Error al obtener la lista de inversionistas. Por favor, intente nuevamente más tarde.');
         });
 }
+
+function showLogs() {
+    fetch('http://localhost:8080/api/log_usuario', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error al obtener la lista de logs');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Obtener el cuerpo de la tabla
+        const tableBody = document.getElementById('logTableBody');
+  
+        // Limpiar el contenido de la tabla antes de agregar nuevos datos
+        tableBody.innerHTML = '';
+  
+        // Iterar sobre los logs y agregarlos a la tabla
+        data.forEach(log => {
+          const row = document.createElement('tr');
+  
+          const cellTransaccionId = document.createElement('td');
+          cellTransaccionId.textContent = log.transaccion_id;
+          cellTransaccionId.className = 'border px-4 py-2';
+  
+          const cellUsuarioId = document.createElement('td');
+          cellUsuarioId.textContent = log.usuario_id;
+          cellUsuarioId.className = 'border px-4 py-2';
+  
+          const cellNombreUsuario = document.createElement('td');
+          cellNombreUsuario.textContent = log.nombre_usuario;
+          cellNombreUsuario.className = 'border px-4 py-2';
+  
+          const cellEmailUsuario = document.createElement('td');
+          cellEmailUsuario.textContent = log.email_usuario;
+          cellEmailUsuario.className = 'border px-4 py-2';
+  
+          const cellRolUsuario = document.createElement('td');
+          cellRolUsuario.textContent = log.rol_usuario;
+          cellRolUsuario.className = 'border px-4 py-2';
+  
+          const cellTipoModificacion = document.createElement('td');
+          cellTipoModificacion.textContent = log.tipo_modificacion;
+          cellTipoModificacion.className = 'border px-4 py-2';
+  
+          const cellFechaModificacion = document.createElement('td');
+          cellFechaModificacion.textContent = new Date(log.fecha_modificacion).toLocaleString();
+          cellFechaModificacion.className = 'border px-4 py-2';
+  
+          // Añadir celdas a la fila
+          row.appendChild(cellTransaccionId);
+          row.appendChild(cellUsuarioId);
+          row.appendChild(cellNombreUsuario);
+          row.appendChild(cellEmailUsuario);
+          row.appendChild(cellRolUsuario);
+          row.appendChild(cellTipoModificacion);
+          row.appendChild(cellFechaModificacion);
+  
+          tableBody.appendChild(row);
+        });
+  
+        document.getElementById('logList').classList.remove('hidden');
+      })
+      .catch(error => {
+        console.error('Error al obtener los logs:', error);
+        alert('Error al obtener la lista de logs. Por favor, intente nuevamente más tarde.');
+      });
+  }
+  
