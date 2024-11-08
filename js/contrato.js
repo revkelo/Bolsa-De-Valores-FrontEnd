@@ -83,7 +83,7 @@ function loadInversionista(){
 }
 
 function firmarContrato(){
-
+console.log("entro");
     const inversionista_id = user;
     const comisionista_id = comisionista_seleccionado;
     const fecha_firma = "2021-10-10";
@@ -98,6 +98,7 @@ function firmarContrato(){
     })
     .then(response => response.json())
     .then(data => {
+        console.log(data);
         if (data.contrato_id){
             localStorage.setItem('contratoId', data.contrato_id);
             const contrato_id = data.contrato_id;
