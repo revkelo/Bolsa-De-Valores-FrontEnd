@@ -1,10 +1,11 @@
 # **Andina Trading - Proyecto de Gestión de Transacciones Bursátiles**
-
+[PDF](https://github.com/revkelo/Bolsa-De-Valores-FrontEnd/blob/main/Andina%20Trading%20(1).pdf)  
 ## **Descripción del Proyecto**  
 Andina Trading es un sistema de software desarrollado para gestionar transacciones de compra y venta de acciones en una bolsa de valores. Diseñado para operar en los mercados bursátiles de Ecuador, Perú, Venezuela y Colombia, este sistema tiene como sede central Bogotá, donde se consolida toda la información para su análisis.  
 El objetivo principal es facilitar el acceso a información bursátil en tiempo real, brindando a inversionistas y comisionistas una plataforma eficiente y segura para la toma de decisiones.
 
 ---
+
 
 ## **Frontend**  
 El frontend de Andina Trading proporciona la interfaz gráfica que permite a los usuarios interactuar con el sistema. Incluye funcionalidades como:  
